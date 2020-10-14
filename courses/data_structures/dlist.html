@@ -22,12 +22,16 @@
   <button type="button" id = "insert_after_node">insert</button><br><br>
 
   erase <input type="text" id="erase_t" placeholder="enter the rect's label">
-  <button type="button" id = "erase">erase</button> <br><br>
+  <button type="button" id = "erase">erase</button> <br><br> 
+
+
+  <button type="button" id = "clear">clear</button> 
+  <button type="button" id = "step_back">step back</button>
+  <input type="range" min="0" max="99" value="30" id="speed">
   
 
-<!--   not working now<button type="button" id = "step">step</button> -->
-
-  <canvas id = "draw" width ="1500" height="1000"></canvas>
+  not working now<button type="button" id = "step">step</button>
+  <canvas id = "draw" width ="1000" height="2000" ></canvas>
 </body>
 
 <script src="../../lib/drawing.js"></script>
@@ -35,10 +39,26 @@
 <script type="text/javascript">
 
 
+
+
 $(document).ready(function(){
+ 
+  // sharpen blurry text
+  var canvas = document.getElementById("draw");
+  var size =1000;
+  canvas.style.width = size + "px"; 
+  canvas.style.height = size + "px"; 
+  var scale = window.devicePixelRatio;  
+  canvas.width = Math.floor(size * scale); 
+  canvas.height = Math.floor(size * scale); 
+
+  //CSS pixels for coordinate systems 
+  ctx.scale(scale, scale); 
+
   ctx.translate(100,50);
+
   da = new dlistAnimation();
-  da.ani.step_by_step = false;
+  da.ani.step_by_step = true;
 
   // da.insert_before_node(10,da.dlist.sentinel);
   $("#push_back").click(function(){
@@ -61,12 +81,29 @@ $(document).ready(function(){
   })
 
   $("#erase").click(function() {
-    console.log("12");
     da.erase($("#erase_t").val());
   })
   $("#step").click(function(){
     da.ani.resume_animation();
   })
+
+  $("#clear").click(function() {
+    da = new dlistAnimation();
+
+  });
+
+  $("#step_back").click(function() { 
+    console.log("step_back");
+    da = da.anis[da.anis.length - 1];
+    
+  })
+
+  $("#speed").change(function() {
+    ANIMATION_TIME = 100 - $(this).val();
+
+  });
+
+
 });
 
 </script>
