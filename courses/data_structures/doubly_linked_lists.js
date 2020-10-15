@@ -1,4 +1,7 @@
-
+/* 
+  Doubly linked list.
+  Please refer to http://web.eecs.utk.edu/~jplank/plank/classes/cs140/Notes/Linked/index.html.
+*/
 class Dnode {
 	constructor(v) {
 		this.value = v;
@@ -47,7 +50,6 @@ class Dlist {
 	}
 
 
-
 	erase(node) {
 		let prev_node, next_node;
 		prev_node = node.blink;
@@ -80,7 +82,7 @@ class Dlist {
 
 
 
-
+/* a callback function to update text field in rect when animation is done */
 function update_rect_text(dict) {
   let rect = dict.rect,
       index = dict.index,
@@ -88,6 +90,7 @@ function update_rect_text(dict) {
   rect.text[index] = text;
 }
 
+/* a callback function to remove a rect object when node is erased */
 function rm_ani_object(dict) {
   let ref = dict.ref,
       ani = dict.ani;
@@ -95,7 +98,19 @@ function rm_ani_object(dict) {
   dict.ani.remove_object(ref);
 }
 
+function add_ani_object(dict) {
+  let obj = dict.obj;
+  let lines = dict.lines;
+  let ani = dict.ani;
+  let i;
+  ani.add_object(obj);
+  for (i = 0; i < lines.length; i++) {
+    ani.connect_object(lines[i]);
+  }
+}
 
+
+/* the curve */
 function get_curve_by_height(ani, ref1, ref2, dy) {
   let i, q_curves;
   q_curves = ani.get_connection(ref1, ref2);
@@ -173,7 +188,7 @@ class dlistAnimation {
     let q_curve, q_curves, n, p, p1, p2;
     let i,j;
     let x,y;
-  
+    let qs;
     let h_scale, w_scale;
     let dlist = this.dlist,
         ani = this.ani,
@@ -196,27 +211,33 @@ class dlistAnimation {
                             concurrence: true } );
 
     ani.add_parallel_ani( { target: prev_obj,
-                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: 0, end: ANIMATION_TIME * 3} } );
+                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: 0, end: ANIMATION_TIME * 5} } );
     ani.add_parallel_ani( { target: next_obj,
-                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: 0, end: ANIMATION_TIME * 3} } );
+                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: 0, end: ANIMATION_TIME * 5} } );
 
+    qs = [];
     for (i = 0; i < 4; i++) {
       if (i == 0) q_curves = ani.get_connection(ref, flink_ref);
       if (i == 1) q_curves = ani.get_connection(flink_ref, ref);
       if (i == 2) q_curves = ani.get_connection(ref, blink_ref);
       if (i == 3) q_curves = ani.get_connection(blink_ref, ref);
-      console.log(q_curves);
+     
       for (j = 0; j < q_curves.length; j++) {
         ani.add_sequence_ani( { target: q_curves[j], 
                                  prop: { strokeStyle: 'red', lineWidth: 3},
                                  concurrence:true} );
+        qs.push(q_curves[j]);
       }
+      
     }
 
     // remove object
-    ani.add_sequence_ani( {"pause" : 1} );
-    ani.add_sequence_ani( { prop: { time: 1 },
-                            action: { params: {ani:ani, ref:ref}, func:rm_ani_object} });
+    ani.add_sequence_ani( {pause: (ANIMATION_TIME > 2) ? ANIMATION_TIME - 2 : 1, prop:{step:true}} );
+
+    
+    ani.add_sequence_ani( { prop: { time: 1},
+                            action: { params: {ani:ani, ref:ref}, func:rm_ani_object} ,
+                            rev_action: { params: {lines: qs, obj: obj, ani:ani}, func:add_ani_object  }});
     
     // move to left
     n = node.flink;
@@ -263,6 +284,7 @@ class dlistAnimation {
 
     q_curve = new quadraticCurve(p1, p1, 0);
     ani.connect_object(q_curve);
+    ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: q_curve, 
                            prop: {p:p2, type:"pivot", new_h_scale: h_scale, new_w_scale: w_scale, ani:ani},
                            action: { params: {index: 1, rect: prev_obj, text: flink_ref}, func: update_rect_text  }});
@@ -306,6 +328,7 @@ class dlistAnimation {
   
     q_curve = new quadraticCurve(p1, p1, 0);
     ani.connect_object(q_curve);
+    ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: q_curve, 
                            prop: {p:p2, type:"pivot", new_w_scale: w_scale, new_h_scale: h_scale, ani:ani},
                            action: { params: {index: 2, rect: next_obj, text: blink_ref}, func: update_rect_text  }});
@@ -396,28 +419,29 @@ class dlistAnimation {
 
     // put shadow on front node, back node and new inserted node.
     ani.add_parallel_ani( { target: next_obj,
-                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? 0 : ANIMATION_TIME, end: ANIMATION_TIME * 8} } );
+                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? 0 : ANIMATION_TIME - 1, end: ANIMATION_TIME * 8} } );
 
     
     ani.add_parallel_ani( { target: prev_obj,
-                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? ANIMATION_TIME : 0, end: ANIMATION_TIME * 8} } );
+                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? ANIMATION_TIME - 1 : 0, end: ANIMATION_TIME * 8} } );
 
    
     ani.add_parallel_ani( { target: rect,
                             prop: { strokeStyle: 'red', shadowColor:"#FF0000", shadowBlur:15, start: 0, end: ANIMATION_TIME * 8} } );
  
+  
     
-   
     if (type == "before") {
       // color the transition of finding the previous node.
       q_curve = get_curve_by_height(ani,flink_ref, blink_ref, height * 5 / 6); // blink
+
       ani.add_sequence_ani( { target: q_curve,
-                              prop: { strokeStyle: 'red'} } );
+                              prop: { strokeStyle: 'red', step:true} } );
     } else {
       // color the transition of finding the next node.
       q_curve = get_curve_by_height(ani, blink_ref, flink_ref, height / 2); // flink
       ani.add_sequence_ani( { target: q_curve,
-                              prop: { strokeStyle: 'red'} } );
+                              prop: { strokeStyle: 'red', step:true} } );
    }
 
 
@@ -446,13 +470,14 @@ class dlistAnimation {
     q_curve = get_curve_by_height(ani, blink_ref, flink_ref, height / 2); // flink
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5} );
     ani.add_sequence_ani( { target: q_curve, 
-                        prop: {p:p1, type:"pivot", new_h_scale: h_scale, ani:ani},
-                        action: { params: {index: 1, rect: prev_obj, text: ref}, func: update_rect_text  } });
+                            prop: {p:p1, type:"pivot", new_h_scale: h_scale, ani:ani},
+                            action: { params: {index: 1, rect: prev_obj, text: ref}, func: update_rect_text  },
+                            rev_action: { params: {index:1, rect:prev_obj, text: prev_obj.text[1] }, func: update_rect_text} });
 
 
 
     /* front node -> new node */
-    ani.add_sequence_ani( {pause: ANIMATION_TIME / 5} );
+    ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     q_curve = get_curve_by_height(ani, flink_ref, blink_ref, height *  5 / 6); // blink
     if (node.flink == sentinel) {
       
@@ -473,7 +498,8 @@ class dlistAnimation {
 
     ani.add_sequence_ani({ target: q_curve, 
                            prop: {p:p2, type:"pivot", new_h_scale: h_scale, new_w_scale: w_scale, ani:ani},
-                           action: { params: {index: 2, rect: next_obj, text: ref}, func: update_rect_text  } });
+                           action: { params: {index: 2, rect: next_obj, text: ref}, func: update_rect_text  },
+                           rev_action: { params: {index:2, rect: next_obj, text: next_obj.text[2] }, func: update_rect_text} });
   
     
 
@@ -497,10 +523,11 @@ class dlistAnimation {
       w_scale = 0;
     }
    
-    ani.add_sequence_ani( {pause: ANIMATION_TIME / 5} );
+    ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: q_curve, 
                            prop: {p:p, type:"pivot", new_h_scale: h_scale, new_w_scale: w_scale, ani:ani},
-                           action: { params: {index: 1, rect: rect, text: flink_ref}, func: update_rect_text  }});
+                           action: { params: {index: 1, rect: rect, text: flink_ref}, func: update_rect_text  },
+                           rev_action: { params: {index:1, rect: rect, text: rect.text[1] }, func: update_rect_text} });
 
 
 
@@ -517,13 +544,15 @@ class dlistAnimation {
       h_scale = 0;
     }
 
-    ani.add_sequence_ani( {pause: ANIMATION_TIME / 5} );
+    ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: q_curve, 
                            prop: {p:p, type:"pivot", new_h_scale: h_scale, ani:ani},
-                           action: { params: {index: 2, rect: rect, text: blink_ref}, func: update_rect_text  }});
+                           action: { params: {index: 2, rect: rect, text: blink_ref}, func: update_rect_text  },
+                           rev_action: { params: {index:2, rect: rect, text: rect.text[2] }, func: update_rect_text} });
 
 
     // move new node up
+    ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: rect, 
                            prop: {p: new Point(x, y / 2) }});
 

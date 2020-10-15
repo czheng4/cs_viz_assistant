@@ -26,11 +26,13 @@
 
 
   <button type="button" id = "clear">clear</button> 
-  <button type="button" id = "step_back">step back</button>
-  <input type="range" min="0" max="99" value="30" id="speed">
   
-
-  not working now<button type="button" id = "step">step</button>
+  <input type="range" min="0" max="90" value="30" id="speed">
+  
+  <button type="button" id = "step_back">step back</button>
+  <button type="button" id = "step_forward">step forward</button>&emsp;&emsp;
+  step_by_step animation<input type="checkbox" id="step_by_step">
+  
   <canvas id = "draw" width ="1000" height="2000" ></canvas>
 </body>
 
@@ -58,7 +60,7 @@ $(document).ready(function(){
   ctx.translate(100,50);
 
   da = new dlistAnimation();
-  da.ani.step_by_step = true;
+  da.ani.step_by_step = false;
 
   // da.insert_before_node(10,da.dlist.sentinel);
   $("#push_back").click(function(){
@@ -83,25 +85,32 @@ $(document).ready(function(){
   $("#erase").click(function() {
     da.erase($("#erase_t").val());
   })
-  $("#step").click(function(){
+  $("#step_forward").click(function(){
+    da.ani.reverse = false;
+    REVERSE_ANIMATION = false;
     da.ani.resume_animation();
   })
 
   $("#clear").click(function() {
     da = new dlistAnimation();
+    da.ani.step_by_step = $("$step_by_step").is(":checked");
 
   });
 
   $("#step_back").click(function() { 
     console.log("step_back");
-    da = da.anis[da.anis.length - 1];
-    
+    da.ani.reverse_animation();
+    da.ani.resume_animation();
   })
 
   $("#speed").change(function() {
     ANIMATION_TIME = 100 - $(this).val();
 
   });
+
+  $("#step_by_step").change(function() {
+    da.ani.step_by_step = $(this).is(":checked");
+  })
 
 
 });
