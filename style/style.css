@@ -1,0 +1,42 @@
+
+body {
+  margin: 0;
+}
+
+
+.animation-control {
+ 
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+}
+
+.elaboration {
+  margin: 10px 0px 5px 0px;
+}
+
+.header { 
+  grid-area: header; 
+  background-color: lightblue;
+  font-size: 30px;
+  padding: 5px 5px 5px 10px;
+}
+
+.control {
+  grid-area: control;
+  background-color: #d5e7c2;
+  padding: 10px 5px 5px 10px;
+}
+
+.canvas {
+  grid-area: canvas;
+  background-color: white;
+}
+
+.grid-container {
+	display: grid;
+  grid-template-areas: 
+    'header'
+    'control'
+    'canvas'
+}
