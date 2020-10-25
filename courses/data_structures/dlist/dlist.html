@@ -5,8 +5,6 @@
   <title></title>
   <link rel="stylesheet" href="../../../style/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="../../../lib/memory_generator.js"></script>
-  <script src="../../../lib/canvas_helper.js"></script>
 </head>
 <style>
   input[type = "text"]{
@@ -60,6 +58,8 @@
  
 </body>
 
+<script src="../../../lib/memory_generator.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
 <script src="../../../lib/drawing.js"></script>
 <script src="dlist.js"></script>
 <script type="text/javascript">
@@ -70,7 +70,7 @@
 $(document).ready(function(){
  
 
-  set_canvas(1200, 700)
+  set_canvas(1200, 700);
   ctx.translate(100,20);
   
   da = new dlistAnimation();

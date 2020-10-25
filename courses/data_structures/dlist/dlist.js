@@ -196,6 +196,14 @@ class dlistAnimation {
 
   erase(ref) {
 
+    // if (this.error_check(0, ref)) return; 
+    ref = ref.trim();
+    if (ref == "") {
+      this.ani.elaboration.text("Address is empty");
+      return;
+    }
+    if (ref.indexOf("0x")) ref = "0x" + ref;
+
     if (this.dlist.ms.get_object(ref) == null) {
       this.ani.elaboration.text(ref + " doesn't exist");
       return;
@@ -379,32 +387,64 @@ class dlistAnimation {
   }
 
   push_back(v) {
+    if (this.error_check(v, this.dlist.ms.get_reference(this.dlist.sentinel))) return;
     this.insert_node(v, this.dlist.ms.get_reference(this.dlist.sentinel), "before");
   }
   push_front(v) {
+    if (this.error_check(v, this.dlist.ms.get_reference(this.dlist.sentinel.flink))) return;
     this.insert_node(v, this.dlist.ms.get_reference(this.dlist.sentinel.flink), "after");
   }
 
   insert_after_node(v, ref) {
+    if (this.error_check(v, ref)) return;
+    
+    ref = ref.trim();
+    if (ref.indexOf("0x")) ref = "0x" + ref;
+
     let n = this.dlist.ms.get_object(ref);
     n = n.flink;
     ref = this.dlist.ms.get_reference(n);
     this.insert_node(v, ref , "after");
   }
   insert_before_node(v, ref) {
+    if (this.error_check(v, ref)) return;
+
+    ref = ref.trim();
+    if (ref.indexOf("0x")) ref = "0x" + ref;
+
     this.insert_node(v, ref, "before");
   }
 
+
+  error_check(v, ref) {
+    ref = ref.trim();
+    if (ref == "") {
+      this.ani.elaboration.text("Address is empty");
+      return true;
+    }
+    if (ref.indexOf("0x")) ref = "0x" + ref;
+    if (this.dlist.ms.get_object(ref) == null) {
+      this.ani.elaboration.text(ref + " doesn't exist");
+      return true;
+    } else if (v == "") {
+      this.ani.elaboration.text("Value is empty");
+      return true;
+    }
+
+    return false;
+  }
   /* it actually inserts a new node before node "ref". 
      But it could also simulate the insert after node(ref).blink by passing type "after" */
   insert_node(v,ref, type = "before") {
+
+
     let rect, flink_ref, blink_ref, label, node;
     let p,p1,p2,p3,p4,q_curve;
     let prev_obj, next_obj;
     let x;
     let h_scale, w_scale;
     let obj;
-    let e_text;
+
 
     let n = this.dlist.ms.get_object(ref);
   

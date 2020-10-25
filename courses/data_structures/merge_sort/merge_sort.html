@@ -3,57 +3,51 @@
 <head>
 
   <title></title>
+  <link rel="stylesheet" href="../../../style/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="../../../lib/memory_generator.js"></script>
 </head>
 <body>
+   <div class = "grid-container">
+    <div class = "header">Merge Sort</div>
+    <div class = "control"> 
 
+      array <input type="text" id="array" placeholder="enter values separated by space" style = "width: 500px; height:25px; font-size:20px"> 
 
-  array <input type="text" id="array" placeholder="enter values separated by space" style = "width: 500px; height:30px; font-size:20px"> 
+      <button type="button" id = "run">run</button> <br><br>
 
-  <button type="button" id = "run">run</button> 
+      <div class = "animation-control">
+        <button type="button" id = "step_back">Step Back</button>&emsp;
+        <button type="button" id = "step_forward">Step Forward</button>&emsp;&emsp;
+        step by step animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        animation speed&emsp;<input type="range" min="0" max="90" value="0" id="speed"> 
+      </div>
 
-  <br><br>
+      <div class = "elaboration">Elaboration: <span id = "elaboration_text" style="color:red"></span> </div>
+    </div>
 
+    <div class = "canvas"> 
+       <canvas id = "draw"></canvas>
+    </div>
+  </div>
 
   
-  <input type="range" min="0" max="90" value="30" id="speed">
-  
-  <button type="button" id = "step_back">step back</button>
-  <button type="button" id = "step_forward">step forward</button>&emsp;&emsp;
-  step_by_step animation<input type="checkbox" id="step_by_step">
-  
-  <canvas id = "draw" width ="3000" height="2000" ></canvas>
 </body>
 
 <script src="../../../lib/drawing.js"></script>
+<script src="../../../lib/memory_generator.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
 <script src="merge_sort.js"></script>
 <script type="text/javascript">
 
 
-
-
 $(document).ready(function(){
  
-  // sharpen blurry text
-
-  var canvas = document.getElementById("draw");
-  var size = 1500;
-  canvas.style.width = size + "px"; 
-  canvas.style.height = size + "px"; 
-  var scale = window.devicePixelRatio;  
-  canvas.width = Math.floor(size * scale); 
-  canvas.height = Math.floor(size * scale); 
   
-  //CSS pixels for coordinate systems 
-  ctx.scale(scale, scale); 
-
+  set_canvas(1200, 800);
   ctx.translate(150,50);
 
   var v = [21,35,12,9,4,56,3,5,10,34,21];
   var msa = new mergeSortAnimation(deep_copy(v));
-  
-  // msa.ani.step_by_step = false;
 
 
   $("#run").click(function() {
@@ -69,9 +63,13 @@ $(document).ready(function(){
       if (!isNaN(d)) v.push(d);
     }
     
-
+    
     if(v.length == 0) v = v1;
-
+    else if(v.length <= 2) {
+      v = v1;
+      msa.ani.elaboration.text("array size must be > 2");
+      return;
+    }
 
     if (v.length != 0) {
       msa = new mergeSortAnimation(deep_copy(v));
@@ -79,7 +77,6 @@ $(document).ready(function(){
       msa.run_animation();
     }
   })
-
 
   $("#step_forward").click(function(){
     msa.ani.reverse = false;
@@ -99,7 +96,6 @@ $(document).ready(function(){
   $("#step_by_step").change(function() {
     msa.ani.step_by_step = $(this).is(":checked");
   })
-
 
 });
 
