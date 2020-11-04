@@ -19,7 +19,22 @@ class Dlist {
 		this.ms = new memorySimulator();
 		
 	}
-	
+	deep_copy() {
+    let dlist = new Dlist();
+    let n = this.sentinel.flink;
+    while (n != this.sentinel) {
+      dlist.push_back(n.value);
+      n = n.flink;
+    }
+    return dlist;
+  }
+  empty() {
+    return (this.size == 0);
+  }
+
+  first() {
+    return this.sentinel.flink.value;
+  }
 	insert_before_node(v, node) {
 		let prev_node, new_node;
 		new_node = new Dnode(v);
@@ -49,6 +64,48 @@ class Dlist {
 		return this.insert_before_node(v, this.sentinel.flink);
 	}
 
+  erase_value(v) {
+    let n = this.sentinel.flink;
+    while (n != this.sentinel) {
+      if (v == n.value) {
+        this.erase(n);
+        return true;
+      } 
+      n = n.flink;
+    }
+
+    return false;
+  }
+
+  // returns the position
+  insert_sort(v) {
+    let node = this.sentinel.flink;
+    let i = 0;
+    let new_node;
+
+    while (1) {
+      
+      if (this.sentinel == node || v <= node.value) {
+        this.insert_before_node(v, node);
+        break;
+      }
+      node = node.flink;
+      i++;
+
+    }
+
+    return i;
+  }
+
+  insert_before_pos(v, n) {
+    let i = 0;
+    let node = this.sentinel.flink;
+    for (i = 0; i < n; i++) {
+      node = node.flink;
+    }
+
+    return this.insert_before_node(v, node);
+  }
 
 	erase(node) {
 		let prev_node, next_node;
@@ -108,6 +165,7 @@ function add_ani_object(dict) {
   let ani = dict.ani;
   let i;
   ani.add_object(obj);
+  console.log("add it");
   for (i = 0; i < lines.length; i++) {
     ani.connect_object(lines[i]);
   }
@@ -260,9 +318,8 @@ class dlistAnimation {
     }
 
     // remove object
-    ani.add_sequence_ani( {pause: (ANIMATION_TIME > 2) ? ANIMATION_TIME - 2 : 1, prop:{step:true}} );
+    ani.add_sequence_ani( {pause: ANIMATION_TIME - 2, prop:{step:true}} );
 
-    
     ani.add_sequence_ani( { prop: { time: 1},
                             text: "remove " + ref,
                             action: { params: {ani:ani, ref:ref}, func:rm_ani_object} ,
@@ -485,11 +542,11 @@ class dlistAnimation {
 
     // put shadow on front node, back node and new inserted node.
     ani.add_parallel_ani( { target: next_obj,
-                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? 0 : ANIMATION_TIME - 1, end: ANIMATION_TIME * 8} } );
+                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? 0 : ANIMATION_TIME - 3, end: ANIMATION_TIME * 8} } );
 
     
     ani.add_parallel_ani( { target: prev_obj,
-                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? ANIMATION_TIME - 1 : 0, end: ANIMATION_TIME * 8} } );
+                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? ANIMATION_TIME - 3 : 0, end: ANIMATION_TIME * 8} } );
 
    
     ani.add_parallel_ani( { target: rect,
@@ -502,14 +559,18 @@ class dlistAnimation {
       q_curve = get_curve_by_height(ani,flink_ref, blink_ref, height * 5 / 6); // blink
 
       ani.add_sequence_ani( { target: q_curve,
-                              prop: { strokeStyle: 'red', step:true} } );
+                              prop: { strokeStyle: 'red', lineWidth:3}, concurrence:true } );
+
     } else {
       // color the transition of finding the next node.
       q_curve = get_curve_by_height(ani, blink_ref, flink_ref, height / 2); // flink
       ani.add_sequence_ani( { target: q_curve,
-                              prop: { strokeStyle: 'red', step:true} } );
+                              prop: { strokeStyle: 'red', lineWidth:3}, concurrence:true } );
    }
 
+   // this is a classical way to keep previous animation effect before we step foward. 
+   // we pause 2 ani_time before the previous animation effect. Bc of how lib works, we have to use "-2".
+   ani.add_sequence_ani( {pause: ANIMATION_TIME - 2, prop:{step:true}} );
 
     // move every rect after inserted rect to right
     n = node.flink;

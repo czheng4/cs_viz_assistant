@@ -28,7 +28,7 @@
       <input type="text" id="erase_t" placeholder="address">
       <button type="button" id = "erase">Erase</button> &emsp; <button type="button" id = "clear">Clear List</button>
 
-      <br><br>
+      <div class="line"></div>
 
       insert <input type="text" id="insert_before_node_v"> before <input type="text" id="insert_before_node_n" placeholder="address">
       <button type="button" id = "insert_before_node">Insert</button>&emsp;&emsp;
@@ -36,7 +36,7 @@
       insert <input type="text" id="insert_after_node_v"> after <input type="text" id="insert_after_node_n" placeholder="address">
       <button type="button" id = "insert_after_node">Insert</button>
 
-      <br> <br>
+      <div class="line"></div>
       
      
       <div class = "animation-control">
@@ -59,86 +59,61 @@
 </body>
 
 <script src="../../../lib/memory_generator.js"></script>
-<script src="../../../lib/canvas_helper.js"></script>
 <script src="../../../lib/drawing.js"></script>
 <script src="dlist.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
-
 
 
 
 $(document).ready(function(){
  
 
-  set_canvas(1200, 700);
-  ctx.translate(100,20);
+  set_canvas(1200, 700, 100, 20);
   
-  da = new dlistAnimation();
+  a = new dlistAnimation(); // must use name a for every animation
 
   $("#push_back").click(function(){
-    da.push_back($("#push_back_t").val());
+    a.push_back($("#push_back_t").val());
     console.log($("#push_back_t").val())
   });
 
   $("#push_front").click(function(){
-    da.push_front($("#push_front_t").val());
+    a.push_front($("#push_front_t").val());
   });
 
   $("#insert_before_node").click(function(){
     console.log($("#insert_before_node_v").val(), $("#insert_before_node_n").val());
-    da.insert_before_node($("#insert_before_node_v").val(), $("#insert_before_node_n").val());
+    a.insert_before_node($("#insert_before_node_v").val(), $("#insert_before_node_n").val());
   })
 
   $("#insert_after_node").click(function(){
     console.log($("#insert_after_node_v").val(), $("#insert_after_node_n").val());
-    da.insert_after_node($("#insert_after_node_v").val(), $("#insert_after_node_n").val());
+    a.insert_after_node($("#insert_after_node_v").val(), $("#insert_after_node_n").val());
   })
 
   $("#erase").click(function() {
-    da.erase($("#erase_t").val());
+    a.erase($("#erase_t").val());
   })
 
   $("#pop_back").click(function() {
-    da.pop_back();
+    a.pop_back();
   })
 
   $("#pop_front").click(function() {
-    da.pop_front();
+    a.pop_front();
   })
 
 
   $("#clear").click(function() {
-    da = new dlistAnimation();
-    da.ani.step_by_step = $("#step_by_step").is(":checked");
+    a = new dlistAnimation();
+    a.ani.step_by_step = $("#step_by_step").is(":checked");
 
   });
-
-
-  $("#step_forward").click(function(){
-    da.ani.reverse = false;
-    REVERSE_ANIMATION = false;
-    da.ani.resume_animation();
-  })
-
-  $("#step_back").click(function() { 
-    da.ani.reverse_animation();
-    da.ani.resume_animation();
-  })
-
-  $("#speed").change(function() {
-    ANIMATION_TIME = 100 - $(this).val();
-
-  });
-
-  $("#step_by_step").change(function() {
-    da.ani.step_by_step = $(this).is(":checked");
-  })
-
-
 });
 
 </script>
-
+<script src="../../../lib/control.js"></script>
 
 
 </html>

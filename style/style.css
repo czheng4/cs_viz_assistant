@@ -3,8 +3,11 @@ body {
   margin: 0;
 }
 
+.line {
+  margin-top: 12px;
+}
 
-.animation-control {
+.graph_operation, .animation-control {
  
   display:flex;
   flex-direction:row;
