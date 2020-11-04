@@ -117,8 +117,8 @@ $(document).ready(function(){
   var g = dijkstra_example(ani);
   var graph_type;
   a = new dijkstraAnimation(ani); // must be name a
-  ani.step_by_step = false;
-  ANIMATION_TIME = 100;
+  ani.step_by_step = true;
+  ANIMATION_TIME = 20;
   a.run_dijkstra(g.get_node(0), g);
 
   $("#run").click(function() {
