@@ -4,6 +4,8 @@
 function update_ctx_prop(dict) {
   let obj = dict.obj,
       ctx_prop = dict.ctx_prop; 
+
+  console.log(obj.ctx_prop, ctx_prop);
   obj.ctx_prop = ctx_prop;
 }
 
@@ -64,7 +66,7 @@ function hightlight_col(dict) {
 
 }
 
-function multimap_content(node_q, dist_q, hightlight_node = null) {
+function multimap_content(node_q, dist_q, hightlight_node = null, dist = -1) {
   let i;
   let str;
   let n1, d1;
@@ -73,19 +75,18 @@ function multimap_content(node_q, dist_q, hightlight_node = null) {
   n1 = node_q.sentinel.flink;
   n2 = dist_q.sentinel.flink;
   for (n1, n2; n1 != node_q.sentinel; n1 = n1.flink, n2 = n2.flink) {
-    if (hightlight_node != null && n1.value.id == hightlight_node.id) {
+    if (hightlight_node != null && n1.value.id == hightlight_node.id && (n2.value == dist || dist == -1) ) {
       str += '<span style = "color: red">';
     }
 
     str += "(" + n2.value + ", " + n1.value.id + ")  ";
 
-    if (hightlight_node != null && n1.value.id == hightlight_node.id) {
+    if (hightlight_node != null && n1.value.id == hightlight_node.id && (n2.value == dist || dist == -1) ) {
       str += '</span>';
     }
   }
   return str;
-  // $("#multimap_t").text("");
-  // $("#multimap_t").append(str);
+  
 }
 
 function update_multimap_content(dict) {
@@ -115,10 +116,99 @@ class dijkstraAnimation {
   constructor(ani){
     this.ani = ani;
     this.graph = null;
+    this.starting_node = null;
   }
 
 
-  run_dijkstra(starting_node, g) {
+  find_path(ending_node, g) {
+    let n = ending_node, pre_n;
+    let ani = this.ani;
+    let path = "";
+
+    for (let key in g.node_map) {
+      g.node_map[key].ani_circle.ctx_prop.strokeStyle = "black";
+      g.node_map[key].ani_circle.ctx_prop.shadowColor = "";
+      g.node_map[key].ani_circle.ctx_prop.shadowBlur = 0;
+    }
+
+    for (let key in g.edge_map) {
+      if (g.edge_map[key].ani_line != null)
+        g.edge_map[key].ani_line.ctx_prop.strokeStyle = "black";
+    }
+
+
+
+    ani.clear_animation();
+    pre_n = n.shallow_copy();
+    while (n != this.starting_node) {
+
+      if (n.backedge == null) return;
+      if (n != ending_node) path += " <- ";
+      path += "({}, {})".format(n.backedge.n1.id, n.backedge.n2.id);
+     
+
+      ani.add_sequence_ani({ 
+        pause:1,
+        text:path,
+        action: { params: {obj: n.ani_circle, ctx_prop: update_dict(n.ani_circle.ctx_prop, ADJ_NODE_CTX) }, 
+                  func: update_ctx_prop},
+        rev_action: { params: {obj: n.ani_circle, ctx_prop: n.ani_circle.ctx_prop },
+                      func: update_ctx_prop},
+        concurrence:true
+      });  
+
+      ani.add_sequence_ani({ 
+        pause:1,
+        action: { params: {obj: n.backedge.ani_line, ctx_prop: update_dict(n.backedge.ani_line.ctx_prop, {strokeStyle:"red", lineWidth:3}) }, 
+                  func: update_ctx_prop},
+        rev_action: { params: {obj: n.backedge.ani_line, ctx_prop: n.backedge.ani_line.ctx_prop },
+                       func: update_ctx_prop},
+        concurrence:true
+      });  
+
+
+      ani.add_sequence_ani({ 
+        pause: 1, 
+        action: { params: {g:g, node: n}, func: hightlight_col },
+        rev_action : { params: {g:g, node:pre_n }, func: hightlight_col },
+        concurrence:true
+      });  
+      pre_n = n.shallow_copy();
+
+
+
+
+      ani.add_sequence_ani({
+        pause: ANIMATION_TIME,
+        prop: {step: true}
+      })
+      
+      n = n.backedge.n1;
+     
+
+    }
+    ani.add_sequence_ani({ 
+        pause: 1, 
+        action: { params: {g:g, node: n}, func: hightlight_col },
+        rev_action : { params: {g:g, node:pre_n}, func: hightlight_col },
+        concurrence:true
+    });  
+      
+
+
+
+    ani.add_sequence_ani({ 
+      pause: 1,
+      text: path + ". Done",
+      action: { params: {obj: n.ani_circle, ctx_prop: update_dict(n.ani_circle.ctx_prop, ADJ_NODE_CTX) }, 
+                func: update_ctx_prop},
+      rev_action: { params: {obj: n.ani_circle, ctx_prop: n.ani_circle.ctx_prop },
+                    func: update_ctx_prop},
+    });  
+    ani.run_animation();
+  }
+
+  run_dijkstra(starting_node, g, leave_node = false) {
     let dist_q = new Dlist();
     let node_q = new Dlist();
     let ani = this.ani;
@@ -132,15 +222,26 @@ class dijkstraAnimation {
     let pre_multimap_text;
     let multimap_text;
 
+    ani.clear_animation();
+    this.starting_node = starting_node;
     pre_multimap_text = "";
     total_animation_time = 0;
 
     // set all nodes' distance to -1 and backedge to null
     // standard routine for dijkstra algorithm
+    console.log(starting_node);
     for (let key in g.node_map) {
       g.node_map[key].distance = -1;
       g.node_map[key].backedge = null;
       g.node_map[key].visited = 0;
+      g.node_map[key].ani_circle.ctx_prop = deep_copy(DEFAULT_CIRCLE_CTX);
+    }
+
+
+    for (let key in g.edge_map) {
+      if (g.edge_map[key].ani_line != null){
+        g.edge_map[key].ani_line.ctx_prop = deep_copy(DEFAULT_LINE_CTX);
+      }
     }
 
     // set up the table.
@@ -201,8 +302,9 @@ class dijkstraAnimation {
       // give shadows for currently processing node.
       ani.add_parallel_ani({target: circle, prop: node_prop });
 
+
       // remove front node animation (show elaboration)
-      multimap_text = multimap_content(node_q, dist_q, n);
+      multimap_text = multimap_content(node_q, dist_q, n, dist);
       ani.add_sequence_ani({ 
         pause: 1,
         text: "Remove node {} from the front of the multimap.".format(n.id),
@@ -210,8 +312,20 @@ class dijkstraAnimation {
         rev_action: { params: {content: pre_multimap_text }, func: update_multimap_content },
         concurrence: true,
       });
-
       pre_multimap_text = multimap_text;
+
+
+
+      ani.add_sequence_ani({ 
+        pause: 1, 
+        action: { params: {g:g, node:n.shallow_copy()}, func: hightlight_col},
+        rev_action : { params: {g:g, node:pre_n}, func: hightlight_col },
+        concurrence:true 
+      });
+      pre_n = n.shallow_copy();
+
+
+
 
       // animation of highlighting removing node in the multimap
       ani.add_sequence_ani({
@@ -233,81 +347,119 @@ class dijkstraAnimation {
       });
       pre_multimap_text = multimap_text;
 
-     
       
-      // animation of showing adj nodes. 
-      for (i = 0; i < n.adj.length; i++) {
-        ani.add_sequence_ani({
-          target:n.adj[i].ani_line,
-          prop: {strokeStyle:"red", lineWidth:3},
-          concurrence:true
-        })
-        ani.add_sequence_ani({
-          target:n.adj[i].n2.ani_circle,
-          prop: deep_copy(ADJ_NODE_CTX),
-          concurrence: true
-        })
+
+      if (dist != n.distance) {
+        e_text = "node's distance != key on multimap ({} != {}). Do nothing".format(n.distance, dist);
+      } else {
+
+        e_text = "Process node {}' adj list".format(n.id);
+
+
+      
+        // animation of showing adj nodes. 
+        for (i = 0; i < n.adj.length; i++) {
+          ani.add_sequence_ani({
+            target:n.adj[i].ani_line,
+            prop: {strokeStyle:"red", lineWidth:3},
+            concurrence:true
+          })
+          ani.add_sequence_ani({
+            target:n.adj[i].n2.ani_circle,
+            prop: deep_copy(ADJ_NODE_CTX),
+            concurrence: true
+          })
+        }
       }
 
       ani.add_sequence_ani({
         pause:ANIMATION_TIME - 2,
-        text: "Process node {}' adj list".format(n.id),
+        text: e_text,
         prop : {step: true}
       })
 
       total_animation_time += ANIMATION_TIME * 2;
-      if (n.adj.length == 0) total_animation_time -= 2;
+      if (n.adj.length == 0 || dist != n.distance) total_animation_time -= 2;
 
 
-      for (i = 0; i < n.adj.length; i++) {
-        e = n.adj[i];
-        n2 = e.n2;
-        b_dist = e.weight + dist;
-        
+      if (dist == n.distance) {
+        for (i = 0; i < n.adj.length; i++) {
 
-        // set line(edge) prop
-        line = e.ani_line;       
-        line_prop = update_dict(line.ctx_prop, {strokeStyle: "red", lineWidth:3});
-        line_prop.start = total_animation_time;
-
-        // set adj node prop
-        adj_prop = update_dict(n2.ani_circle.ctx_prop, ADJ_NODE_CTX);
-        adj_prop.start = total_animation_time;
-
-        if (n2.visited == 1) {
-          adj_prop.fillStyle = "yellow";
-        }
-        
-        e_text = "Process edge ( " + e.id + " ): ";
-        e_text += "New Distance = " + dist + " + " + e.weight + " = " + (dist + e.weight); 
-         if (n2.distance == -1 || n2.distance > b_dist) {}
-        else e_text += " > {}. Do Nothing".format(n2.distance);
-
-        // color the edge red
-        ani.add_parallel_ani({ target:line, prop: line_prop});
-
-        // generate shadow for adj node
-        ani.add_parallel_ani({ target:n2.ani_circle, prop: adj_prop})
-
-
-        // animation of highlighting the node in the table
-        ani.add_sequence_ani({ 
-          pause: 1, 
-          text: e_text,
-          action: { params: {g:g, node:n2.shallow_copy()}, func: hightlight_col},
-          rev_action : { params: {g:g, node:pre_n}, func: hightlight_col },
-          concurrence:true 
-        });
-
-        pre_n = n2.shallow_copy();
-        ani.add_sequence_ani({pause:ANIMATION_TIME, prop:{step:true}});
-
-        total_animation_time += ANIMATION_TIME;
-        if (n2.distance == -1 || n2.distance > b_dist) {
+          e = n.adj[i];
+          n2 = e.n2;
+          b_dist = e.weight + dist;
           
-          if (n2.distance != -1) {
 
-            multimap_text = multimap_content(node_q, dist_q, n2);
+          // set line(edge) prop
+          line = e.ani_line;       
+          line_prop = update_dict(line.ctx_prop, {strokeStyle: "red", lineWidth:3});
+          line_prop.start = total_animation_time;
+
+          // set adj node prop
+          adj_prop = update_dict(n2.ani_circle.ctx_prop, ADJ_NODE_CTX);
+          adj_prop.start = total_animation_time;
+
+          if (n2.visited == 1) {
+            adj_prop.fillStyle = "yellow";
+          }
+          
+          e_text = "Process edge ( " + e.id + " ): ";
+          e_text += "New Distance = " + dist + " + " + e.weight + " = " + (dist + e.weight); 
+           if (n2.distance == -1 || n2.distance > b_dist) {}
+          else e_text += " > {}. Do Nothing".format(n2.distance);
+
+          // color the edge red
+          ani.add_parallel_ani({ target:line, prop: line_prop});
+
+          // generate shadow for adj node
+          ani.add_parallel_ani({ target:n2.ani_circle, prop: adj_prop})
+
+
+          // animation of highlighting the node in the table
+          ani.add_sequence_ani({ 
+            pause: 1, 
+            text: e_text,
+            action: { params: {g:g, node:n2.shallow_copy()}, func: hightlight_col},
+            rev_action : { params: {g:g, node:pre_n}, func: hightlight_col },
+            concurrence:true 
+          });
+
+          pre_n = n2.shallow_copy();
+          ani.add_sequence_ani({pause:ANIMATION_TIME, prop:{step:true}});
+
+          total_animation_time += ANIMATION_TIME;
+          if (n2.distance == -1 || n2.distance > b_dist) {
+            
+            if (leave_node == false && n2.distance != -1) {
+
+              multimap_text = multimap_content(node_q, dist_q, n2);
+              ani.add_sequence_ani({
+                pause:1,
+                action: { params: {content: multimap_text }, func: update_multimap_content },
+                rev_action: { params: {content: pre_multimap_text }, func: update_multimap_content },
+                concurrence:true
+              });
+              pre_multimap_text = multimap_text;
+
+              ani.add_sequence_ani({
+                pause:ANIMATION_TIME, 
+                text: "node {} is in the multimap, remove it".format(n2.id),
+                prop: {step:true}
+              });
+
+              node_q.erase(n2.itr);
+              dist_q.erase_value(n2.distance);
+
+              total_animation_time += ANIMATION_TIME;
+
+            }
+            n2.distance = b_dist;
+            n2.backedge = e;
+            pos = dist_q.insert_sort(b_dist);
+            n2.itr = node_q.insert_before_pos(n2, pos);
+
+            // animation of hightlighting new added edge
+            multimap_text = multimap_content(node_q, dist_q, n2, b_dist);
             ani.add_sequence_ani({
               pause:1,
               action: { params: {content: multimap_text }, func: update_multimap_content },
@@ -316,86 +468,52 @@ class dijkstraAnimation {
             });
             pre_multimap_text = multimap_text;
 
+
+            ani.add_sequence_ani({ 
+              pause: 1, 
+              action: { params: {g:g, node:n2.shallow_copy()}, func: hightlight_col},
+              rev_action: { params: {g:g, node:pre_n}, func: hightlight_col },
+              concurrence:true 
+            })
+            pre_n = n2.shallow_copy();
+
+
             ani.add_sequence_ani({
-              pause:ANIMATION_TIME, 
-              text: "node {} is in the multimap, remove it".format(n2.id),
-              prop: {step:true}
-            });
-
-            node_q.erase(n2.itr);
-            dist_q.erase_value(n2.distance);
-
-            // animation of earsing it.
-            multimap_text = multimap_content(node_q, dist_q);
-            ani.add_sequence_ani({
-              pause:1,
-              action: { params: {content: multimap_text }, func: update_multimap_content },
-              rev_action: { params: {content: pre_multimap_text }, func: update_multimap_content },
-            });
-            pre_multimap_text = multimap_text;
-            total_animation_time += ANIMATION_TIME + 1;
-
+              pause: ANIMATION_TIME,
+              text: "Update node {} and insert ({}, {}) to multimap".format(n2.id, b_dist, e.n2.id),
+              prop: {step: true}
+            })
+            total_animation_time += ANIMATION_TIME;
+             // console.log(dist_q);
           }
-          n2.distance = b_dist;
-          n2.backedge = e;
-          pos = dist_q.insert_sort(b_dist);
-          n2.itr = node_q.insert_before_pos(n2, pos);
 
-          // animation of hightlighting new added edge
-          multimap_text = multimap_content(node_q, dist_q, n2);
-          ani.add_sequence_ani({
-            pause:1,
-            action: { params: {content: multimap_text }, func: update_multimap_content },
-            rev_action: { params: {content: pre_multimap_text }, func: update_multimap_content },
-            concurrence:true
-          });
-          pre_multimap_text = multimap_text;
-
-
+          multimap_text = multimap_content(node_q, dist_q);
           ani.add_sequence_ani({ 
             pause: 1, 
-            action: { params: {g:g, node:n2.shallow_copy()}, func: hightlight_col},
-            rev_action: { params: {g:g, node:pre_n}, func: hightlight_col },
+            action: { params: {content: multimap_text }, func: update_multimap_content },
+            rev_action: { params: {content: pre_multimap_text }, func: update_multimap_content },
             concurrence:true 
           })
-          pre_n = n2.shallow_copy();
+          pre_multimap_text = multimap_text;
+
+          ani.add_sequence_ani({pause:2});
+          total_animation_time += 2;
+          line_prop.end = total_animation_time;
+          adj_prop.end = total_animation_time;
+
+          if (n2.visited == 1) {
+            ani.add_sequence_ani({ 
+              pause:1, 
+              action: { params: {obj: n2.ani_circle, ctx_prop:update_dict(n2.ani_circle.ctx_prop, VISITED_NODE_CTX)}, func: update_ctx_prop},
+            })
+            total_animation_time += 1;
+          }
 
 
-          ani.add_sequence_ani({
-            pause: ANIMATION_TIME,
-            text: "Update node {} and insert ({}, {}) to multimap".format(n2.id, b_dist, e.n2.id),
-            prop: {step: true}
-          })
-          total_animation_time += ANIMATION_TIME;
-           // console.log(dist_q);
+         
+          // console.log(line_prop.start, line_prop.end);
+          // total_animation_time += 2;
         }
-
-        multimap_text = multimap_content(node_q, dist_q);
-        ani.add_sequence_ani({ 
-          pause: 1, 
-          action: { params: {content: multimap_text }, func: update_multimap_content },
-          rev_action: { params: {content: pre_multimap_text }, func: update_multimap_content },
-          concurrence:true 
-        })
-        pre_multimap_text = multimap_text;
-
-        ani.add_sequence_ani({pause:2});
-        total_animation_time += 2;
-        line_prop.end = total_animation_time;
-        adj_prop.end = total_animation_time;
-
-        if (n2.visited == 1) {
-          ani.add_sequence_ani({ 
-            pause:1, 
-            action: { params: {obj: n2.ani_circle, ctx_prop:update_dict(n2.ani_circle.ctx_prop, VISITED_NODE_CTX)}, func: update_ctx_prop},
-          })
-          total_animation_time += 1;
-        }
-
-
-       
-        // console.log(line_prop.start, line_prop.end);
-        // total_animation_time += 2;
       }
 
 
