@@ -107,7 +107,7 @@ function dijkstra_example(ani) {
                        [2,9,12], [8,9,2],  [9,3,8],   [4,8,1],
                        [8,10,1], [3,8,33], [8,6,3],   [6,4,9],
                        [3,7,20], [7,6,1],  [6,5,1]]);
-  // g.draw();
+  $("input[name=graph_type]").prop("disabled", true);
   return g;
 }
 
@@ -285,9 +285,6 @@ $(document).ready(function(){
     
   })
 
-  // $("#node").append("<td id = \"node_0\"> new node </td>");
-  // $("#node_0").css("background-color","pink");
-  // $("#node_0").text("new 1");
 
 });
 

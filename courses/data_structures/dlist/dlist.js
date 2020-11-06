@@ -285,6 +285,9 @@ class dlistAnimation {
         margin = this.margin,
         size = this.dlist.size;
 
+
+    ani.clear_animation();
+
     obj = ani.get_object(ref);
     flink_ref = dlist.ms.get_reference(node.flink);
     blink_ref = dlist.ms.get_reference(node.blink);
@@ -514,7 +517,7 @@ class dlistAnimation {
         sentinel = this.dlist.sentinel,
         size = this.dlist.size;
 
-
+    ani.clear_animation();
     node = dlist.insert_before_node(v,n);
     ref = dlist.ms.get_reference(node);
     flink_ref = dlist.ms.get_reference(node.flink);

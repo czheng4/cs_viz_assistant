@@ -196,7 +196,6 @@ class dijkstraAnimation {
       
 
 
-
     ani.add_sequence_ani({ 
       pause: 1,
       text: path + ". Done",
