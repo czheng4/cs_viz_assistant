@@ -117,13 +117,14 @@ $(document).ready(function(){
  
   var ani = new Animation();
   var g = dijkstra_example(ani);
-  var graph_type;
+  var graph_type, weight_type;
   a = new dijkstraAnimation(ani); // must be name a
-  // ani.step_by_step = false;
-  ANIMATION_TIME = 100 - $("#speed").val();
-  // a.run_dijkstra(g.get_node(0), g, $("#leave_node").is(":checked"));
 
+
+  ANIMATION_TIME = 100 - $("#speed").val();
+  weight_type = T_POSITIVE_NUMBER;
   g.draw();
+  
   $("#clear_graph").click(function(){
     $("input[name=graph_type]").prop("disabled", false);
     ani = new Animation();
@@ -167,7 +168,7 @@ $(document).ready(function(){
     if (g == null) {
       graph_type = $("input[name=graph_type]:checked").val();
       console.log(graph_type);
-      g = new Graph(ani, graph_type);
+      g = new Graph(ani, graph_type, weight_type);
       $("input[name=graph_type]").prop("disabled", true);
     }
     id = $("#node_t").val();
@@ -247,19 +248,25 @@ $(document).ready(function(){
     let id1, id2, weight;
     let n1, n2;
     let e;
+    let i;
     let str = $("#edge_t").val();
     str = str.trim();
     str = str.split(/[ ,]+/);
 
     if (g == null) {
       $("#elaboration_text").text("must create node first");
-    } else if (str.length != 3) {
+    } else if (g.weight_type != T_STRING && g.weight_type != T_CONSTANT && str.length != 3) {
       $("#elaboration_text").text("add_edge: node_id1 node_id2 weight");
     } else {
       id1 = str[0];
       id2 = str[1];
-      weight = parseFloat(str[2]);
-      if (isNaN(weight)) {
+
+      weight = "";
+      for (i = 2; i < str.length; i++) {
+        if (i != 2) weight += " ";
+        weight += str[i];
+      }
+      if (g.weight_type != T_STRING && g.weight_type != T_CONSTANT && isNaN(parseFloat(weight))) {
         $("#elaboration_text").text("add_edge: weight is not valid");
       } else if (!g.is_node(id1)) {
         $("#elaboration_text").text("node " + id1 + " doesn't exist");
@@ -269,17 +276,15 @@ $(document).ready(function(){
       } else {
         n1 = g.get_node(id1);
         n2 = g.get_node(id2);
-       
-        if (g.is_edge(n1, n2)) {
-          e = g.get_edge(n1, n2);
-          $("#elaboration_text").text(e.id + " exists");
-        } else {
-          g.get_edge(n1, n2, weight);
-          g.draw();
-        }
+        
+        console.log(weight);
+        g.get_edge(n1, n2, weight);
+        g.draw();
+        
       }
       $("#edge_t").val("");
       $("#edge_t").focus();
+
 
     }
     

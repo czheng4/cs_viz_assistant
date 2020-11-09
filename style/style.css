@@ -3,11 +3,19 @@ body {
   margin: 0;
 }
 
+.file-management {
+  position: fixed;
+  bottom: 0;
+  background-color: #d5e7c2;
+  padding: 10px;
+  width: 100%;
+}
+
 .line {
   margin-top: 12px;
 }
 
-.graph_operation, .animation-control {
+.animation-control {
  
   display:flex;
   flex-direction:row;

@@ -1,0 +1,11 @@
+TYPE UNDIRECTED
+LAYOUT TREE
+NODE 0 COL red POS 50 50
+NODE 2 POS 0 0
+NODE 3 POS 0 100 COL lightblue
+EDGE 0 3
+EDGe 0 2  width 4 col blue
+EDGE 0 3 3 COL red width 3
+NODE 8
+
+
