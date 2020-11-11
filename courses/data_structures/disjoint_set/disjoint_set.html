@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style type="text/css">
+    input[type = "text"]{
+      width: 120px;
+    }
+
+    td {
+    
+      text-align: center;
+      padding: 5px 7px 5px 7px;
+     /* background-color: pink;*/
+    }
+
+    
+
+  </style>
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header">Disjoint Set</div>
+    <div class = "control"> 
+
+     
+      <input type="text" id="num_elements_t" placeholder="number of elements"> 
+      <button type="button" id = "elements">Initialize Disjoint Set</button> 
+     
+      
+      <div class = "line"></div>
+
+    
+      
+      <div class = "animation-control">
+        <button type="button" id = "step_back">Step Back</button>&emsp;
+        <button type="button" id = "step_forward">Step Forward</button>&emsp;&emsp;
+        step by step animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        animation speed&emsp;<input type="range" min="0" max="90" value="50" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        Elaboration: <span id = "elaboration_text" style="color:red"></span> 
+        
+      </div>
+    </div>
+
+    <div class = "canvas"> 
+       <canvas id = "draw"></canvas>
+    </div>
+  </div>
+
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="../../../lib/memory_generator.js"></script>
+<script src="disjoint_set.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+
+
+
+$(document).ready(function(){
+  
+  set_canvas(1200, 800, 150, 50);
+ 
+  var ani = new Animation();
+  var g = dijkstra_example(ani);
+  var graph_type, weight_type;
+  a = new dijkstraAnimation(ani); // must be name a
+
+
+  ANIMATION_TIME = 100 - $("#speed").val();
+  weight_type = T_POSITIVE_NUMBER;
+  g.draw();
+  
+  $("#clear_graph").click(function(){
+    $("input[name=graph_type]").prop("disabled", false);
+    ani = new Animation();
+    a = new dijkstraAnimation(ani);
+    g = null;
+    ani.draw();
+  })
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+
+</html>

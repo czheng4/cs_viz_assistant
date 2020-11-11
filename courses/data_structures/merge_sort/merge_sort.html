@@ -46,7 +46,7 @@ $(document).ready(function(){
   set_canvas(1200, 800, 150, 50);
 
   var v = [21,35,12,9,4,56,3,5,10,34,21];
-  a = new mergeSortAnimation(deep_copy(v)); //must use name a
+  MAIN_A = new mergeSortAnimation(deep_copy(v)); //must use name MAIN_A
 
 
   $("#run").click(function() {
@@ -66,14 +66,14 @@ $(document).ready(function(){
     if(v.length == 0) v = v1;
     else if(v.length <= 2) {
       v = v1;
-      a.ani.elaboration.text("array size must be > 2");
+      MAIN_A.ani.elaboration.text("array size must be > 2");
       return;
     }
 
     if (v.length != 0) {
-      a = new mergeSortAnimation(deep_copy(v));
-      a.ani.step_by_step = $("#step_by_step").is(":checked");
-      a.run_animation();
+      MAIN_A = new mergeSortAnimation(deep_copy(v));
+      MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
+      MAIN_A.run_animation();
     }
   })
 

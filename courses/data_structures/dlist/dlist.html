@@ -71,43 +71,43 @@ $(document).ready(function(){
 
   set_canvas(1200, 700, 100, 20);
   
-  a = new dlistAnimation(); // must use name a for every animation
+  MAIN_A = new dlistAnimation(); // must use name a for every animation
 
   $("#push_back").click(function(){
-    a.push_back($("#push_back_t").val());
+    MAIN_A.push_back($("#push_back_t").val());
     console.log($("#push_back_t").val())
   });
 
   $("#push_front").click(function(){
-    a.push_front($("#push_front_t").val());
+    MAIN_A.push_front($("#push_front_t").val());
   });
 
   $("#insert_before_node").click(function(){
     console.log($("#insert_before_node_v").val(), $("#insert_before_node_n").val());
-    a.insert_before_node($("#insert_before_node_v").val(), $("#insert_before_node_n").val());
+    MAIN_A.insert_before_node($("#insert_before_node_v").val(), $("#insert_before_node_n").val());
   })
 
   $("#insert_after_node").click(function(){
     console.log($("#insert_after_node_v").val(), $("#insert_after_node_n").val());
-    a.insert_after_node($("#insert_after_node_v").val(), $("#insert_after_node_n").val());
+    MAIN_A.insert_after_node($("#insert_after_node_v").val(), $("#insert_after_node_n").val());
   })
 
   $("#erase").click(function() {
-    a.erase($("#erase_t").val());
+    MAIN_A.erase($("#erase_t").val());
   })
 
   $("#pop_back").click(function() {
-    a.pop_back();
+    MAIN_A.pop_back();
   })
 
   $("#pop_front").click(function() {
-    a.pop_front();
+    MAIN_A.pop_front();
   })
 
 
   $("#clear").click(function() {
-    a = new dlistAnimation();
-    a.ani.step_by_step = $("#step_by_step").is(":checked");
+    MAIN_A = new dlistAnimation();
+    MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
 
   });
 });

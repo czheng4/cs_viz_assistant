@@ -113,8 +113,8 @@ const VISITED_NODE_CTX = {fillStyle:"yellow"};
 const ADJ_NODE_CTX = {strokeStyle: '#FF0000', shadowColor:"#FF0000", shadowBlur:15};
 
 class dijkstraAnimation {
-  constructor(ani){
-    this.ani = ani;
+  constructor(){
+    this.ani = new Animation();
     this.graph = null;
     this.starting_node = null;
   }
@@ -533,7 +533,6 @@ class dijkstraAnimation {
       // console.log(dist, node);
     }
 
-    console.log(g.get_node(5).distance);
 
     ani.run_animation();
   }
