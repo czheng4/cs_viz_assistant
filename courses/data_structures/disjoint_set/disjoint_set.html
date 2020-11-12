@@ -6,18 +6,15 @@
   <link rel="stylesheet" href="../../../style/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <style type="text/css">
-    input[type = "text"]{
-      width: 120px;
+    input[type = "number"], input[type = "text"]{
+      width: 100px;
     }
-
-    td {
+    .elaboration-table td {
     
       text-align: center;
-      padding: 5px 7px 5px 7px;
-     /* background-color: pink;*/
+      padding: 5px 15px 5px 15px;
+      /* background-color: pink;*/
     }
-
-    
 
   </style>
 </head>
@@ -27,12 +24,30 @@
     <div class = "control"> 
 
      
-      <input type="text" id="num_elements_t" placeholder="number of elements"> 
-      <button type="button" id = "elements">Initialize Disjoint Set</button> 
-     
+      <input type="number" id="num_elements_t" min = 1 max = 20 value = 10 placeholder="number of elements"> 
+      <button type="button" id = "num_elements">Initialize Disjoint Set</button> &emsp;
+      <button type="button" id = "clear">Clear</button>  &emsp;
+      
+      <input type="radio" id="union_by_rank" name="union_type" value = "union_by_rank" checked> 
+      <label for="union_type">Union-By-Rank</label> 
+
+      <input type="radio" id="union_by_size" name="union_type" value = "union_by_size"> 
+      <label for="union_type">Union-By-Size</label> 
+
+      <input type="radio" id="union_by_height" name="union_type" value = "union_by_height"> 
+      <label for="union_type">Union-By-Height</label> 
+
+      
       
       <div class = "line"></div>
 
+      <input type="text" id="union_t" placeholder="setId1 setId2"> 
+      <button type="button" id = "union">Union</button> &emsp;&emsp;
+
+      <input type="number" id="find_t" placeholder="setId"> 
+      <button type="button" id = "find">Find</button> 
+
+      <div class = "line"></div>
     
       
       <div class = "animation-control">
@@ -44,7 +59,20 @@
 
       <div class = "elaboration">
         Elaboration: <span id = "elaboration_text" style="color:red"></span> 
-        
+        <table border = 1 class = "elaboration-table">
+          <tr id = "node">
+            <td>Node</td>
+          </tr>
+
+          <tr id = "link">
+            <td>Link</td>
+          </tr>
+
+          <tr id = "size_or_height">
+            <td>Size</td>
+          </tr>
+
+        </table>
       </div>
     </div>
 
@@ -67,24 +95,98 @@
 
 $(document).ready(function(){
   
-  set_canvas(1200, 800, 150, 50);
- 
-  var ani = new Animation();
-  var g = dijkstra_example(ani);
-  var graph_type, weight_type;
-  a = new dijkstraAnimation(ani); // must be name a
+  set_canvas(1200, 800, 75, 50);
+
+  MAIN_G_SPEC.weight_type = T_CONSTANT;
+  MAIN_G_SPEC.num_cols = 10;
+
+  
+  MAIN_G_SPEC.enable_edge_color_change = false;
+  MAIN_G_SPEC.enable_edge_create = false;
+  MAIN_G_SPEC.gap_y = 300;
+
+  MAIN_A = new disjointSetAnimation(); // must be name a
 
 
   ANIMATION_TIME = 100 - $("#speed").val();
-  weight_type = T_POSITIVE_NUMBER;
-  g.draw();
   
-  $("#clear_graph").click(function(){
-    $("input[name=graph_type]").prop("disabled", false);
-    ani = new Animation();
-    a = new dijkstraAnimation(ani);
-    g = null;
+  $("#num_elements").click(function(){
+    let num = parseInt($("#num_elements_t").val());
+    let ani, node;
+    let type;
+    if (isNaN(num)) {
+      $("#elaboration_text").text("number of num_elements: must be int");
+    } else if (num <= 0 || num > 20) {
+      $("#elaboration_text").text("number of elements must > 0 and <= 20");
+    } else {
+
+      type = $("input[name=union_type]:checked").val();
+      if (type == "union_by_size") MAIN_A = new disjointSetAnimation(UNION_BY_SIZE);
+      else if (type == "union_by_height") MAIN_A = new disjointSetAnimation(UNION_BY_HEIGHT);
+      else MAIN_A = new disjointSetAnimation(UNION_BY_RANK);
+
+
+      MAIN_G = new Graph(MAIN_A.ani, "direct");
+      MAIN_A.init(num, MAIN_G);
+      MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
+      for (let i = 0; i < num; i++) {
+        node = MAIN_G.get_node(i);
+        node.ani_circle.propagation = true;
+      }
+
+      MAIN_G.draw();
+    }
+  })
+
+  $("#clear").click(function(){
+    $("input[name=union_type]").prop("disabled", false);
+    let ani = new Animation();
     ani.draw();
+    MAIN_G = null;
+  })
+ 
+
+  $("#union").click(function(){
+    let str = $("#union_t").val();
+    
+
+    if (MAIN_G == null) {
+      $("#elaboration_text").text("Must initialize Disjoint Set");
+      return;
+    }
+
+    str = str.trim();
+    str = str.split(" ");
+
+    MAIN_A.union(str[0], str[1]);
+
+
+    $("#union_t").val("");
+    $("#union_t").focus("");
+
+  })
+
+  $("#find").click(function(){
+    let num = $("#find_t").val();
+
+    if (MAIN_G == null) {
+      $("#elaboration_text").text("Must initialize Disjoint Set");
+      return;
+    }
+    MAIN_A.find(num);
+    $("#find_t").val("");
+    $("#find_t").focus();
+  })
+
+  $("body").keypress(function(e) {
+    let id = $("input:focus").attr("id");
+    console.log(id);
+    if (e.keyCode == 13) {
+      if (id == "num_elements_t") $("#num_elements").click();
+      if (id == "union_t") $("#union").click();
+      if (id == "find_t") $("#find").click();    
+    }
+
   })
 
 });
@@ -92,5 +194,6 @@ $(document).ready(function(){
 </script>
 
 <script src="../../../lib/control.js"></script>
+<script src="../graph_creator/graph_creator.js"></script>
 
 </html>

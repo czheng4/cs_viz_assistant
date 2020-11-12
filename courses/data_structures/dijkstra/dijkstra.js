@@ -5,7 +5,6 @@ function update_ctx_prop(dict) {
   let obj = dict.obj,
       ctx_prop = dict.ctx_prop; 
 
-  console.log(obj.ctx_prop, ctx_prop);
   obj.ctx_prop = ctx_prop;
 }
 

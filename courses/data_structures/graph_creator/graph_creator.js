@@ -338,6 +338,7 @@ $(document).ready(function(){
     } else if (g.is_node(id)) {
       $("#elaboration_text").text(id + " exists");
     } else {
+      $("#elaboration_text").text("Add node {} successfully".format(id));
       g.get_node(id);
       g.draw();
     }
@@ -359,6 +360,7 @@ $(document).ready(function(){
     } else if (!g.is_node(id)) {
       $("#elaboration_text").text(id + " doesn't exist");
     } else {
+      $("#elaboration_text").text("Remove node {} successfully".format(id));
       g.remove_node(id);
       g.draw();
     }
@@ -397,6 +399,7 @@ $(document).ready(function(){
         if (!g.is_edge(n1, n2)) {
           $("#elaboration_text").text("Edge " + n1.id + "->" + n2.id + " doesn't exist");
         } else {
+          $("#elaboration_text").text("Remove Edge {} -> {} successfully".format(n1.id, n2.id));
           g.remove_edge(n1, n2);
           g.draw();
         }
@@ -418,8 +421,10 @@ $(document).ready(function(){
 
     if (g == null) {
       $("#elaboration_text").text("must create node first");
+    } else if (str.length < 2) {
+      $("#elaboration_text").text("add_edge: node_id1 node_id2 [weight]");
     } else if (g.weight_type != T_STRING && g.weight_type != T_CONSTANT && str.length != 3) {
-      $("#elaboration_text").text("add_edge: node_id1 node_id2 weight");
+      $("#elaboration_text").text("add_edge: node_id1 node_id2 [weight]");
     } else {
       id1 = str[0];
       id2 = str[1];
@@ -440,7 +445,7 @@ $(document).ready(function(){
         n1 = g.get_node(id1);
         n2 = g.get_node(id2);
         
-        console.log(weight);
+        $("#elaboration_text").text("Add/Update edge {} -> {} successfully".format(n1.id, n2.id));
         g.get_edge(n1, n2, weight);
         g.draw();
         
@@ -451,5 +456,84 @@ $(document).ready(function(){
     
   })
 
+
+
+  // mouse and key event
+
+  $("#draw").mousedown(function(e) {
+    MAIN_A.ani.mouse_down(e.pageX, e.pageY);
+
+  })
+
+  $("#draw").mouseup(function(e) {
+
+    MAIN_A.ani.mouse_up(e.pageX, e.pageY);
+  })
+
+  $("#draw").mousemove(function(e) {
+    MAIN_A.ani.mouse_move(e.pageX, e.pageY);
+  })
+
+  $("body").keypress(function(e) {
+    
+    let color_swtich_num;
+    console.log(e.keyCode);
+    if (e.keyCode == 119 || e.keyCode == 87) { // 'w' and 'W'
+      PRESS_W_KEY = true;
+    }
+
+    if (e.keyCode == 68 || e.keyCode == 100) { // 'd' and 'D'
+      PRESS_D_KEY = true;
+    }
+
+    if (e.keyCode == 67 || e.keyCode == 99) { // 'c' and 'C'
+      PRESS_C_KEY = true;
+    }
+
+    if (e.keyCode >= 49 && e.keyCode <= 52) {
+      color_swtich_num = e.keyCode - 49;
+      
+      if (MAIN_G != null)  {
+        
+        // press 'c' and number to change node color
+        if (MAIN_G.enable_node_color_change && PRESS_C_KEY && ("spectrum" in $("#node_color")) ) {
+           console.log("123");
+          $("#node_color").spectrum("set", NODE_COLORS[color_swtich_num]);
+          MAIN_G.node_color = NODE_COLORS[color_swtich_num];
+        }
+
+        // press 'w' and number to change edge color
+        if (MAIN_G.enable_edge_color_change && PRESS_W_KEY && ("spectrum" in $("#edge_color")) ) {
+          $("#edge_color").spectrum("set", EDGE_COLORS[color_swtich_num]);
+          MAIN_G.edge_color = EDGE_COLORS[color_swtich_num];
+        }
+      }
+
+    }
+    if (e.keyCode == 13) {
+      let id = $("input:focus").attr("id");
+      
+      if (id == "edge_t") $("#add_edge").click();
+      else if (id == "node_t") $("#add_node").click();
+     
+      console.log($("input:focus").attr("id"));
+    }
+  })
+
+  $("body").keyup(function(e) {
+    // console.log(e.keyCode, "up");
+    if (e.keyCode == 119 || e.keyCode == 87) { // 'w' and 'W'
+      PRESS_W_KEY = false;
+    }
+
+    if (e.keyCode == 68 || e.keyCode == 100) { // 'd' and 'D'
+      PRESS_D_KEY = false;
+    }
+
+    if (e.keyCode == 67 || e.keyCode == 99) { // 'c' and 'C'
+      PRESS_C_KEY = false;
+    }
+   
+  })
 
 });

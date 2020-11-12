@@ -3,6 +3,20 @@ body {
   margin: 0;
 }
 
+.elaboration-table {
+  border-collapse: collapse; 
+  margin-top: 5px;
+}
+
+
+.elaboration-table td {
+    
+  text-align: center;
+  padding: 5px 7px 5px 7px;
+     /* background-color: pink;*/
+}
+
+
 .file-management {
   position: fixed;
   bottom: 0;
