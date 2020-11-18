@@ -74,6 +74,7 @@ $(document).ready(function(){
   MAIN_A = new dlistAnimation(); // must use name a for every animation
 
   $("#push_back").click(function(){
+    MAIN_A.ani.restore_state();
     MAIN_A.push_back($("#push_back_t").val());
     console.log($("#push_back_t").val())
   });

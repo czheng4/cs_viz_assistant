@@ -1,3 +1,5 @@
+const NODE_COLORS = ['#DDDDDD', 'pink', 'lightblue', 'yellow'];
+const EDGE_COLORS = ["black", "red", "blue", "#FFB901"];
 function download(filename, text) {
   $("#download").attr("href", 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
   $("#download").attr("download", filename);
@@ -27,7 +29,6 @@ function generate_graph_file_content(g) {
 
   return str;
 }
-
 
 $(document).ready(function(){
   var g = MAIN_G;
@@ -477,7 +478,7 @@ $(document).ready(function(){
   $("body").keypress(function(e) {
     
     let color_swtich_num;
-    console.log(e.keyCode);
+
     if (e.keyCode == 119 || e.keyCode == 87) { // 'w' and 'W'
       PRESS_W_KEY = true;
     }

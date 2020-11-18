@@ -17,15 +17,26 @@ class Dlist {
 		this.sentinel.flink = this.sentinel;
 		this.sentinel.blink = this.sentinel;
 		this.ms = new memorySimulator();
+    this.ms.get_reference(this.sentinel);
 		
 	}
 	deep_copy() {
     let dlist = new Dlist();
+    let ms = new memorySimulator();
     let n = this.sentinel.flink;
+    let new_n;
+
+    ms.object_to_address.set(dlist.sentinel, this.ms.get_reference(this.sentinel));
+    ms.address_to_object.set(this.ms.get_reference(this.sentinel), dlist.sentinel);
+
     while (n != this.sentinel) {
-      dlist.push_back(n.value);
+      new_n = dlist.push_back(n.value);
+      ms.object_to_address.set(new_n, this.ms.get_reference(n));
+      ms.address_to_object.set(this.ms.get_reference(n), new_n);
       n = n.flink;
     }
+
+    dlist.ms = ms;
     return dlist;
   }
   empty() {
@@ -244,6 +255,20 @@ class dlistAnimation {
 		
 	}
 
+  deep_copy() {
+    
+
+  }
+
+  set_state() {
+
+    /* the state is composed of algorithm and animation */
+    let da = new dlistAnimation();
+    da.dlist = this.dlist.deep_copy();
+    da.ani = this.ani.deep_copy();
+    this.ani.set_state(da);
+  }
+
   pop_back() {
     this.erase(this.dlist.ms.get_reference(this.dlist.sentinel.blink));
   }
@@ -251,6 +276,7 @@ class dlistAnimation {
   pop_front() {
     this.erase(this.dlist.ms.get_reference(this.dlist.sentinel.flink));
   }
+
 
   erase(ref) {
 
@@ -286,7 +312,7 @@ class dlistAnimation {
         size = this.dlist.size;
 
 
-    ani.clear_animation();
+    // ani.clear_animation();
 
     obj = ani.get_object(ref);
     flink_ref = dlist.ms.get_reference(node.flink);
@@ -517,7 +543,8 @@ class dlistAnimation {
         sentinel = this.dlist.sentinel,
         size = this.dlist.size;
 
-    ani.clear_animation();
+    this.set_state();
+    // ani.clear_animation();
     node = dlist.insert_before_node(v,n);
     ref = dlist.ms.get_reference(node);
     flink_ref = dlist.ms.get_reference(node.flink);

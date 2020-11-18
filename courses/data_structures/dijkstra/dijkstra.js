@@ -131,8 +131,10 @@ class dijkstraAnimation {
     }
 
     for (let key in g.edge_map) {
-      if (g.edge_map[key].ani_line != null)
+      if (g.edge_map[key].ani_line != null) {
         g.edge_map[key].ani_line.ctx_prop.strokeStyle = "black";
+        g.edge_map[key].ani_line.ctx_prop.lineWidth = 2;
+      }
     }
 
 
@@ -403,7 +405,7 @@ class dijkstraAnimation {
           
           e_text = "Process edge ( " + e.id + " ): ";
           e_text += "New Distance = " + dist + " + " + e.weight + " = " + (dist + e.weight); 
-           if (n2.distance == -1 || n2.distance > b_dist) {}
+          if (n2.distance == -1 || n2.distance > b_dist) {}
           else e_text += " > {}. Do Nothing".format(n2.distance);
 
           // color the edge red

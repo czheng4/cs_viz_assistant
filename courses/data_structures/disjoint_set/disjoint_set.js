@@ -79,6 +79,43 @@ function change_line_color(dict) {
   dict.line.ctx_prop = update_dict(dict.line.ctx_prop, { "strokeStyle": dict.color} );
 }
 
+
+function default_color(dict) {
+  let g = dict.g;
+  for (let key in g.node_map) {
+    g.node_map[key].ani_circle.ctx_prop = deep_copy(DEFAULT_CIRCLE_CTX);
+  }
+  for (let key in g.edge_map) {
+    g.edge_map[key].ani_line.ctx_prop.strokeStyle = "black";
+  }
+}
+
+function color_two_sets(dict) {
+  let id, c;
+  let ds = dict.ds,
+      id1 = dict.id1,
+      id2 = dict.id2;
+  let g = ds.g;
+
+  // console.log(id1, id2);
+  for (let i = 0; i < ds.num_elements; i++) {
+    id = ds.find_no_animation(i);
+    console.log(id);
+    if (id == id1) {
+      c = g.get_node(i).ani_circle;
+      c.ctx_prop.fillStyle = 'yellow';
+    }
+
+    if (id == id2) {
+      c = g.get_node(i).ani_circle;
+      c.ctx_prop.fillStyle = 'lightblue';
+    }
+  }
+  
+}
+
+
+
 function hightlight_col(dict) {
   let g = dict.g,
       ids = dict.ids,
@@ -181,6 +218,23 @@ class disjointSetAnimation {
   }
 
 
+
+  union_error_check(id1, id2) {
+    let links = this.links;
+    id1 = parseInt(id1);
+    id2 = parseInt(id2);
+
+    if (isNaN(id1) || isNaN(id2) || id1 < 0 || id2 < 0 || id1 >= this.num_elements || id2 >= this.num_elements) {
+      $("#elaboration_text").text("Call Union on invalid sets {} {}");
+      return true;
+    } else if (links[id1] != -1 || links[id2] != -1) {
+      $("#elaboration_text").text("Must Call Union on set ids rather than element");
+      return true;
+    }
+
+    return false;
+  }
+
   union(id1, id2) {
 
     let links = this.links;
@@ -195,49 +249,49 @@ class disjointSetAnimation {
       return;
     }
 
-    this.reset_color();
+    // this.reset_color();
 
     this.union_by_types(id1, id2);
 
   }
 
-  reset_color() {
-    let g = this.g;
-    let n, e;
+  // reset_color() {
+  //   let g = this.g;
+  //   let n, e;
 
-    for (let key in g.node_map) {
-      n = g.node_map[key].ani_circle;
-      n.ctx_prop= deep_copy(DEFAULT_CIRCLE_CTX);
-    }
+  //   for (let key in g.node_map) {
+  //     n = g.node_map[key].ani_circle;
+  //     n.ctx_prop= deep_copy(DEFAULT_CIRCLE_CTX);
+  //   }
 
-    for (let key in g.edge_map) {
-      e = g.edge_map[key].ani_line;
+  //   for (let key in g.edge_map) {
+  //     e = g.edge_map[key].ani_line;
 
-      e.ctx_prop.strokeStyle = deep_copy(DEFAULT_LINE_CTX);
-    }
+  //     e.ctx_prop.strokeStyle = deep_copy(DEFAULT_LINE_CTX);
+  //   }
 
-  }
+  // }
 
 
-  color_two_sets(id1, id2) {
-    let id, c;
-    let g = this.g;
+  // color_two_sets(id1, id2) {
+  //   let id, c;
+  //   let g = this.g;
 
-    for (let i = 0; i < this.num_elements; i++) {
-      id = this.find_no_animation(i);
+  //   for (let i = 0; i < this.num_elements; i++) {
+  //     id = this.find_no_animation(i);
 
-      if (this.find_no_animation(i) == id1) {
-        c = g.get_node(i).ani_circle;
-        c.ctx_prop.fillStyle = 'yellow';
-      }
+  //     if (this.find_no_animation(i) == id1) {
+  //       c = g.get_node(i).ani_circle;
+  //       c.ctx_prop.fillStyle = 'yellow';
+  //     }
 
-      if (this.find_no_animation(i) == id2) {
-        c = g.get_node(i).ani_circle;
-        c.ctx_prop.fillStyle = 'lightblue';
-      }
-    }
+  //     if (this.find_no_animation(i) == id2) {
+  //       c = g.get_node(i).ani_circle;
+  //       c.ctx_prop.fillStyle = 'lightblue';
+  //     }
+  //   }
     
-  }
+  // }
   
   find_no_animation(id) {
     
@@ -257,12 +311,21 @@ class disjointSetAnimation {
         g = this.g;
 
 
-    ani.clear_animation();
-    this.reset_color();
+    // ani.clear_animation();
+   
     if (id < 0 || id >= this.num_elements) {
       $("#elaboration_text").text("{} is not a valid set id".format(id));
       return;
     }
+
+    this.set_state();
+    // this.reset_color();
+    ani.add_sequence_ani({
+      pause:1,
+      action : { params: {g: this.g}, func: default_color},
+      rev_action: { params: {g: this.g}, func: default_color},
+      concurrence: true
+    })
 
     prev_ele = id;
     ele = id;
@@ -312,7 +375,7 @@ class disjointSetAnimation {
       });
 
       ani.add_sequence_ani({
-        pause: ANIMATION_TIME,
+        pause: new AniTime("ANIMATION_TIME"),
         prop: {step: true},
       });
 
@@ -326,10 +389,7 @@ class disjointSetAnimation {
     if (this.union_type == UNION_BY_RANK) {
 
       ani.add_sequence_ani({pause: 1, prop: {step: true} });
-      // ani.add_sequence_ani({
-      //   pause: 1,
-      //   text: "Perfrom path compression",
-      // });
+      
 
       circle = g.get_node(ele).ani_circle;
       parent_p = ani.get_point(circle.x, circle.y);
@@ -402,6 +462,15 @@ class disjointSetAnimation {
   
   }
 
+  set_state() {
+    let ani = this.ani;
+     /* the entire state is composed of the state of graph, Animation and algorithm */
+    let state = this.deep_copy(); // this copy the state of algorithm
+    state.ani = state.ani.deep_copy(); // this copy the state of animation
+    state.g = state.g.deep_copy(state.ani); // this copy the state of Graph
+    ani.set_state(state);
+  }
+
   union_by_types(id1, id2) {
     let g = this.g,
         ani = this.ani,
@@ -415,8 +484,22 @@ class disjointSetAnimation {
     let stop_propagation = {};
     let old_ds = this.deep_copy();
     
-    ani.clear_animation();
-    this.color_two_sets(id1, id2);
+
+    // /* the entire state is composed of the state of graph, Animation and algorithm */
+    // let state = this.deep_copy(); // this copy the state of algorithm
+    // state.ani = state.ani.deep_copy(); // this copy the state of animation
+    // state.g = state.g.deep_copy(state.ani); // this copy the state of Graph
+    // ani.set_state(state);
+    this.set_state();
+   
+
+    // ani.clear_animation();
+    ani.add_sequence_ani({
+      pause:1,
+      action: {params: {ds: old_ds, id1:id1, id2:id2}, func: color_two_sets},
+      rev_action : { params: {g: this.g}, func: default_color},
+      concurrence: true
+    })
 
     if (this.union_type == UNION_BY_SIZE) {
       if (sizes[id1] > sizes[id2]) {
@@ -448,7 +531,7 @@ class disjointSetAnimation {
     p = node_pos_after_union(parent_n, g);
     
     line = g.get_edge(child_n, parent_n).ani_line;
-    line.p2 = line.p1.copy();
+    line.p2 = line.p1;
     
 
     if (this.union_type == UNION_BY_SIZE) {
@@ -456,7 +539,7 @@ class disjointSetAnimation {
     } else {
       e_text = "Union({}, {}). Parent is {}. Child is {}. Set parent's height to {}. Set child's link to {}".format(id1, id2, parent, child, this.heights[parent], parent);
     }
-
+    
     ani.add_sequence_ani({
       pause: 1,
       text: e_text,
@@ -474,13 +557,24 @@ class disjointSetAnimation {
 
     // when we get to parent, we wanna stop propagation.
     stop_propagation[parent_n.ani_circle.ref] = true;
-
+    child_n.ani_circle.propagation = true;
     // move the child to a nice position.
     ani.add_sequence_ani({ 
       target: child_n.ani_circle,
       prop: {p:p, stop_propagation: stop_propagation },
-      action: {params: {obj:child_n.ani_circle}, func: disable_propagation}
+      action: {params: {obj:child_n.ani_circle}, func: disable_propagation},
     });
+
+    ani.add_sequence_ani({
+      pause:1,
+      rev_action: {params: {obj:child_n.ani_circle}, func: enable_propagation},
+      concurrence: true,
+    })
+
+    ani.add_sequence_ani({
+      pause:1,
+      rev_action: {params: {ds: old_ds, id1:id1, id2:id2}, func: color_two_sets},
+    })
 
     ani.run_animation(false, function(){
       $("#union_t").focus();

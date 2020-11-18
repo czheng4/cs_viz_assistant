@@ -14,7 +14,7 @@
 </head>
 <body>
    <div class = "grid-container">
-    <div class = "header">Dijkstra</div>
+    <div class = "header">Network Flow</div>
     <div class = "control"> 
 
      
@@ -26,7 +26,7 @@
       <button type="button" id = "add_edge">Add Edge</button>
       <button type="button" id = "remove_edge">Remove Edge</button> &emsp;&emsp;
       
-      Leave node on multimap<input type="checkbox" id="leave_node" checked>
+     
       
       <div class = "line"></div>
 
@@ -38,10 +38,13 @@
 
       <button type="button" id = "clear_graph">Clear Graph</button> &emsp;&emsp;
 
-      <input type="radio" id="undirected" name="graph_type" value = "undirect" checked> 
-      <label for="graph_type">Undirected Graph</label> 
-      <input type="radio" id="directed" name="graph_type" value = "direct">
-      <label for="graph_type">Directed Graph</label>
+      <!-- make the display none and check directed because network flow problem works on directed graph -->
+      <div style="display: none">
+        <input type="radio" id="undirected" name="graph_type" value = "undirect"> 
+        <label for="graph_type">Undirected Graph</label> 
+        <input type="radio" id="directed" name="graph_type" value = "direct" checked>
+        <label for="graph_type">Directed Graph</label>
+      </div>
       <div class = "line"></div>
       
       <div class = "animation-control">
@@ -93,21 +96,33 @@
 <script src="../../../lib/drawing.js"></script>
 <script src="../../../lib/memory_generator.js"></script>
 <script src="../dlist/dlist.js"></script>
-<script src="dijkstra.js"></script>
+<script src="network_flow.js"></script>
 <script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
 
 
 
-function dijkstra_example(ani) {
-  let g = new Graph(ani, "undirect");
+function network_flow_example(ani) {
+  let g = new Graph(ani, "direct");
+  let c;
+  
+  c = g.get_node("S").ani_circle;
+  c.move(-120 - c.x, 120 - c.y);
+  c = g.get_node("A").ani_circle;
+  c = g.get_node("B").ani_circle;
+  c.move(0 - c.x, 120 - c.y);
+  c = g.get_node("C").ani_circle;
+  c.move(-40 - c.x, 240 - c.y);
+  c = g.get_node("T").ani_circle;
+  c.move(220 - c.x, 120 - c.y);
+  c = g.get_node("D").ani_circle;
+  c.move(120 - c.x, 240 - c.y);
 
-  g.get_nodes([2, 0, 11, 1, 9, 8, 4, 5, 10, 3, 7 , 6]);
-  g.get_edges_by_name([[0,2,1],  [11,0,7], [1,11,40], [11,4,2],
-                       [2,9,12], [8,9,2],  [9,3,8],   [4,8,1],
-                       [8,10,1], [3,8,33], [8,6,3],   [6,4,9],
-                       [3,7,20], [7,6,1],  [6,5,1]]);
-  $("input[name=graph_type]").prop("disabled", true);
+  g.get_edges_by_name([["S", "A", 10], ["S", "C", 14], ["A", "B", 5], 
+                       ["A", "T", 5],  ["B", "T", 8], ["C","B",13],
+                       ["C","D", 10],  ["D", "T", 12]]);
+  console.log(g.edge_map)
+
   return g;
 }
 
@@ -115,17 +130,18 @@ $(document).ready(function(){
   
 
 
-  set_canvas(1200, 800, 150, 50);
-  MAIN_G_SPEC.weight_type = T_POSITIVE_NUMBER;
+  set_canvas(1200, 800, 250, 50);
+  MAIN_G_SPEC.weight_type = T_NON_NEGATIVE_NUMBER;
   MAIN_G_SPEC.enable_node_color_change = false;
   MAIN_G_SPEC.enable_edge_color_change = false;
-  MAIN_A = new dijkstraAnimation(); // must be name ani
-  MAIN_G = dijkstra_example(MAIN_A.ani);
+  MAIN_A = new networkFlowAnimation(); // must be name ani
+  MAIN_G = network_flow_example(MAIN_A.ani);
   ANIMATION_TIME = 100 - $("#speed").val();
  
   MAIN_G.draw();
   
-
+  let flow = MAIN_A.find_max_flow(MAIN_G, MAIN_G.get_node("S"), MAIN_G.get_node("T"));
+  console.log(flow)
   $("#get_path").click(function(){
     let id = $("#ending_node").val();
     let g = MAIN_G;
