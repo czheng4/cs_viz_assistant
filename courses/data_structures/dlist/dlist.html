@@ -62,6 +62,7 @@
 <script src="../../../lib/drawing.js"></script>
 <script src="dlist.js"></script>
 <script src="../../../lib/canvas_helper.js"></script>
+<script src="dlist_test.js"></script>
 <script type="text/javascript">
 
 
@@ -73,6 +74,8 @@ $(document).ready(function(){
   
   MAIN_A = new dlistAnimation(); // must use name a for every animation
   ANIMATION_TIME = 100 - $("#speed").val();
+
+  dlist_test1();
   $("#push_back").click(function(){
     // MAIN_A.ani.restore_state();
     // MAIN_A.ani.set_function_call("push_back", [$("#push_back_t").val()]);
