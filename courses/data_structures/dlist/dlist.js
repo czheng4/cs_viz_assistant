@@ -36,6 +36,9 @@ class Dlist {
       n = n.flink;
     }
 
+    console.log(this.ms.num_calls);
+
+    ms.call_generator(this.ms.num_calls);
     dlist.ms = ms;
     return dlist;
   }
@@ -167,6 +170,11 @@ function rm_ani_object(dict) {
   let ref = dict.ref,
       ani = dict.ani;
 
+  console.log("remove " + ref);
+  console.log(dict.ani.obj_map);
+  console.log(dict.ani.connection_map);
+  console.log(dict.ani.points);
+
   dict.ani.remove_object(ref);
 }
 
@@ -176,7 +184,7 @@ function add_ani_object(dict) {
   let ani = dict.ani;
   let i;
   ani.add_object(obj);
-  console.log("add it");
+  console.log("add it", obj);
   for (i = 0; i < lines.length; i++) {
     ani.connect_object(lines[i]);
   }
@@ -255,11 +263,6 @@ class dlistAnimation {
 		
 	}
 
-  deep_copy() {
-    
-
-  }
-
   set_state() {
 
     /* the state is composed of algorithm and animation */
@@ -270,10 +273,13 @@ class dlistAnimation {
   }
 
   pop_back() {
+
+    this.ani.set_function_call("pop_back");
     this.erase(this.dlist.ms.get_reference(this.dlist.sentinel.blink));
   }
 
   pop_front() {
+    this.ani.set_function_call("pop_front");
     this.erase(this.dlist.ms.get_reference(this.dlist.sentinel.flink));
   }
 
@@ -311,7 +317,8 @@ class dlistAnimation {
         margin = this.margin,
         size = this.dlist.size;
 
-
+    ani.set_function_call("erase", [ref]);
+    this.set_state();
     // ani.clear_animation();
 
     obj = ani.get_object(ref);
@@ -399,6 +406,8 @@ class dlistAnimation {
 
     q_curve = new quadraticCurve(p1, p1, 0);
     ani.connect_object(q_curve);
+    // qs.push(q_curve);
+
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: q_curve, 
                            text: "set "  + blink_ref + "'s flink to " +  flink_ref,
@@ -444,6 +453,9 @@ class dlistAnimation {
   
     q_curve = new quadraticCurve(p1, p1, 0);
     ani.connect_object(q_curve);
+    // qs.push(q_curve);
+
+
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: q_curve, 
                            text: "set "  + flink_ref + "'s blink to " +  blink_ref,
@@ -474,10 +486,14 @@ class dlistAnimation {
 
   push_back(v) {
     if (this.error_check(v, this.dlist.ms.get_reference(this.dlist.sentinel))) return;
+
+    this.ani.set_function_call("push_back", [v]);
     this.insert_node(v, this.dlist.ms.get_reference(this.dlist.sentinel), "before");
   }
   push_front(v) {
     if (this.error_check(v, this.dlist.ms.get_reference(this.dlist.sentinel.flink))) return;
+
+    this.ani.set_function_call("push_front", [v]);
     this.insert_node(v, this.dlist.ms.get_reference(this.dlist.sentinel.flink), "after");
   }
 
@@ -486,10 +502,12 @@ class dlistAnimation {
     
     ref = ref.trim();
     if (ref.indexOf("0x")) ref = "0x" + ref;
+    this.ani.set_function_call("insert_after_node", [v, ref]);
 
     let n = this.dlist.ms.get_object(ref);
     n = n.flink;
     ref = this.dlist.ms.get_reference(n);
+    
     this.insert_node(v, ref , "after");
   }
   insert_before_node(v, ref) {
@@ -498,6 +516,7 @@ class dlistAnimation {
     ref = ref.trim();
     if (ref.indexOf("0x")) ref = "0x" + ref;
 
+    this.ani.set_function_call("insert_before_node", [v, ref]);
     this.insert_node(v, ref, "before");
   }
 
@@ -529,7 +548,7 @@ class dlistAnimation {
     let prev_obj, next_obj;
     let x;
     let h_scale, w_scale;
-    let obj;
+    let obj, lines, tmp_obj;
 
 
     let n = this.dlist.ms.get_object(ref);
@@ -567,20 +586,32 @@ class dlistAnimation {
     p3 = ani.get_point(x + width, y + height * 1 / 2); // flink
     p4 = ani.get_point(x, y + height * 5 / 6); // blink
     rect.attach_points([p1, p2, p3, p4]);
-    ani.add_object(rect);
 
+    lines = []
+    // ani.add_object(rect);
 
+    ani.add_sequence_ani( { prop: { time: 1},
+                            text: "add new node " + ref,
+                            action: { params: {ani:ani, lines: lines, obj: rect}, func:add_ani_object} ,
+                            rev_action: { params: {ref:ref, ani:ani}, func:rm_ani_object  }});
+   
     // put shadow on front node, back node and new inserted node.
+    
+    if (size != 0)
+    ani.add_parallel_ani( { target: prev_obj,
+                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? ANIMATION_TIME - 3 : 3, end: ANIMATION_TIME * 8} } );
+
+
     ani.add_parallel_ani( { target: next_obj,
-                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? 0 : ANIMATION_TIME - 3, end: ANIMATION_TIME * 8} } );
+                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? 3 : ANIMATION_TIME - 3, end: ANIMATION_TIME * 8} } );
+    
+
 
     
-    ani.add_parallel_ani( { target: prev_obj,
-                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? ANIMATION_TIME - 3 : 0, end: ANIMATION_TIME * 8} } );
 
    
     ani.add_parallel_ani( { target: rect,
-                            prop: { strokeStyle: 'red', shadowColor:"#FF0000", shadowBlur:15, start: 0, end: ANIMATION_TIME * 8} } );
+                            prop: { strokeStyle: 'red', shadowColor:"#FF0000", shadowBlur:15, start: 3, end: ANIMATION_TIME * 8} } );
  
   
     
@@ -625,6 +656,7 @@ class dlistAnimation {
 
 
     q_curve = get_curve_by_height(ani, blink_ref, flink_ref, height / 2); // flink
+    lines.push(q_curve);
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5} );
     ani.add_sequence_ani( { target: q_curve, 
                             text: "set "  + blink_ref + "'s flink to " +  ref,
@@ -637,6 +669,7 @@ class dlistAnimation {
     /* front node -> new node */
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     q_curve = get_curve_by_height(ani, flink_ref, blink_ref, height *  5 / 6); // blink
+    lines.push(q_curve);
     if (node.flink == sentinel) {
       
       // different params for cruve
@@ -665,6 +698,7 @@ class dlistAnimation {
     /* new node to front node */
 
     q_curve = new quadraticCurve(p3, p3, 0);
+    lines.push(q_curve);
     ani.connect_object(q_curve);
    
     if (node.flink == sentinel) { // to sentinel
@@ -693,6 +727,7 @@ class dlistAnimation {
 
     // new node to back node.
     q_curve = new quadraticCurve(p4, p4, 0);
+    lines.push(q_curve);
     ani.connect_object(q_curve);
 
 

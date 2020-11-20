@@ -160,11 +160,7 @@ $(document).ready(function(){
       $("#elaboration_text").text("Union: id1 id2");
     }
 
-   
 
-    // if (MAIN_A.union_error_check(str[0], str[1])) return;
-
-    MAIN_A.ani.restore_state();
     MAIN_A.union(str[0], str[1]);
     console.log(MAIN_A.ani.connection_map);
 
@@ -185,7 +181,6 @@ $(document).ready(function(){
       return;
     }
 
-    MAIN_A.ani.restore_state();
     MAIN_A.find(num);
     $("#find_t").val("");
     $("#find_t").focus();

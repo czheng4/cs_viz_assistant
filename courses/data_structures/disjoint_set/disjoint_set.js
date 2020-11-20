@@ -98,16 +98,22 @@ function color_two_sets(dict) {
   let g = ds.g;
 
   // console.log(id1, id2);
+  // for (let key in g.edge_map) {
+  //   g.edge_map[key].ani_line.ctx_prop.strokeStyle = "black";
+  // }
   for (let i = 0; i < ds.num_elements; i++) {
     id = ds.find_no_animation(i);
     console.log(id);
     if (id == id1) {
       c = g.get_node(i).ani_circle;
+      // c.ctx_prop = deep_copy(DEFAULT_CIRCLE_CTX);
       c.ctx_prop.fillStyle = 'yellow';
+     
     }
 
     if (id == id2) {
       c = g.get_node(i).ani_circle;
+      // c.ctx_prop = deep_copy(DEFAULT_CIRCLE_CTX);
       c.ctx_prop.fillStyle = 'lightblue';
     }
   }
@@ -249,49 +255,13 @@ class disjointSetAnimation {
       return;
     }
 
-    // this.reset_color();
-
+    this.ani.set_function_call("union", [id1, id2]);
+    this.set_state();
     this.union_by_types(id1, id2);
 
   }
 
-  // reset_color() {
-  //   let g = this.g;
-  //   let n, e;
-
-  //   for (let key in g.node_map) {
-  //     n = g.node_map[key].ani_circle;
-  //     n.ctx_prop= deep_copy(DEFAULT_CIRCLE_CTX);
-  //   }
-
-  //   for (let key in g.edge_map) {
-  //     e = g.edge_map[key].ani_line;
-
-  //     e.ctx_prop.strokeStyle = deep_copy(DEFAULT_LINE_CTX);
-  //   }
-
-  // }
-
-
-  // color_two_sets(id1, id2) {
-  //   let id, c;
-  //   let g = this.g;
-
-  //   for (let i = 0; i < this.num_elements; i++) {
-  //     id = this.find_no_animation(i);
-
-  //     if (this.find_no_animation(i) == id1) {
-  //       c = g.get_node(i).ani_circle;
-  //       c.ctx_prop.fillStyle = 'yellow';
-  //     }
-
-  //     if (this.find_no_animation(i) == id2) {
-  //       c = g.get_node(i).ani_circle;
-  //       c.ctx_prop.fillStyle = 'lightblue';
-  //     }
-  //   }
-    
-  // }
+  
   
   find_no_animation(id) {
     
@@ -318,6 +288,7 @@ class disjointSetAnimation {
       return;
     }
 
+    this.ani.set_function_call("find", [id]);
     this.set_state();
     // this.reset_color();
     ani.add_sequence_ani({
@@ -490,7 +461,6 @@ class disjointSetAnimation {
     // state.ani = state.ani.deep_copy(); // this copy the state of animation
     // state.g = state.g.deep_copy(state.ani); // this copy the state of Graph
     // ani.set_state(state);
-    this.set_state();
    
 
     // ani.clear_animation();
