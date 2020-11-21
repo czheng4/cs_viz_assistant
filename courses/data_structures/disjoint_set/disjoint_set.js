@@ -346,7 +346,7 @@ class disjointSetAnimation {
       });
 
       ani.add_sequence_ani({
-        pause: new AniTime("ANIMATION_TIME"),
+        pause: new aniTime("ANIMATION_TIME"),
         prop: {step: true},
       });
 

@@ -197,7 +197,7 @@ class mergeSortAnimation {
         fill_styles[i] = left_color;
         ani.add_sequence_ani( {target: rect1,
                                text: "Merge " + v1[lp] + " in the left subarray",
-                               prop: {copy:{index1:lp, rect: prev_rect, index2:i, h_scale: 0, ctx_prop: {fillStyle: left_color}}}})
+                               prop: {copy:{index1:lp, rect: prev_rect, index2:i, h_scale: 0}}})
 
 
         ani.add_sequence_ani( {pause: 1, 
@@ -223,7 +223,7 @@ class mergeSortAnimation {
         fill_styles[i] = right_color;
         ani.add_sequence_ani( {target: rect2, 
                                text: "Merge " + v2[rp] + " in the right subarray",
-                               prop: {copy:{index1:rp, rect: prev_rect, index2:i, h_scale: 0, ctx_prop: {fillStyle: right_color}}}})
+                               prop: {copy:{index1:rp, rect: prev_rect, index2:i, h_scale: 0}}})
 
 
         ani.add_sequence_ani( {pause: 1, 
