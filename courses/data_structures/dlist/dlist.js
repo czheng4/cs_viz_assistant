@@ -1,3 +1,7 @@
+/*
+  ChaoHui Zheng
+  11/22/2020
+*/
 /* 
   Doubly linked list.
   Please refer to http://web.eecs.utk.edu/~jplank/plank/classes/cs140/Notes/Linked/index.html.
@@ -36,7 +40,7 @@ class Dlist {
       n = n.flink;
     }
 
-    console.log(this.ms.num_calls);
+    
 
     ms.call_generator(this.ms.num_calls);
     dlist.ms = ms;
@@ -170,11 +174,6 @@ function rm_ani_object(dict) {
   let ref = dict.ref,
       ani = dict.ani;
 
-  console.log("remove " + ref);
-  console.log(dict.ani.obj_map);
-  console.log(dict.ani.connection_map);
-  console.log(dict.ani.points);
-
   dict.ani.remove_object(ref);
 }
 
@@ -184,7 +183,6 @@ function add_ani_object(dict) {
   let ani = dict.ani;
   let i;
   ani.add_object(obj);
-  console.log("add it", obj);
   for (i = 0; i < lines.length; i++) {
     ani.connect_object(lines[i]);
   }

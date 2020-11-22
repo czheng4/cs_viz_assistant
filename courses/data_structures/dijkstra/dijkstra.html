@@ -1,3 +1,8 @@
+<!--
+  ChaoHui Zheng
+  11/22/2020
+-->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,10 +50,10 @@
       <div class = "line"></div>
       
       <div class = "animation-control">
-        <button type="button" id = "step_back">Step Back</button>&emsp;
-        <button type="button" id = "step_forward">Step Forward</button>&emsp;&emsp;
-        step by step animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
-        animation speed&emsp;<input type="range" min="0" max="90" value="50" id="speed"> 
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="50" id="speed"> 
       </div>
 
       <div class = "elaboration">
@@ -78,14 +83,13 @@
     </div>
   </div>
 
-  <!-- This is general import and export doesn't do error check for specific animation to do!!!!! -->
-  <!-- <div class = "file-management">
+  <div class = "bottom-nav">
     <button id = "import_graph">Import Graph</button>
     <input type="file" name ="Import Graph" style="display: none" id = "import_input">
 
     <button id = "download_graph">Download Graph</button>
     <a id = "download" download></a>
-  </div> -->
+  </div>
 
   
 </body>
@@ -119,6 +123,7 @@ $(document).ready(function(){
   MAIN_G_SPEC.weight_type = T_POSITIVE_NUMBER;
   MAIN_G_SPEC.enable_node_color_change = false;
   MAIN_G_SPEC.enable_edge_color_change = false;
+
   MAIN_A = new dijkstraAnimation(); // must be name ani
   MAIN_G = dijkstra_example(MAIN_A.ani);
   MAIN_G.draw();

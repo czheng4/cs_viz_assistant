@@ -3,6 +3,12 @@ body {
   margin: 0;
 }
 
+
+
+#go_back, #go_forward {
+  width: 90px;
+}
+
 .elaboration-table {
   border-collapse: collapse; 
   margin-top: 5px;
@@ -17,7 +23,7 @@ body {
 }
 
 
-.file-management {
+.bottom-nav {
   position: fixed;
   bottom: 0;
   background-color: #d5e7c2;

@@ -129,7 +129,7 @@ $(document).ready(function(){
       let node, edge, circle, line, from, to;
       let tmp_g, tmp_ani;
       
-      graph_type = "undirect";
+      graph_type = "";
       layout = "grid";
      
       data = data.replace(/\n/g,'');
@@ -139,7 +139,7 @@ $(document).ready(function(){
       
       tmp_ani = new Animation();
       tmp_g = new Graph(tmp_ani);
-      tmp_g.weight_type = T_STRING;
+    
       for (i = 0; i < data.length; i++) {
         str = data[i]
         if (str == "") continue;
@@ -151,6 +151,10 @@ $(document).ready(function(){
         size = str.length;
        
         if (specifier == "NODE") {
+          if (graph_type == "") {
+            $("#elaboration_text").text("graph type must be specified before Node/Edge");
+            return;
+          }
           j = 1;
           sub_specifier = "NODE"
           while (1) {
@@ -199,7 +203,10 @@ $(document).ready(function(){
         } else if (specifier == "EDGE") {
           j = 1;
           sub_specifier = "EDGE";
-         
+          if (graph_type == "") {
+            $("#elaboration_text").text("graph type must be specified before Node/Edge");
+            return;
+          }
           while(1) {
 
              console.log(sub_specifier, size, j);
@@ -250,13 +257,22 @@ $(document).ready(function(){
             $("#elaboration_text").text("Graph type is not specified. Importing graph failed");
             return;
           } else if (str[1].toUpperCase().indexOf("UNDIRECT") != -1) {
-            graph_type = "undirect";
+            graph_type = "undirected";
+            if (!(MAIN_G_SPEC.graph_type & T_UNDIRECTED)) {
+              $("#elaboration_text").text("Undirected graph type is not allowed");
+              return;
+            }
           } else if (str[1].toUpperCase().indexOf("DIRECT") != -1) {
-            graph_type = "direct";
+            graph_type = "directed";
+            if (!(MAIN_G_SPEC.graph_type & T_DIRECTED)) {
+              $("#elaboration_text").text("Directed graph type is not allowed");
+              return;
+            }
           } else {
             $("#elaboration_text").text("\"{}\" is not a graph type. Importing graph failed".format(data[i]));
             return;
           }
+
           tmp_g.graph_type = graph_type;
 
         } else if (specifier == "LAYOUT") {

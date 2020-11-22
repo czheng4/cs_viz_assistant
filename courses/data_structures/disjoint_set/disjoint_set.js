@@ -1,3 +1,7 @@
+/*
+  ChaoHui Zheng
+  11/22/2020
+*/
 const UNION_BY_SIZE = 0b1;
 const UNION_BY_RANK = 0b11;
 const UNION_BY_HEIGHT = 0b111;

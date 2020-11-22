@@ -1,4 +1,7 @@
-
+/*
+  ChaoHui Zheng
+  11/22/2020
+*/
 const BFS_PATH = 0b1;
 const DFS_PATH = 0b11;
 const DIJKSTRA_PATH = 0b111;

@@ -1,8 +1,7 @@
-/* 
-  Doubly linked list.
-  Please refer to http://web.eecs.utk.edu/~jplank/plank/classes/cs140/Notes/Linked/index.html.
+/*
+  ChaoHui Zheng
+  11/22/2020
 */
-
 
 function add_objs_to_ani(dict) {
   let ani = dict.ani,
