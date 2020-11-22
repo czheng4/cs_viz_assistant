@@ -66,8 +66,8 @@ function example1() {
   ani.add_sequence_ani({
     target: rect,
     prop: {
-      copy: {index1:2, rect: rect1, index2: 0, h_scale: 0, w_scale: 0},  
-      time: new aniTime("ANIMATION_TIME", "*", 2),
+      copy: {index1:2, rect: rect1, index2: 0, h_scale: 0, w_scale: 0},
+      time: 2 * ANIMATION_TIME, // ANIMATION_TIME is 100 by default.
     },
     concurrence: true, // the next animation happens at the same time as this one.
   })

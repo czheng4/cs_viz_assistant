@@ -361,6 +361,7 @@ class dlistAnimation {
                             action: { params: {ani:ani, ref:ref}, func:rm_ani_object} ,
                             rev_action: { params: {lines: qs, obj: obj, ani:ani}, func:add_ani_object  }});
     
+
     // move to left
     n = node.flink;
     while (n != sentinel) {
@@ -412,7 +413,8 @@ class dlistAnimation {
     ani.add_sequence_ani({ target: q_curve, 
                            text: "set "  + blink_ref + "'s flink to " +  flink_ref,
                            prop: {p:p2, type:"pivot", new_h_scale: h_scale, new_w_scale: w_scale, ani:ani},
-                           action: { params: {index: 1, rect: prev_obj, text: flink_ref}, func: update_rect_text  }});
+                           action: { params: {index: 1, rect: prev_obj, text: flink_ref}, func: update_rect_text  },
+                           rev_action: { params: {index: 1, rect: prev_obj, text: ref}, func: update_rect_text  }});
 
 
     // next_obj to prev_obj
@@ -460,7 +462,8 @@ class dlistAnimation {
     ani.add_sequence_ani({ target: q_curve, 
                            text: "set "  + flink_ref + "'s blink to " +  blink_ref,
                            prop: {p:p2, type:"pivot", new_w_scale: w_scale, new_h_scale: h_scale, ani:ani},
-                           action: { params: {index: 2, rect: next_obj, text: blink_ref}, func: update_rect_text  }});
+                           action: { params: {index: 2, rect: next_obj, text: blink_ref}, func: update_rect_text  },
+                           rev_action: { params: {index: 2, rect: next_obj, text: ref}, func: update_rect_text  } });
 
 
     ani.add_sequence_ani( {pause: 1, text: "done" } );

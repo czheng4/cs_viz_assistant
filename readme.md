@@ -1,11 +1,3 @@
-
-
-# Animation Time (aniTime) 
-We use a global value `ANIMATION_TIME` to control the speed of animation. The value of ANIMATION_TIME changes as we slide the speed bar. `aniTime` allows for dynamic change of animation speed. `aniTime` takes arg1, operator(+,-,\*,/), and arg2. arg1 and arg2 are either a number or string "ANIMATION_TIME". If either arg1 or arg2 is the string "ANIMATION_TIME", the time changes as `ANIMATION_TIME` changes. `get_time()` function returns the the time. For example, `aniTime("ANIMATION_TIME", "+", 3).get_time()` will return ANIMATION_TIME - 3.
-
-
- 
-
 # Overall Animation property
 To add animation property, we provide `add_sequence_ani` and `add_parallel_ani` function calls. 
 

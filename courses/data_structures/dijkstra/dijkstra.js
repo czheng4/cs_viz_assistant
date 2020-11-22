@@ -363,7 +363,7 @@ class dijkstraAnimation {
             target:n.adj[i].ani_line,
             prop: {strokeStyle:"red", lineWidth:3},
             concurrence:true
-          })
+          });
           ani.add_sequence_ani({
             target:n.adj[i].n2.ani_circle,
             prop: deep_copy(ADJ_NODE_CTX),
@@ -376,7 +376,7 @@ class dijkstraAnimation {
         pause:ANIMATION_TIME - 2,
         text: e_text,
         prop : {step: true}
-      })
+      });
 
       total_animation_time += ANIMATION_TIME * 2;
       if (n.adj.length == 0 || dist != n.distance) total_animation_time -= 2;

@@ -2,7 +2,7 @@
 
 function dlist_test1() {
   MAIN_A = new dlistAnimation();
-  aniTester = new animationTester(50);
+  aniTester = new animationTester(90);
 
   aniTester.add_func("push_back", [1]);
   aniTester.add_func("push_front", [3]);

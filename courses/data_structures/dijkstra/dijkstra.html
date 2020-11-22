@@ -122,7 +122,8 @@ $(document).ready(function(){
   MAIN_A = new dijkstraAnimation(); // must be name ani
   MAIN_G = dijkstra_example(MAIN_A.ani);
   ANIMATION_TIME = 100 - $("#speed").val();
- 
+  MAIN_A.ani.step_by_step = true;
+  MAIN_A.run_dijkstra(MAIN_G.get_node(0), MAIN_G, true);
   MAIN_G.draw();
   
 
