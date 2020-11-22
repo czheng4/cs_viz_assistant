@@ -138,14 +138,16 @@ $(document).ready(function(){
   MAIN_G_SPEC.weight_type = T_NON_NEGATIVE_NUMBER;
   MAIN_G_SPEC.enable_node_color_change = false;
   MAIN_G_SPEC.enable_edge_color_change = false;
+  MAIN_G_SPEC.graph_type = T_DIRECTED;
+  
   MAIN_A = new networkFlowAnimation(); // must be name ani
   MAIN_G = network_flow_example(MAIN_A.ani);
-  ANIMATION_TIME = 100 - $("#speed").val();
+  D_ANIMATION_TIME = 100 - $("#speed").val();
  
   MAIN_G.draw();
   
-  let flow = MAIN_A.find_max_flow(MAIN_G, MAIN_G.get_node("S"), MAIN_G.get_node("T"));
-  console.log(flow)
+  // let flow = MAIN_A.find_max_flow(MAIN_G, MAIN_G.get_node("S"), MAIN_G.get_node("T"));
+  // console.log(flow)
   $("#get_path").click(function(){
     let id = $("#ending_node").val();
     let g = MAIN_G;
