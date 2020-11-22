@@ -108,7 +108,7 @@ $(document).ready(function(){
   MAIN_A = new disjointSetAnimation(); // must be name a
 
 
-  ANIMATION_TIME = 100 - $("#speed").val();
+  D_ANIMATION_TIME = 100 - $("#speed").val();
   
 
   $("#num_elements").click(function(){
@@ -160,7 +160,7 @@ $(document).ready(function(){
       $("#elaboration_text").text("Union: id1 id2");
     }
 
-  
+    
 
     MAIN_A.union(str[0], str[1]);
     console.log(MAIN_A.ani.connection_map);

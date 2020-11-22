@@ -325,8 +325,6 @@ class dijkstraAnimation {
       pre_n = n.shallow_copy();
 
 
-
-
       // animation of highlighting removing node in the multimap
       ani.add_sequence_ani({
         pause:ANIMATION_TIME,

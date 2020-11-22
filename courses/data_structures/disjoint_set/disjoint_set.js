@@ -455,15 +455,6 @@ class disjointSetAnimation {
     let stop_propagation = {};
     let old_ds = this.deep_copy();
     
-
-    // /* the entire state is composed of the state of graph, Animation and algorithm */
-    // let state = this.deep_copy(); // this copy the state of algorithm
-    // state.ani = state.ani.deep_copy(); // this copy the state of animation
-    // state.g = state.g.deep_copy(state.ani); // this copy the state of Graph
-    // ani.set_state(state);
-   
-
-    // ani.clear_animation();
     ani.add_sequence_ani({
       pause:1,
       action: {params: {ds: old_ds, id1:id1, id2:id2}, func: color_two_sets},

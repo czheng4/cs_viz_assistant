@@ -43,7 +43,7 @@
         <button type="button" id = "step_back">Step Back</button>&emsp;
         <button type="button" id = "step_forward">Step Forward</button>&emsp;&emsp;
         step by step animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
-        animation speed&emsp;<input type="range" min="0" max="90" value="90" id="speed"> 
+        animation speed&emsp;<input type="range" min="0" max="100" value="100" id="speed"> 
       </div>
 
       <div class = "elaboration">Elaboration: <span id = "elaboration_text" style="color:red"></span> </div>
@@ -73,7 +73,7 @@ $(document).ready(function(){
   set_canvas(1200, 700, 100, 20);
   
   MAIN_A = new dlistAnimation(); // must use name a for every animation
-  ANIMATION_TIME = 100 - $("#speed").val();
+  D_ANIMATION_TIME = 100 - $("#speed").val();
 
   dlist_test1();
   $("#push_back").click(function(){

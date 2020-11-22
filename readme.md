@@ -9,7 +9,7 @@ we internally keep track of the accumulated animation time to compute where the 
 | ----------| ---------|
 | pause |   pause the animation for `pause` times. If `pause` is used, `prop` shouldn't be used |
 | target | the target object(`Circle`, `quadraticCurve`, and `Rect`) to execute the `prop` |
-| prop(dict)  | the animation property of `Circle`, `quadraticCurve`, or `Rect`. If key `time` is not specified, `aniTime("ANIMATION_TIME")` is used. |
+| prop(dict)  | the animation property of `Circle`, `quadraticCurve`, or `Rect`. If key `time` is not specified, `ANIMATION_TIME` is used. |
 | action(dict) | This is an after-animation action that will be executed when the animation time gets to `end`. It's a dictionary that has `params` and `func`. `params` is the parameter of `func`.|
 | rev_action(dict) | same as action. But it triggers when animation moves backward. | 
 | concurrence | If it's true, the next added animation property has the same staring time as this one |
