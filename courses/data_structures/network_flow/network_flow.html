@@ -30,17 +30,38 @@
       <button type="button" id = "add_edge">Add Edge</button>
       <button type="button" id = "remove_edge">Remove Edge</button> &emsp;&emsp;
       
+      <button type="button" id = "clear_network">Clear Graph</button>
      
       
       <div class = "line"></div>
+      
 
-      <input type="text" id="starting_node" placeholder="starting node"> 
+
+      <input type="text" id="path_t" placeholder="Enter path (i.e. S A T)" style = "width: 200px; display: none"> 
+      <button type="button" id = "run">Run One Path</button>
+
+
+      <input type="radio" id="manual" name="search_type" value = "manual"> 
+      <label for="search_type">Manually Enter</label> 
+      <input type="radio" id="bfs" name="search_type" value = "bfs"> 
+      <label for="search_type">BFS</label> 
+      <input type="radio" id="greedy_dfs" name="search_type" value = "greedy_dfs"> 
+      <label for="search_type">Greedy-DFS</label> 
+      <input type="radio" id="dfs" name="search_type" value = "dfs" checked> 
+      <label for="search_type">DFS</label> 
+      <input type="radio" id="dijsktra" name="search_type" value = "dijsktra"> 
+      <label for="search_type">Dijkstra</label> 
+      
+     
+
+
+     <!--  <input type="text" id="starting_node" placeholder="starting node"> 
       <button type="button" id = "run">Run</button> &emsp;&emsp;
 
       <input type="text" id="ending_node" placeholder="ending node"> 
-      <button type="button" id = "get_path">Get Path</button> &emsp;&emsp;
+      <button type="button" id = "get_path">Get Path</button> &emsp;&emsp; -->
 
-      <button type="button" id = "clear_graph">Clear Graph</button> &emsp;&emsp;
+     
 
       <!-- make the display none and check directed because network flow problem works on directed graph -->
       <div style="display: none">
@@ -59,7 +80,7 @@
       </div>
 
       <div class = "elaboration">
-        Elaboration: <span id = "elaboration_text" style="color:red"></span> 
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text">S is the SOURCE. T is the SINK</span></div>
         <table border = 1 class = "elaboration-table">
           <tr id = "node">
             <td>Node</td>
@@ -104,29 +125,32 @@
 <script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
 
+function default_graph(ani) {
+  let g = new Graph(ani, "direct", ["S","T"]);
+  g.get_node("S", -120, 120);
+  g.get_node("T", 220, 120);
 
+  return g;
+}
 
 function network_flow_example(ani) {
-  let g = new Graph(ani, "direct");
-  let c;
+  let g = new Graph(ani, "direct", ["S", "T"]);
   
-  c = g.get_node("S").ani_circle;
-  c.move(-120 - c.x, 120 - c.y);
-  c = g.get_node("A").ani_circle;
-  c = g.get_node("B").ani_circle;
-  c.move(0 - c.x, 120 - c.y);
-  c = g.get_node("C").ani_circle;
-  c.move(-40 - c.x, 240 - c.y);
-  c = g.get_node("T").ani_circle;
-  c.move(220 - c.x, 120 - c.y);
-  c = g.get_node("D").ani_circle;
-  c.move(120 - c.x, 240 - c.y);
-
+  g.get_node("S", -120, 120);  
+  g.get_node("A", 0, 0);
+  g.get_node("B", 0, 120);
+  g.get_node("C", -40, 240);
+  g.get_node("T", 220, 120);
+  g.get_node("D", 120, 240);
+ 
   g.get_edges_by_name([["S", "A", 10], ["S", "C", 14], ["A", "B", 5], 
                        ["A", "T", 5],  ["B", "T", 8], ["C","B",13],
                        ["C","D", 10],  ["D", "T", 12]]);
   console.log(g.edge_map)
 
+  g.set_label("Residual Graph", "top");
+ 
+  $("#elaboration_text").text("S is the SOURCE. T is the SINK")
   return g;
 }
 
@@ -134,49 +158,57 @@ $(document).ready(function(){
   
 
 
-  set_canvas(1200, 800, 250, 50);
+  set_canvas(1200, 800, 200, 75);
   MAIN_G_SPEC.weight_type = T_NON_NEGATIVE_NUMBER;
   MAIN_G_SPEC.enable_node_color_change = false;
   MAIN_G_SPEC.enable_edge_color_change = false;
   MAIN_G_SPEC.graph_type = T_DIRECTED;
+  MAIN_G_SPEC.num_cols = 2;
   
-  MAIN_A = new networkFlowAnimation(); // must be name ani
+  MAIN_A = new networkFlowAnimation(); // must be name ani 
   MAIN_G = network_flow_example(MAIN_A.ani);
+  MAIN_A.g = MAIN_G;
+
   D_ANIMATION_TIME = 100 - $("#speed").val();
  
-  MAIN_G.draw();
+  // MAIN_G.draw();
   
   // let flow = MAIN_A.find_max_flow(MAIN_G, MAIN_G.get_node("S"), MAIN_G.get_node("T"));
   // console.log(flow)
-  $("#get_path").click(function(){
-    let id = $("#ending_node").val();
-    let g = MAIN_G;
-    if (id == "") {
-      $("#elaboration_text").text("node id is empty");
-    } else if (g == null) {
-      // $("#elaboration_text").text("node id is empty");
-    } else if (!g.is_node(id)) {
-      $("#elaboration_text").text(id + "doesn't exist");
+
+
+  // $("#manual").click(function(){
+  //   $("#path_t").css("display", "inline-block");
+  // })
+  $("input[name=search_type]").click(function(){
+    let id = $(this)[0].id;
+    if (id == "manual") {
+      $("#path_t").css("display", "inline-block");
     } else {
-      MAIN_A.find_path(g.get_node(id), g);
+      $("#path_t").css("display", "none");
     }
 
-    
+    console.log($(this)[0].id);
   })
 
-  $("#run").click(function() {
-    let id = $("#starting_node").val();
-    let g = MAIN_G;
-    if (id == "") {
-      $("#elaboration_text").text("node id is empty");
-    } else if (g == null) {
-    } else if (!g.is_node(id)) {
-      $("#elaboration_text").text(id + "doesn't exist");
-    } else {
-      MAIN_A.run_dijkstra(g.get_node(id), g, $("#leave_node").is(":checked"));
-    }
-
+  $("#run").click(function(){
+    MAIN_A.find_augmenting_path($("input[name=search_type]:checked").val());
   })
+
+  $("#clear_network").click(function(){
+    let ani;
+    $("input[name=graph_type]").prop("disabled", false);
+    MAIN_A = new networkFlowAnimation()
+    MAIN_G = default_graph(MAIN_A.ani);
+    MAIN_A.g = MAIN_G;
+    MAIN_G.draw();
+
+    $("#elaboration_text").text("S is the SOURCE. T is the SINK")
+  })
+
+
+
+
 
 
 });

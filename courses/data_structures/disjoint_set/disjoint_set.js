@@ -323,7 +323,7 @@ class disjointSetAnimation {
       
       prev_ele = ele;
       ele = this.links[ele];
-      str += " -> " + ele;
+      str += RIGHT_ARROW + ele;
 
       /* color the node
          we don't actually need target here. I add target here becuase when animation steps back, 

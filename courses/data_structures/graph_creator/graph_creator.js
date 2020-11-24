@@ -31,7 +31,6 @@ function generate_graph_file_content(g) {
 }
 
 $(document).ready(function(){
-  var g = MAIN_G;
   
   if ("spectrum" in $("#node_color")) {
     $('#node_color').spectrum({
@@ -97,18 +96,20 @@ $(document).ready(function(){
   }
 
   $("#node_radius").change(function() {
+    let g = MAIN_G;
     MAIN_G_SPEC.node_radius = $(this).val();
     if (g != null) g.node_radius = MAIN_G_SPEC.node_radius;
   })
 
   $("#edge_width").change(function() {
+    let g = MAIN_G;
     MAIN_G_SPEC.edge_width = $(this).val();
     if (g != null) g.edge_width = MAIN_G_SPEC.edge_width;
   })
 
  
   $("#download_graph").click(function() {
-    download("graph.txt", generate_graph_file_content(g));
+    download("graph.txt", generate_graph_file_content(MAIN_G));
   })
 
   $("#import_graph").click(function(){
@@ -120,6 +121,7 @@ $(document).ready(function(){
 
     let reader = new FileReader();
     let files = $(this)[0].files;
+    let g = MAIN_G;
 
     if (files.length == 0) return;
     reader.onload = function () {
@@ -300,15 +302,15 @@ $(document).ready(function(){
       tmp_g.edge_width = MAIN_G_SPEC.edge_width;
       tmp_g.node_radius = MAIN_G_SPEC.node_radius;
       
-      g = tmp_g;
-      MAIN_G = g;
+      // g = tmp_g;
+      MAIN_G = tmp_g;
       MAIN_A.ani = tmp_ani;
       
-      console.log(g.graph_type);
+      // console.log(g.graph_type);
       $("#directed").attr("checked", false);
       $("#undirected").attr("checked", false);
 
-      if (g.graph_type == "direct") $("#directed").attr("checked", true);
+      if (MAIN_G.graph_type == "direct") $("#directed").attr("checked", true);
       else $("#undirected").attr("checked", true);
       
      
@@ -323,7 +325,6 @@ $(document).ready(function(){
     let ani;
     $("input[name=graph_type]").prop("disabled", false);
     ani = new Animation();
-    g = null;
     MAIN_G = null;
     MAIN_A.ani = ani;
     ani.draw();
@@ -334,6 +335,8 @@ $(document).ready(function(){
   $("#add_node").click(function() {
     
     let id, graph_type, ani;
+    let g = MAIN_G;
+
     if (g == null) {
       graph_type = $("input[name=graph_type]:checked").val();
       ani = new Animation();
@@ -366,7 +369,7 @@ $(document).ready(function(){
 
   $("#remove_node").click(function() {
     let id;
-
+    let g = MAIN_G;
     if (g == null) return;
     
     id = $("#node_t").val();
@@ -392,7 +395,7 @@ $(document).ready(function(){
     let n1, n2;
     let e;
     let str = $("#edge_t").val();
-
+    let g = MAIN_G;
     str = str.trim();
     str = str.split(/[ ,]+/);
 
@@ -433,6 +436,8 @@ $(document).ready(function(){
     let e;
     let i;
     let str = $("#edge_t").val();
+    let g = MAIN_G;
+    
     str = str.trim();
     str = str.split(/[ ,]+/);
 

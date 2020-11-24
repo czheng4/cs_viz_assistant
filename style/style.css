@@ -9,11 +9,21 @@ body {
   width: 90px;
 }
 
+
+
+
 .elaboration-table {
   border-collapse: collapse; 
   margin-top: 5px;
 }
 
+#elaboration_text {
+  color: red;
+}
+
+.main-elaboration {
+  height: 20px;
+}
 
 .elaboration-table td {
     

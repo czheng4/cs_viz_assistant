@@ -3,7 +3,6 @@
   11/22/2020
 */
 
-
 function update_ctx_prop(dict) {
   let obj = dict.obj,
       ctx_prop = dict.ctx_prop; 
@@ -147,8 +146,10 @@ class dijkstraAnimation {
     while (n != this.starting_node) {
 
       if (n.backedge == null) return;
-      if (n != ending_node) path += " <- ";
+
+      if (n != ending_node) path += LEFT_ARROW;
       path += "({}, {})".format(n.backedge.n1.id, n.backedge.n2.id);
+      
      
 
       ani.add_sequence_ani({ 
@@ -404,7 +405,7 @@ class dijkstraAnimation {
             adj_prop.fillStyle = "yellow";
           }
           
-          e_text = "Process edge ( " + e.id + " ): ";
+          e_text = "Process edge ( " + e.pretty_edge() + " ): ";
           e_text += "New Distance = " + dist + " + " + e.weight + " = " + (dist + e.weight); 
           if (n2.distance == -1 || n2.distance > b_dist) {}
           else e_text += " > {}. Do Nothing".format(n2.distance);
