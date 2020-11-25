@@ -331,8 +331,6 @@ class networkFlowAnimation {
     $("#elaboration_text").text("");
     $("#elaboration_text").append(text);
 
-    // since elaboration_text will have multiple lines we must reset offset.
-    reset_canvas_offset();
     this.ani.draw();
   }
 
@@ -520,7 +518,6 @@ class networkFlowAnimation {
             e.ani_line.ctx_prop.strokeStyle = "red";
             e.ani_line.ctx_prop.lineWidth = 3;
           }
-          reset_canvas_offset();
         }}
       })
     }

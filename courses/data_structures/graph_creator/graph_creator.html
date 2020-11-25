@@ -108,6 +108,16 @@ function example(ani) {
                        [8,10,1], [3,8,33], [8,6,3],   [6,4,9],
                        [3,7,20], [7,6,1],  [6,5,1]]);
   $("input[name=graph_type]").prop("disabled", true);
+  $("#elaboration_text").text("");
+  $("#elaboration_text").append(
+    "Press W/w + mouse down + mouse move to create edge" + NEW_LINE + 
+    "Press D/d + mouse down + mouse move to delete edge" + NEW_LINE +
+    "Press T/t + mouse click edge weight to switch the text to other direction" + NEW_LINE + 
+    "Press C/c + mouse clock node to change its color" + NEW_LINE + 
+    "Press C/c + number to switch to differen node colors" + NEW_LINE +
+    "Press W/w + number to switch to differen edge line colors"              
+  );
+  reset_canvas_offset();
   return g;
 }
 
