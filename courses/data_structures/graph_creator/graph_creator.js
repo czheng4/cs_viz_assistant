@@ -1,3 +1,9 @@
+/*
+  Copyright (C) 2020, ChaoHui Zheng
+  All rights reserved.
+  
+  11/24/2020
+*/
 const NODE_COLORS = ['#DDDDDD', 'pink', 'lightblue', 'yellow'];
 const EDGE_COLORS = ["black", "red", "blue", "#FFB901"];
 function download(filename, text) {
@@ -21,10 +27,11 @@ function generate_graph_file_content(g) {
   for (let key in g.edge_map) {
     e = g.edge_map[key];
     line = e.ani_line;
-    str += "EDGE {} {} {} COL {} WIDTH {} TEXT_T {}\n".format(e.n1.id, e.n2.id, e.weight, 
+    str += "EDGE {} {} {} COL {} WIDTH {} TEXT_T {} TEXT_DIR {}\n".format(e.n1.id, e.n2.id, e.weight, 
                                                               line.ctx_prop.strokeStyle,
                                                               line.ctx_prop.lineWidth,
-                                                              line.text_t);
+                                                              line.text_t,
+                                                              line.text_direction);
   }
 
   return str;
@@ -54,6 +61,7 @@ $(document).ready(function(){
           ["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
       ],
       hide: function(color) {
+        let g = MAIN_G;
         MAIN_G_SPEC.node_color = $(this).spectrum("get").toHexString();
         if(g != null) {
           g.node_color = MAIN_G_SPEC.node_color;
@@ -86,6 +94,7 @@ $(document).ready(function(){
           ["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
       ],
       hide: function(color) {
+        let g = MAIN_G;
         MAIN_G_SPEC.edge_color = $(this).spectrum("get").toHexString();
         if(g != null) {
           g.edge_color = MAIN_G_SPEC.edge_color;
@@ -217,6 +226,7 @@ $(document).ready(function(){
             } else if (sub_specifier == "EDGE") {
               if (size < j + 2) {
                 $("#elaboration_text").text("\"{}\". Edge spec is not valid. Importing graph failed".format(data[i]));
+                return;
               }
               from = tmp_g.get_node(str[j]); j++;
               to = tmp_g.get_node(str[j]); j++;
@@ -228,9 +238,12 @@ $(document).ready(function(){
                 weight += str[j];
               }
 
-
               edge = tmp_g.get_edge(from, to, weight.trim());
-
+              if (edge == null) {
+                $("#elaboration_text").text("Weight \"{}\" is not valid. Importing graph failed".format(weight));
+                return;
+              }
+              console.log(from, to, edge, weight.trim());
               
               sub_specifier = "";
             } else if (sub_specifier.indexOf("COL") != -1) {
@@ -245,9 +258,11 @@ $(document).ready(function(){
               edge.ani_line.text_t = parseFloat(str[j]);
               j++;
               sub_specifier = "";
+            } else if (sub_specifier.indexOf("TEXT_DIR") != -1) {
+              edge.ani_line.text_direction = str[j];
+              j++;
             } else {
               sub_specifier = str[j].toUpperCase();
-            
               j++;
             }
           
@@ -297,22 +312,25 @@ $(document).ready(function(){
       }
 
       tmp_g.draw();
-      tmp_g.node_color = MAIN_G_SPEC.node_color;
-      tmp_g.edge_color = MAIN_G_SPEC.edge_color;
-      tmp_g.edge_width = MAIN_G_SPEC.edge_width;
-      tmp_g.node_radius = MAIN_G_SPEC.node_radius;
+      // tmp_g.node_color = MAIN_G_SPEC.node_color;
+      // tmp_g.edge_color = MAIN_G_SPEC.edge_color;
+      // tmp_g.edge_width = MAIN_G_SPEC.edge_width;
+      // tmp_g.node_radius = MAIN_G_SPEC.node_radius;
       
       // g = tmp_g;
       MAIN_G = tmp_g;
       MAIN_A.ani = tmp_ani;
+      if ("g" in MAIN_A) MAIN_A.g = MAIN_G;
       
       // console.log(g.graph_type);
       $("#directed").attr("checked", false);
       $("#undirected").attr("checked", false);
 
+
       if (MAIN_G.graph_type == "direct") $("#directed").attr("checked", true);
       else $("#undirected").attr("checked", true);
       
+      console.log(MAIN_G);
      
       
     };
@@ -342,10 +360,10 @@ $(document).ready(function(){
       ani = new Animation();
       MAIN_A.ani = ani;
       g = new Graph(ani, graph_type);
-      g.node_color = MAIN_G_SPEC.node_color;
-      g.edge_color = MAIN_G_SPEC.edge_color;
-      g.edge_width = MAIN_G_SPEC.edge_width;
-      g.node_radius = MAIN_G_SPEC.node_radius;
+      // g.node_color = MAIN_G_SPEC.node_color;
+      // g.edge_color = MAIN_G_SPEC.edge_color;
+      // g.edge_width = MAIN_G_SPEC.edge_width;
+      // g.node_radius = MAIN_G_SPEC.node_radius;
 
       MAIN_G = g;
       $("input[name=graph_type]").prop("disabled", true);
@@ -512,6 +530,10 @@ $(document).ready(function(){
       PRESS_C_KEY = true;
     }
 
+    if (e.keyCode == 84 || e.keyCode == 116) {
+      PRESS_T_KEY = true;
+    }
+
     if (e.keyCode >= 49 && e.keyCode <= 52) {
       color_swtich_num = e.keyCode - 49;
       
@@ -554,6 +576,10 @@ $(document).ready(function(){
 
     if (e.keyCode == 67 || e.keyCode == 99) { // 'c' and 'C'
       PRESS_C_KEY = false;
+    }
+
+    if (e.keyCode == 84 || e.keyCode == 116) {
+      PRESS_T_KEY = false;
     }
    
   })

@@ -109,6 +109,7 @@ aniTester.run_test();
 | w/W + number | switch the color of edges |
 | w/W + mouse down + mouse up | Create edges |
 | d/D + mouse down + mouse up | Delete edges | 
+| t/T + mouse down | Switch text direction of edge |
 
 
 

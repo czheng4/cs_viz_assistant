@@ -1,6 +1,9 @@
 /*
-  ChaoHui Zheng
+  Copyright (C) 2020, ChaoHui Zheng
+  All rights reserved.
+  
   11/22/2020
+  Last Modified 11/24/2020
 */
 /* 
   Doubly linked list.

@@ -319,7 +319,7 @@ class disjointSetAnimation {
         concurrence: true,
       })
 
-      if (this.links[ele] != -1) line = g.get_edge_by_name(ele, this.links[ele]).ani_line;
+      if (this.links[ele] != -1) line = g.get_edge_by_name(ele, this.links[ele], "").ani_line;
       
       prev_ele = ele;
       ele = this.links[ele];
@@ -374,7 +374,7 @@ class disjointSetAnimation {
         old_ds = this.deep_copy();
         this.links[v[i]] = ele;
         circle = g.get_node(v[i]).ani_circle;
-        line = g.get_edge_by_name(v[i], v[i + 1]).ani_line;
+        line = g.get_edge_by_name(v[i], v[i + 1], "").ani_line;
 
         ani.add_sequence_ani({
           pause:1,
@@ -430,7 +430,7 @@ class disjointSetAnimation {
       text: "Done. Find({}) = {}".format(id, ele)
     });
 
-    ani.run_animation(false, function(){
+    ani.run_animation(function(){
       $("#find_t").focus();
     });
     return ele;
@@ -495,7 +495,7 @@ class disjointSetAnimation {
 
     p = node_pos_after_union(parent_n, g);
     
-    line = g.get_edge(child_n, parent_n).ani_line;
+    line = g.get_edge(child_n, parent_n, "").ani_line;
     line.p2 = line.p1;
     
 
@@ -541,7 +541,7 @@ class disjointSetAnimation {
       rev_action: {params: {ds: old_ds, id1:id1, id2:id2}, func: color_two_sets},
     })
 
-    ani.run_animation(false, function(){
+    ani.run_animation(function(){
       $("#union_t").focus();
     });
   }

@@ -38,7 +38,8 @@
 
 
       <input type="text" id="path_t" placeholder="Enter path (i.e. S A T)" style = "width: 200px; display: none"> 
-      <button type="button" id = "run">Run One Path</button>
+      <button type="button" id = "run">Run Augmenting Path</button>
+      <button type="button" id = "min_cut" disabled>Find Minimum Cut</button>
 
 
       <input type="radio" id="manual" name="search_type" value = "manual"> 
@@ -49,18 +50,10 @@
       <label for="search_type">Greedy-DFS</label> 
       <input type="radio" id="dfs" name="search_type" value = "dfs" checked> 
       <label for="search_type">DFS</label> 
-      <input type="radio" id="dijsktra" name="search_type" value = "dijsktra"> 
+      <input type="radio" id="dijkstra" name="search_type" value = "dijkstra"> 
       <label for="search_type">Dijkstra</label> 
       
      
-
-
-     <!--  <input type="text" id="starting_node" placeholder="starting node"> 
-      <button type="button" id = "run">Run</button> &emsp;&emsp;
-
-      <input type="text" id="ending_node" placeholder="ending node"> 
-      <button type="button" id = "get_path">Get Path</button> &emsp;&emsp; -->
-
      
 
       <!-- make the display none and check directed because network flow problem works on directed graph -->
@@ -81,23 +74,6 @@
 
       <div class = "elaboration">
         <div class = "main-elaboration">Elaboration: <span id = "elaboration_text">S is the SOURCE. T is the SINK</span></div>
-        <table border = 1 class = "elaboration-table">
-          <tr id = "node">
-            <td>Node</td>
-          </tr>
-
-          <tr id = "distance">
-            <td>Distance</td>
-          </tr>
-
-          <tr id = "backedge">
-            <td>Backedge</td>
-          </tr>
-
-          <tr id = "multimap"> 
-            <td>Multimap</td>
-          </tr>
-        </table>
       </div>
     </div>
 
@@ -106,14 +82,14 @@
     </div>
   </div>
 
-  <!-- This is general import and export doesn't do error check for specific animation to do!!!!! -->
-  <!-- <div class = "file-management">
+ <!--  This is general import and export doesn't do error check for specific animation to do!!!!! -->
+  <div class = "bottom-nav">
     <button id = "import_graph">Import Graph</button>
     <input type="file" name ="Import Graph" style="display: none" id = "import_input">
 
     <button id = "download_graph">Download Graph</button>
     <a id = "download" download></a>
-  </div> -->
+  </div>
 
   
 </body>
@@ -122,6 +98,7 @@
 <script src="../../../lib/memory_generator.js"></script>
 <script src="../dlist/dlist.js"></script>
 <script src="network_flow.js"></script>
+<script src="network_flow_test.js"></script>
 <script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
 
@@ -147,13 +124,27 @@ function network_flow_example(ani) {
                        ["A", "T", 5],  ["B", "T", 8], ["C","B",13],
                        ["C","D", 10],  ["D", "T", 12]]);
   console.log(g.edge_map)
-
-  g.set_label("Residual Graph", "top");
  
-  $("#elaboration_text").text("S is the SOURCE. T is the SINK")
+  $("#elaboration_text").text("");
+  $("#elaboration_text").append("T is the SOURCE. T is the SINK");
   return g;
 }
+function network_flow_example2(ani) {
+  let g = new Graph(ani, "direct", ["S", "T"]);
+  
+  g.get_node("S", -120, 120);  
+  g.get_node("T", 240, 120);
 
+  g.get_node("A", 50, 0);  
+  g.get_node("B", 50, 240);
+ 
+  g.get_edges_by_name([["S", "A", 500], ["A", "B", 1], ["S", "B", 500], ["A", "T", 500], 
+                       ["B", "T", 500] ]);
+ 
+ 
+  $("#elaboration_text").text("S is the SOURCE. T is the SINK");
+  return g;
+}
 $(document).ready(function(){
   
 
@@ -164,6 +155,13 @@ $(document).ready(function(){
   MAIN_G_SPEC.enable_edge_color_change = false;
   MAIN_G_SPEC.graph_type = T_DIRECTED;
   MAIN_G_SPEC.num_cols = 2;
+
+  // By default all the radio buttons are disabled after each animation.
+  // By default all the input and regular buttons are enabled after each animation.
+  // we can enabled or disable specific buttons/inputs by specifying ENABLE_IDS and DISABLE_IDS list.
+
+  ENABLE_IDS = ["input[name=search_type]"];
+  DISABLE_IDS = ["#min_cut", "[id*=node]", "[id*=edge]", "#import_graph", "#download_graph"];
   
   MAIN_A = new networkFlowAnimation(); // must be name ani 
   MAIN_G = network_flow_example(MAIN_A.ani);
@@ -171,15 +169,11 @@ $(document).ready(function(){
 
   D_ANIMATION_TIME = 100 - $("#speed").val();
  
-  // MAIN_G.draw();
+  MAIN_G.draw();
+
+  // network_flow_test1();
   
-  // let flow = MAIN_A.find_max_flow(MAIN_G, MAIN_G.get_node("S"), MAIN_G.get_node("T"));
-  // console.log(flow)
-
-
-  // $("#manual").click(function(){
-  //   $("#path_t").css("display", "inline-block");
-  // })
+  
   $("input[name=search_type]").click(function(){
     let id = $(this)[0].id;
     if (id == "manual") {
@@ -192,12 +186,26 @@ $(document).ready(function(){
   })
 
   $("#run").click(function(){
-    MAIN_A.find_augmenting_path($("input[name=search_type]:checked").val());
+    let val = $("input[name=search_type]:checked").val();
+    console.log($("#path_t").val());
+    if (val == "manual") MAIN_A.find_augmenting_path(val, $("#path_t").val());
+    else  MAIN_A.find_augmenting_path(val);
+  })
+
+  $("#min_cut").click(function() {
+    MAIN_A.find_min_cut();
   })
 
   $("#clear_network").click(function(){
     let ani;
     $("input[name=graph_type]").prop("disabled", false);
+    $("[id*=node]").prop("disabled", false);
+    $("[id*=edge]").prop("disabled", false);
+    $("#min_cut").prop("disabled", true);
+    $("#run").prop("disabled", false);
+    $("#import_graph").prop("disabled", false);
+    $("#download_graph").prop("disabled", false);
+
     MAIN_A = new networkFlowAnimation()
     MAIN_G = default_graph(MAIN_A.ani);
     MAIN_A.g = MAIN_G;
@@ -205,8 +213,6 @@ $(document).ready(function(){
 
     $("#elaboration_text").text("S is the SOURCE. T is the SINK")
   })
-
-
 
 
 

@@ -18,11 +18,13 @@ body {
 }
 
 #elaboration_text {
+  position: relative;
   color: red;
 }
 
 .main-elaboration {
   height: 20px;
+  display: inline-block;
 }
 
 .elaboration-table td {
