@@ -66,8 +66,8 @@
       <div class = "line"></div>
       
       <div class = "animation-control">
-        <button type="button" id = "go_back">Go Back</button>&emsp;
-        <button type="button" id = "go_forward">Go Forward</button>&emsp;&emsp;
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
         Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
         Animation Speed&emsp;<input type="range" min="0" max="100" value="50" id="speed"> 
       </div>
@@ -126,7 +126,7 @@ function network_flow_example(ani) {
   console.log(g.edge_map)
  
   $("#elaboration_text").text("");
-  $("#elaboration_text").append("T is the SOURCE. T is the SINK");
+  $("#elaboration_text").append("S is the SOURCE. T is the SINK");
   return g;
 }
 function network_flow_example2(ani) {
@@ -161,7 +161,7 @@ $(document).ready(function(){
   // we can enabled or disable specific buttons/inputs by specifying ENABLE_IDS and DISABLE_IDS list.
 
   ENABLE_IDS = ["input[name=search_type]"];
-  DISABLE_IDS = ["#min_cut", "[id*=node]", "[id*=edge]", "#import_graph", "#download_graph"];
+  DISABLE_IDS = ["#min_cut", "[id*=node]", "[id*=edge]", "#download_graph"];
   
   MAIN_A = new networkFlowAnimation(); // must be name ani 
   MAIN_G = network_flow_example(MAIN_A.ani);

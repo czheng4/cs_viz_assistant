@@ -175,7 +175,12 @@ class networkFlowAnimation {
     this.max_flow = 0;
   }
 
-
+  make_new() {
+    $("#run").prop("disabled", false);
+    $("#min_cut").prop("disabled", true);
+    
+    return new networkFlowAnimation();
+  }
 
   create_flow_graph() {
     let g = this.g;
@@ -184,6 +189,7 @@ class networkFlowAnimation {
     let x1, x2, y1, y2, y;
     let text, line;
     let margin = 60;
+    let circles = [], edges = [];
     if (g == null) {
       throw new Error("graph is not created. Error");
     }
@@ -195,7 +201,9 @@ class networkFlowAnimation {
     y2 = -1;
 
     for (let key in g.node_map) {
+
       n = g.node_map[key].ani_circle;
+      circles.push(n);
       if (n.x < x1) x1 = n.x;
       if (n.x > x2) x2 = n.x;
       if (n.y < y1) y1 = n.y;
@@ -215,19 +223,34 @@ class networkFlowAnimation {
     ani.add_object(new quadraticCurve(new Point(x1 + d - margin, y1 - 50), new Point(x1 + d - margin, y2 + 50), 0, 0, false));
     ani.add_object(new quadraticCurve(new Point(x1 + 2 * d - margin, y1 - 50), new Point(x1 + 2 * d - margin, y2 + 50), 0, 0, false));
 
-    for (let key in g.node_map) {
-      n = g.node_map[key].ani_circle;
+    for (let i = 0; i < circles.length; i++) {
+      n = circles[i];
       g.get_node(flow_g_node(n.ref), n.x, n.y, n.ref);
       g.get_node(original_g_node(n.ref), n.x + 2 * d, n.y, n.ref).ani_circle.visible = true;
       n.move(d, 0);
     }
 
-    for (let key in g.edge_map) {
-      e = g.edge_map[key];
+    // loop through list rather than g.node_map bc we keep adding ele to node_map 
+    // for (let key in g.node_map) {
+    //   n = g.node_map[key].ani_circle;
+    //   g.get_node(flow_g_node(n.ref), n.x, n.y, n.ref);
+    //   g.get_node(original_g_node(n.ref), n.x + 2 * d, n.y, n.ref).ani_circle.visible = true;
+    //   n.move(d, 0);
+    // }
+    for (let key in g.edge_map) edges.push(g.edge_map[key]);
+    for (let i = 0; i < edges.length; i++) {
+      e = edges[i];
       n = g.get_node(original_g_node(e.n1.id));
       n2 = g.get_node(original_g_node(e.n2.id));
       g.get_edge(n, n2, e.weight).ani_line.text_t = e.ani_line.text_t;
     }
+
+    // for (let key in g.edge_map) {
+    //   e = g.edge_map[key];
+    //   n = g.get_node(original_g_node(e.n1.id));
+    //   n2 = g.get_node(original_g_node(e.n2.id));
+    //   g.get_edge(n, n2, e.weight).ani_line.text_t = e.ani_line.text_t;
+    // }
 
    
 

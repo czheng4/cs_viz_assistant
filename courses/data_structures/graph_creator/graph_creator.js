@@ -318,11 +318,15 @@ $(document).ready(function(){
       // tmp_g.node_radius = MAIN_G_SPEC.node_radius;
       
       // g = tmp_g;
+
+      if ("make_new" in MAIN_A) MAIN_A = MAIN_A.make_new();
       MAIN_G = tmp_g;
       MAIN_A.ani = tmp_ani;
+      MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
       if ("g" in MAIN_A) MAIN_A.g = MAIN_G;
       
       // console.log(g.graph_type);
+      $("#download_graph").prop("disabled", false);
       $("#directed").attr("checked", false);
       $("#undirected").attr("checked", false);
 
@@ -342,10 +346,19 @@ $(document).ready(function(){
   $("#clear_graph").click(function(){
     let ani;
     $("input[name=graph_type]").prop("disabled", false);
-    ani = new Animation();
+    if ("make_new" in MAIN_A) MAIN_A = MAIN_A.make_new();
+    else {
+      ani = new Animation();
+      MAIN_A.ani = ani;
+    }
+    MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
     MAIN_G = null;
-    MAIN_A.ani = ani;
-    ani.draw();
+    MAIN_A.ani.draw();
+
+    $("[id*=node]").prop("disabled", false);
+    $("[id*=edge]").prop("disabled", false);
+    $("#import_graph").prop("disabled",false);
+    $("#download_graph").prop("disabled",false);
   })
 
 
@@ -357,9 +370,10 @@ $(document).ready(function(){
 
     if (g == null) {
       graph_type = $("input[name=graph_type]:checked").val();
-      ani = new Animation();
-      MAIN_A.ani = ani;
-      g = new Graph(ani, graph_type);
+      // ani = new Animation();
+      // MAIN_A.ani = ani;
+      g = new Graph(MAIN_A.ani, graph_type);
+      MAIN_A.g = g;
       // g.node_color = MAIN_G_SPEC.node_color;
       // g.edge_color = MAIN_G_SPEC.edge_color;
       // g.edge_width = MAIN_G_SPEC.edge_width;
