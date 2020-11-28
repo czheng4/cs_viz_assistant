@@ -106,18 +106,16 @@ function graph_example(ani) {
 
 $(document).ready(function(){
   
-
-
   set_canvas(1200, 800, 250, 75);
   MAIN_G_SPEC.weight_type = T_NUMBER;
   MAIN_G_SPEC.enable_node_color_change = false;
   MAIN_G_SPEC.enable_edge_color_change = false;
   MAIN_G_SPEC.graph_type = T_UNDIRECTED;
-  MAIN_G_SPEC.num_cols = 2;
   MAIN_G_SPEC.create_reverse_edge = false;
 
 
   DISABLE_IDS = ["[id*=node]", "[id*=edge]", "#download_graph"];
+  ENABLE_STEP_IDS = ["#clear_graph"];
   
   MAIN_A = new kruskalAnimation(); // must be name ani 
   MAIN_G = graph_example(MAIN_A.ani);

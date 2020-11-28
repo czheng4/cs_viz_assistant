@@ -77,12 +77,10 @@ class primAnimation {
     this.ani = new Animation();
     this.g = null;
     this.map_rect = null;
-    
-    this.init = false;
-    this.num_elements = 0;
+    this.init = true;
   }
 
-  /* create init graph and init disjoint set */
+  /* create init graph */
   create_init_graph() {
     let g = this.g;
     let ani = this.ani;
@@ -167,11 +165,24 @@ class primAnimation {
   }
   
 
-  run() {
-    this.create_init_graph();
-    this.multimap_init();
-    this.ani.draw();
+  run(starting_node_id) {
 
+    starting_node_id = starting_node_id.trim();
+    
+    if (starting_node_id === "") {
+      $("#elaboration_text").text("Starting Node Id is empty");
+      return;
+    } else if (!this.g.is_node(starting_node_id)) {
+      $("#elaboration_text").text("Starting Node Id {} does not exist".format(starting_node_id));
+      return;
+    }
+
+    if (this.init == true) {
+      this.create_init_graph();
+      this.multimap_init();
+      this.init = false;
+    }
+    
     let starting_node, edge, node, node2, s_edge;
     let i, sum, key, best_d, pos;
     let e_text, texts, pre_texts, highlight_texts, base_text;
@@ -180,12 +191,19 @@ class primAnimation {
         g = this.g,
         ani = this.ani;
 
-    starting_node = g.get_node("A");
+    starting_node = g.get_node(starting_node_id);
     for (let key in g.node_map) {
       g.node_map[key].visited = 0;
       g.node_map[key].distance = null;
       g.node_map[key].backedge = null;
       g.node_map[key].itr = null;
+      g.node_map[key].ani_circle.ctx_prop.fillStyle = "#DDDDDD";
+    }
+
+    for (let key in g.edge_map) {
+      edge = g.edge_map[key];
+      edge.ani_line.ctx_prop = deep_copy(DEFAULT_LINE_CTX);
+      if (edge.n1.id.indexOf("INIT_GRAPH_") != -1) edge.ani_line.visible = true;
     }
 
     starting_node.distance = 0;
@@ -199,10 +217,11 @@ class primAnimation {
       edge.n2.itr = multimap.insert_sort_func(edge, compare);
     }
 
+    ani.clear_animation();
     ani.add_sequence_ani({
       pause: 1,
       text: "Start by inserting starting node {}'s adjacent edges into multimap".format(starting_node.id),
-      action: { params: {nodes: [starting_node], color :"yellow"}, func: set_node_color },
+      action: { params: {nodes: [starting_node], color :"pink"}, func: set_node_color },
       concurrence: true,
     })
 
@@ -238,6 +257,7 @@ class primAnimation {
 
       // update the multimap texts.
       texts = dlist_to_rect_texts(multimap);
+      pre_texts[0] = "";
       ani.add_sequence_ani({
         pause: 1,
         action: {params: {map_rect: map_rect, texts: texts}, func: update_rect_text},
@@ -261,7 +281,7 @@ class primAnimation {
         first_line = false;
         ani.add_sequence_ani({
           pause:1,
-          action: {params: {nodes: [s_edge.n1], color: "yellow"}, func: set_node_color},
+          action: {params: {nodes: [s_edge.n1], color: "pink"}, func: set_node_color},
           rev_action:  {params: {nodes: [s_edge.n1], color: "#DDDDDD"}, func: set_node_color},
           concurrence: true
         });
@@ -269,10 +289,10 @@ class primAnimation {
 
       ani.add_sequence_ani({
         pause:1,
-        action: {params: {nodes: [s_edge.n2, edge.n2], color: "yellow"}, func: set_node_color},
+        action: {params: {nodes: [s_edge.n2, edge.n2], color: "pink"}, func: set_node_color},
         rev_action:  {params: {nodes: [s_edge.n2, edge.n2], color: "#DDDDDD"}, func: set_node_color},
         concurrence: true
-      })
+      });
 
       // set line color
       ani.add_sequence_ani({
@@ -280,13 +300,13 @@ class primAnimation {
         action: {params: {line: edge.ani_line, ctx_prop: HIGHLIGHT_LINE}, func: set_line_color},
         rev_action: {params: {line: edge.ani_line, ctx_prop: DEFAULT_LINE_CTX}, func: set_line_color},
         concurrence: true
-      })
+      });
 
       // pause here.
       ani.add_sequence_ani({
         pause: ANIMATION_TIME,
         prop: {step: true}
-      })
+      });
 
       highlight_texts = this.highlight_adj(node.adj);
       e_text += "Process {}'s adjacent edges { ".format(edge.n2.id);
@@ -317,7 +337,7 @@ class primAnimation {
               target: map_rect,
               text: e_text + "Edge {} improves \"to\" node's {} current distance. Erase edge {} from multimap".format(highlight(edge.pretty_edge() + " : " + edge.weight), node2.id, highlight(node2.itr.value.pretty_edge())),
               prop: {text_fade_out: {color: "red", index: pos}, step: true, time: ANIMATION_TIME * 3}
-            })
+            });
           }
 
 
@@ -334,17 +354,14 @@ class primAnimation {
             action: {params: {map_rect: map_rect, texts: texts}, func: update_rect_text},
             rev_action: {params: {map_rect: map_rect, texts: pre_texts}, func: update_rect_text},
             concurrence: true
-          })
+          });
           pre_texts = deep_copy(texts);
 
           ani.add_sequence_ani({
             target: map_rect,
             prop: {text_fade_in: {color:"red", index: pos}, step: true, time: ANIMATION_TIME * 3}
-          })
+          });
 
-          // multimap.print();
-
-          // return;
         } else {
          
             if (node2.visited == 1) {
@@ -352,26 +369,26 @@ class primAnimation {
                 pause: ANIMATION_TIME,
                 text: e_text + "Edge {} . Node {} is in the spanning tree. Do nothing".format(highlight(edge.pretty_edge() + " : " + edge.weight), node2.id),
                 prop: {step: true}
-              })
+              });
             } else {
               ani.add_sequence_ani({
                 pause: ANIMATION_TIME,
                 text: e_text + "Edge {} is not improving \"to\" node {}'s current distance {}. Do nothing".format(highlight(edge.pretty_edge() + " : " + edge.weight), node2.id, node2.distance),
                 prop: {step: true}
-              })
+              });
             }
           
         }
 
       }
 
-     
-
-
     }
 
+    ani.add_sequence_ani({
+      pause: 1,
+      text: "Done. The sum of the weights of connected edges is " + sum
+    })
 
-    console.log(sum);
     ani.run_animation();
 
 

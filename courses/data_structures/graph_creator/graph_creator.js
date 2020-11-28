@@ -3,6 +3,7 @@
   All rights reserved.
   
   11/24/2020
+  last modified 11/27/2020
 */
 const NODE_COLORS = ['#DDDDDD', 'pink', 'lightblue', 'yellow'];
 const EDGE_COLORS = ["black", "red", "blue", "#FFB901"];
@@ -122,7 +123,6 @@ $(document).ready(function(){
   })
 
   $("#import_graph").click(function(){
-
     $("#import_input").click();
   })
 
@@ -312,12 +312,6 @@ $(document).ready(function(){
       }
 
       tmp_g.draw();
-      // tmp_g.node_color = MAIN_G_SPEC.node_color;
-      // tmp_g.edge_color = MAIN_G_SPEC.edge_color;
-      // tmp_g.edge_width = MAIN_G_SPEC.edge_width;
-      // tmp_g.node_radius = MAIN_G_SPEC.node_radius;
-      
-      // g = tmp_g;
 
       if ("make_new" in MAIN_A) MAIN_A = MAIN_A.make_new();
       MAIN_G = tmp_g;
@@ -326,9 +320,11 @@ $(document).ready(function(){
       if ("g" in MAIN_A) MAIN_A.g = MAIN_G;
       
       // console.log(g.graph_type);
-      $("#download_graph").prop("disabled", false);
-      $("#directed").attr("checked", false);
-      $("#undirected").attr("checked", false);
+      $(":button").prop("disabled", false);
+      $(":input").prop("disabled", false);
+
+      $("#go_back").prop("disabled", true);
+      $("#go_forward").prop("disabled", true);
 
 
       if (MAIN_G.graph_type == "direct") $("#directed").attr("checked", true);
@@ -355,10 +351,11 @@ $(document).ready(function(){
     MAIN_G = null;
     MAIN_A.ani.draw();
 
-    $("[id*=node]").prop("disabled", false);
-    $("[id*=edge]").prop("disabled", false);
-    $("#import_graph").prop("disabled",false);
-    $("#download_graph").prop("disabled",false);
+    $(":button").prop("disabled", false);
+    $(":input").prop("disabled", false);
+
+    $("#go_back").prop("disabled", true);
+    $("#go_forward").prop("disabled", true);
   })
 
 
@@ -370,14 +367,8 @@ $(document).ready(function(){
 
     if (g == null) {
       graph_type = $("input[name=graph_type]:checked").val();
-      // ani = new Animation();
-      // MAIN_A.ani = ani;
       g = new Graph(MAIN_A.ani, graph_type);
       MAIN_A.g = g;
-      // g.node_color = MAIN_G_SPEC.node_color;
-      // g.edge_color = MAIN_G_SPEC.edge_color;
-      // g.edge_width = MAIN_G_SPEC.edge_width;
-      // g.node_radius = MAIN_G_SPEC.node_radius;
 
       MAIN_G = g;
       $("input[name=graph_type]").prop("disabled", true);
