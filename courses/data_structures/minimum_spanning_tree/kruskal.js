@@ -3,6 +3,7 @@
   All rights reserved.
   
   11/25/2020
+  last modified 11/26/2020
 */
 
 /* disjoint set by rank */
@@ -85,7 +86,7 @@ class kruskalAnimation {
     let n, d, nodes;
     let c;
     let margin = 60;
-    let rect_width;
+    let origin;
       
     x1 = 100000;
     x2 = -1;
@@ -111,19 +112,21 @@ class kruskalAnimation {
     this.ds = new disjointSet();
     this.ds.init(count);
 
-    rect_width = x1 > 0 ? 50 : -x1 + 50;
-    d = x2 - x1 + margin * 2 + rect_width;
+    origin = -x1;
+    d = x2 - x1 + margin * 2;
 
-    if (x1 + 2 * d > canvas.width) set_canvas(x1 + 2 * d, 800, 200, 75);
+    // the 250 width is used for sorted edges. 
+    if (2 * d + 50 > canvas.width - 250) set_canvas(2 * d + 300, 800, 250, 75);
+    d += origin;
     
-    ani.add_object(new Text("Current State", x1 + rect_width, y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
+    ani.add_object(new Text("Spanning Tree", x1 + origin, y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
     ani.add_object(new Text("Original Graph", x1 + d , y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
     ani.add_object(new quadraticCurve(new Point(x1 + d - margin, y1 - 50), new Point(x1 + d - margin, y2 + 50), 0, 0, false));
 
     console.log(ani.obj_map);
     for (let i = 0; i < nodes.length; i++) {
       n = nodes[i];
-      g.get_node(init_graph_node(n.ref), n.x + rect_width, n.y, n.ref);
+      g.get_node(init_graph_node(n.ref), n.x + origin, n.y, n.ref);
       n.move(d, 0);
     }
 
@@ -149,8 +152,8 @@ class kruskalAnimation {
       texts.push("[ {} -- {} ] : {}".format(e.n1.id, e.n2.id, e.weight));
     }
 
-    ani.add_object(this.edge_rect = new Rect(-180, 0, 130, sorted_edges.length * 26, "SORTED_EDGES_REF", texts, "Sorted Edges", "top", "v", {lineWidth: .5}));
-    ani.add_object(this.edge_ptr = new quadraticCurve(new Point(0, 13), new Point(-50, 13), 0, 0, true))
+    ani.add_object(this.edge_rect = new Rect(-230, 0, 130, sorted_edges.length * 26, "SORTED_EDGES_REF", texts, "Sorted Edges", "top", "v", {lineWidth: .5}));
+    ani.add_object(this.edge_ptr = new quadraticCurve(new Point(-50, 13), new Point(-100, 13), 0, 0, true))
     this.edge_ptr.angle_length = 10;
     this.edge_ptr.ctx_prop.strokeStyle = "red";
     this.edge_ptr.ctx_prop.lineWidth = 2.5;
@@ -160,8 +163,8 @@ class kruskalAnimation {
   }
 
   clear() {
-    this.edge_ptr.p1 = new Point(0, 13);
-    this.edge_ptr.p2 = new Point(-50, 13);
+    this.edge_ptr.p1 = new Point(-50, 13);
+    this.edge_ptr.p2 = new Point(-100, 13);
     for (let i = 0; i < this.edge_rect.fillStyles.length; i++)
       this.edge_rect.fillStyles[i] = "#DDDDDD";
     this.ds = new disjointSet();
@@ -197,8 +200,18 @@ class kruskalAnimation {
       d.obj.fillStyles[d.index2] = "#DDDDDD";
     };
     let color_line = function(d) {
-      if (d.b_line != null) d.b_line.ctx_prop.strokeStyle = "black";
-      if (d.r_line != null) d.r_line.ctx_prop.strokeStyle = "red";
+      if (d.b_line != null) {
+        d.b_line.ctx_prop.strokeStyle = "black";
+        d.b_line.p1.obj.ctx_prop.fillStyle = "#DDDDDD";
+        d.b_line.p2.obj.ctx_prop.fillStyle = "#DDDDDD";
+
+      }
+      if (d.r_line != null) {
+        d.r_line.ctx_prop.strokeStyle = "red";
+        d.r_line.p1.obj.ctx_prop.fillStyle = "pink";
+        d.r_line.p2.obj.ctx_prop.fillStyle = "pink";
+
+      }
     };
 
     ani.clear_animation();

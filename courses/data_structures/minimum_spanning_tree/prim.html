@@ -18,7 +18,7 @@
 </head>
 <body>
    <div class = "grid-container">
-    <div class = "header">Minimum Spanning Tree -- Kruskal's Algorithm</div>
+    <div class = "header">Minimum Spanning Tree -- Prim's Algorithm</div>
     <div class = "control"> 
 
      
@@ -35,7 +35,7 @@
       
       <div class = "line"></div>
       
-      <button type="button" id = "run" style="width: 195px">Run Kruskal Algorithm</button>&emsp;
+      <button type="button" id = "run" style="width: 195px">Run Prim's Algorithm</button>&emsp;
 
       
 
@@ -56,7 +56,7 @@
       </div>
 
       <div class = "elaboration">
-        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
+        <div class = "main-elaboration" style = "height: 57px;">Elaboration: <span id = "elaboration_text"></span></div>
       </div>
     </div>
 
@@ -80,7 +80,7 @@
 <script src="../../../lib/drawing.js"></script>
 <script src="../../../lib/memory_generator.js"></script>
 <script src="../dlist/dlist.js"></script>
-<script src="kruskal.js"></script>
+<script src="prim.js"></script>
 <script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
 
@@ -114,17 +114,19 @@ $(document).ready(function(){
   MAIN_G_SPEC.enable_edge_color_change = false;
   MAIN_G_SPEC.graph_type = T_UNDIRECTED;
   MAIN_G_SPEC.num_cols = 2;
-  MAIN_G_SPEC.create_reverse_edge = false;
+  MAIN_G_SPEC.create_reverse_edge = true;
 
 
   DISABLE_IDS = ["[id*=node]", "[id*=edge]", "#download_graph"];
   
-  MAIN_A = new kruskalAnimation(); // must be name ani 
+  MAIN_A = new primAnimation(); // must be name ani 
   MAIN_G = graph_example(MAIN_A.ani);
   MAIN_A.g = MAIN_G;
-
+  // D_ANIMATION_TIME = 0;
+  MAIN_A.ani.step_by_step = true;
   MAIN_G.draw();
 
+  MAIN_A.run();
   $("#run").click(function(){
     MAIN_A.run();
   })

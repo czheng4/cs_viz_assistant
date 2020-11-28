@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/22/2020
-  Last Modified 11/24/2020
+  Last Modified 11/27/2020
 */
 /* 
   Doubly linked list.
@@ -96,6 +96,18 @@ class Dlist {
     }
 
     return false;
+  }
+
+  insert_sort_func(v, func) {
+    let node = this.sentinel.flink;
+
+    while (1) {
+      if (this.sentinel == node || func(node.value, v)) {
+        return this.insert_before_node(v, node);
+      }
+      node = node.flink;
+    }
+   
   }
 
   // returns the position

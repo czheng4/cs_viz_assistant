@@ -3,6 +3,7 @@
   All rights reserved.
   
   11/24/2020
+  last modified 11/27/2020
 */
 const BFS_PATH = 0b1;
 const DFS_PATH = 0b11;
@@ -171,7 +172,7 @@ class networkFlowAnimation {
     this.source = null;
     this.sink = null;
     this.path = [];
-    this.is_flow_graph = false;
+    this.is_init_graph = false;
     this.max_flow = 0;
   }
 
@@ -182,7 +183,8 @@ class networkFlowAnimation {
     return new networkFlowAnimation();
   }
 
-  create_flow_graph() {
+  /* create the flow and original graph */
+  create_init_graph() {
     let g = this.g;
     let ani = this.ani;
     let d, n, e, n2;
@@ -190,6 +192,7 @@ class networkFlowAnimation {
     let text, line;
     let margin = 60;
     let circles = [], edges = [];
+    let origin;
     if (g == null) {
       throw new Error("graph is not created. Error");
     }
@@ -210,33 +213,29 @@ class networkFlowAnimation {
       if (n.y > y2) y2 = n.y;
     }
 
+    origin = -(x1 + 120);
     d = x2 - x1 + margin * 2;
 
-    ani.add_object(new Text("Flow Graph", x1, y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
-    ani.add_object(new Text("Residual Graph", x1 + d , y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
-    ani.add_object(new Text("Original Graph", x1 + 2 * d , y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
-
     // make canvas bigger if canvas is not wide enough.
-    if (x1 + 3 * d + 200 > canvas.width) set_canvas(x1 + 3 * d + 200, 800, 200, 75);
-      
-    
-    ani.add_object(new quadraticCurve(new Point(x1 + d - margin, y1 - 50), new Point(x1 + d - margin, y2 + 50), 0, 0, false));
-    ani.add_object(new quadraticCurve(new Point(x1 + 2 * d - margin, y1 - 50), new Point(x1 + 2 * d - margin, y2 + 50), 0, 0, false));
+    if (3 * d > canvas.width - 200) set_canvas(3 * d + 200, 800, 200, 75);
+
+
+    ani.add_object(new Text("Flow Graph", x1 + origin, y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
+    ani.add_object(new Text("Residual Graph", x1 + d + origin, y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
+    ani.add_object(new Text("Original Graph", x1 + 2 * d +origin , y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
+
+  
+    ani.add_object(new quadraticCurve(new Point(x1 + d - margin + origin, y1 - 50), new Point(x1 + d - margin + origin, y2 + 50), 0, 0, false));
+    ani.add_object(new quadraticCurve(new Point(x1 + 2 * d - margin + origin, y1 - 50), new Point(x1 + 2 * d - margin + origin, y2 + 50), 0, 0, false));
 
     for (let i = 0; i < circles.length; i++) {
       n = circles[i];
-      g.get_node(flow_g_node(n.ref), n.x, n.y, n.ref);
-      g.get_node(original_g_node(n.ref), n.x + 2 * d, n.y, n.ref).ani_circle.visible = true;
-      n.move(d, 0);
+      g.get_node(flow_g_node(n.ref), n.x + origin, n.y, n.ref);
+      g.get_node(original_g_node(n.ref), n.x + 2 * d + origin, n.y, n.ref).ani_circle.visible = true;
+      n.move(d + origin, 0);
     }
 
     // loop through list rather than g.node_map bc we keep adding ele to node_map 
-    // for (let key in g.node_map) {
-    //   n = g.node_map[key].ani_circle;
-    //   g.get_node(flow_g_node(n.ref), n.x, n.y, n.ref);
-    //   g.get_node(original_g_node(n.ref), n.x + 2 * d, n.y, n.ref).ani_circle.visible = true;
-    //   n.move(d, 0);
-    // }
     for (let key in g.edge_map) edges.push(g.edge_map[key]);
     for (let i = 0; i < edges.length; i++) {
       e = edges[i];
@@ -245,16 +244,7 @@ class networkFlowAnimation {
       g.get_edge(n, n2, e.weight).ani_line.text_t = e.ani_line.text_t;
     }
 
-    // for (let key in g.edge_map) {
-    //   e = g.edge_map[key];
-    //   n = g.get_node(original_g_node(e.n1.id));
-    //   n2 = g.get_node(original_g_node(e.n2.id));
-    //   g.get_edge(n, n2, e.weight).ani_line.text_t = e.ani_line.text_t;
-    // }
 
-   
-
-    console.log(this.ani.obj_map);
     this.ani.draw();
 
   }
@@ -262,7 +252,7 @@ class networkFlowAnimation {
   deep_copy() {
     let net = new networkFlowAnimation();
     net.max_flow = this.max_flow;
-    net.is_flow_graph = this.is_flow_graph;
+    net.is_init_graph = this.is_init_graph;
 
     net.ani = this.ani.deep_copy();
     net.g = this.g.deep_copy(net.ani);
@@ -368,9 +358,9 @@ class networkFlowAnimation {
     let find_path;
     let path_str, rev_path, rev_path_str;
 
-    if (this.is_flow_graph == false) {
-      this.create_flow_graph();
-      this.is_flow_graph = true;
+    if (this.is_init_graph == false) {
+      this.create_init_graph();
+      this.is_init_graph = true;
     }
     this.set_state();
     ani.set_function_call("find_augmenting_path", [find_path_type, manual_path]);
