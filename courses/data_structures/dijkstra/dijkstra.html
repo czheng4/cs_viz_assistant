@@ -123,7 +123,8 @@ $(document).ready(function(){
   MAIN_G_SPEC.weight_type = T_POSITIVE_NUMBER;
   MAIN_G_SPEC.enable_node_color_change = false;
   MAIN_G_SPEC.enable_edge_color_change = false;
-
+  ENABLE_STEP_IDS = ["#clear_graph"];
+  
   MAIN_A = new dijkstraAnimation(); // must be name ani
   MAIN_G = dijkstra_example(MAIN_A.ani);
   MAIN_G.draw();
