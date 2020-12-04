@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/22/2020
-  Last Modified 11/24/2020
+  Last Modified 12/03/2020
 */
 
 function update_ctx_prop(dict) {
@@ -58,7 +58,8 @@ function hightlight_col(dict) {
 
   $("#distance_" + node.id).text(node.distance);
   if (node.backedge != null) {
-    $("#backedge_" + node.id).text("({}, {})".format(node.backedge.n1.id, node.backedge.n2.id));
+    $("#backedge_" + node.id).text("");
+    $("#backedge_" + node.id).append(node.backedge.pretty_edge());
   } else {
     $("#backedge_" + node.id).text("NULL");
   }

@@ -1,0 +1,131 @@
+<!--
+  ChaoHui Zheng
+  11/28/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style type="text/css">
+    input[type = "text"]{
+      width: 50px;
+    }  
+  </style>
+  
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header">Binary Search Tree</div>
+    <div class = "control"> 
+
+      
+      <input type = "text" id = "insert_t">
+      <button type="button" id = "insert">Insert</button> &emsp;
+      <input type="text" id = "delete_t"> 
+      <button type = "button" id = "delete">Delete</button> &emsp;
+      <input type="text" id = "find_t">
+      <button type = "button" id = "find">Find</button> &emsp;&emsp;
+
+      <button type="button" id = "clear_network">Clear Tree</button>
+     
+      
+      <div class = "line"></div>
+      
+
+
+
+      
+      <div class = "line"></div>
+      
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="50" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
+      </div>
+    </div>
+
+    <div class = "canvas"> 
+       <canvas id = "draw"></canvas>
+    </div>
+  </div>
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="../../../lib/memory_generator.js"></script>
+<script src="../dlist/dlist.js"></script>
+<script src="bst.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+  
+
+
+  set_canvas(1200, 800, 0, 75);
+  MAIN_G_SPEC.weight_type = T_CONSTANT;
+  MAIN_G_SPEC.enable_node_color_change = false;
+  MAIN_G_SPEC.enable_edge_color_change = false;
+  MAIN_G_SPEC.graph_type = T_UNDIRECTED;
+  MAIN_G_SPEC.create_reverse_edge = false;
+  MAIN_G_SPEC.layout = "tree";
+  MAIN_G_SPEC.gap_x = 475;
+  MAIN_G_SPEC.center_x = 500;
+  MAIN_G_SPEC.node_radius = 28;
+
+ 
+  
+  MAIN_A = new binarySearchTreeAnimation(); 
+  
+
+  D_ANIMATION_TIME = 100 - $("#speed").val();
+ 
+  MAIN_G = MAIN_A.g;
+
+  MAIN_G.get_node("S");
+   MAIN_G.get_node("1");
+    MAIN_G.get_node("2");
+     MAIN_G.get_node("3");
+
+      MAIN_G.get_node("4");
+       MAIN_G.get_node("5");
+       MAIN_G.get_node("34");
+       MAIN_G.get_node("54");
+       MAIN_G.get_node("521");
+       MAIN_G.get_node("5f");
+
+       MAIN_G.get_node("5f");
+       MAIN_G.get_node("5we");
+        MAIN_G.get_node("32we");
+          MAIN_G.get_node("Dinsey");
+
+            MAIN_G.get_node("32fewwe");
+              MAIN_G.get_node("3few2we");
+                MAIN_G.get_node("3few2we");
+                  MAIN_G.get_node("Baby Daisey");
+                    MAIN_G.get_node("12,f");
+                      MAIN_G.get_node("2f0/");
+                        MAIN_G.get_node("323.-0");
+  MAIN_G.draw();
+
+  
+ 
+
+
+
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+<script src="../graph_creator/graph_creator.js"></script>
+</html>

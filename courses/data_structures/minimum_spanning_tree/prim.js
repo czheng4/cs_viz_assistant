@@ -3,6 +3,7 @@
   All rights reserved.
   
   11/27/2020
+  last modified 12/03/2020
 */
 
 const HIGHLIGHT_LINE = {lineWidth: 3, strokeStyle: "red"};
@@ -30,14 +31,18 @@ function update_rect_text(dict) {
   let map_rect = dict.map_rect,
       texts = dict.texts;
 
-  console.log(texts);
   map_rect.text = deep_copy(texts);
   map_rect.height = texts.length * 26;
   
 }
-function clear_color(map_rect) {
-  map_rect.text_color = {};
+function set_color(dict) {
+  if (dict.reverse) dict.map_rect.text_color = dict.map_rect.tmp_text_color;
+  else {
+    dict.map_rect.tmp_text_color = dict.map_rect.text_color;
+    dict.map_rect.text_color = {};
+  }
 }
+
 
 function highlight(text) {
   return "<span style = \"color:blue; font-weight:bold\">[ " + text + " ]</span>";
@@ -142,7 +147,8 @@ class primAnimation {
   reset_text_color() {
     this.ani.add_sequence_ani({
       pause:1,
-      action: {params: this.map_rect, func: clear_color}
+      action: {params: {map_rect:this.map_rect, reverse: false}, func: set_color},
+      rev_action: {params: {map_rect:this.map_rect, reverse: true}, func: set_color},
     })
   }
 
@@ -333,9 +339,10 @@ class primAnimation {
             console.log(pos);
             multimap.erase(node2.itr);
             this.reset_text_color();
+            pre_texts[pos] = "";
             ani.add_sequence_ani({
               target: map_rect,
-              text: e_text + "Edge {} improves \"to\" node's {} current distance. Erase edge {} from multimap".format(highlight(edge.pretty_edge() + " : " + edge.weight), node2.id, highlight(node2.itr.value.pretty_edge())),
+              text: e_text + "Edge {} improves \"to\" node's {} current distance {}. Erase edge {} from multimap".format(highlight(edge.pretty_edge() + " : " + edge.weight), node2.id, node2.distance, highlight(node2.itr.value.pretty_edge())),
               prop: {text_fade_out: {color: "red", index: pos}, step: true, time: ANIMATION_TIME * 3}
             });
           }
@@ -348,6 +355,8 @@ class primAnimation {
           pos = edge_pos_in_map(multimap, edge);
 
           this.reset_text_color();
+
+
           ani.add_sequence_ani({
             pause:1,
             text: e_text + "Add edge {} into multimap".format(highlight(edge.pretty_edge())),

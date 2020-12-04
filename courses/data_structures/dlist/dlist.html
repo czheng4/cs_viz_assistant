@@ -47,7 +47,7 @@
         <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
         <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
         Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
-        Animation Speed&emsp;<input type="range" min="0" max="100" value="100" id="speed"> 
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="50" id="speed"> 
       </div>
 
       <div class = "elaboration">
@@ -57,6 +57,10 @@
 
     <div class = "canvas"> 
        <canvas id = "draw"></canvas>
+    </div>
+
+    <div class = "bottom-nav">
+      <button id = "script">Script</button>
     </div>
   </div>
   
@@ -81,7 +85,7 @@ $(document).ready(function(){
   MAIN_A = new dlistAnimation(); // must use name a for every animation
   D_ANIMATION_TIME = 100 - $("#speed").val();
 
-  dlist_test1();
+  // dlist_test1();
   $("#push_back").click(function(){
     MAIN_A.push_back($("#push_back_t").val());
   });

@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/24/2020
-  last modified 11/27/2020
+  last modified 12/03/2020
 */
 const NODE_COLORS = ['#DDDDDD', 'pink', 'lightblue', 'yellow'];
 const EDGE_COLORS = ["black", "red", "blue", "#FFB901"];
@@ -19,6 +19,9 @@ function generate_graph_file_content(g) {
 
   if (g.graph_type == "undirect") str += "TYPE UNDIRECTED\n";
   else str += "TYPE DIRECTED\n";
+
+  str += "TRANSLATE_X " + TRANSLATE_X + "\n";
+  str += "TRANSLATE_Y " + TRANSLATE_Y + "\n";
 
   for (let key in g.node_map) {
     circle = g.node_map[key].ani_circle;
@@ -135,8 +138,8 @@ $(document).ready(function(){
     if (files.length == 0) return;
     reader.onload = function () {
       let data = reader.result;
-      let i, j, size, x, y;
-      let str, specifier, graph_type, layout, weight, grid_size, sub_specifier;
+      let i, j, size, x, y, dx, dy;
+      let str, specifier, graph_type, layout, weight, grid_size, sub_specifier, translate_x, translate_y;
       let node, edge, circle, line, from, to;
       let tmp_g, tmp_ani;
       
@@ -144,12 +147,14 @@ $(document).ready(function(){
       layout = "grid";
      
       data = data.replace(/\n/g,'');
-      data = data.replace(/EDGE|NODE|TYPE|NODES|LAYOUT/ig,'\n$&');
+      data = data.replace(/EDGE|NODE|TYPE|NODES|LAYOUT|TRANSLATE_X|TRANSLATE_Y/ig,'\n$&');
       data = data.split('\n');
       console.log(data);
       
       tmp_ani = new Animation();
       tmp_g = new Graph(tmp_ani);
+      translate_x = 0;
+      translate_y = 0;
     
       for (i = 0; i < data.length; i++) {
         str = data[i]
@@ -307,8 +312,35 @@ $(document).ready(function(){
           }
           tmp_g.layout = layout;
 
-        } 
+        } else if (specifier == "TRANSLATE_X") {
+          if (size != 2) {
+            $("#elaboration_text").text("TRANSLATE_X NUMBER. Importing graph failed");
+            return;
+          }
+          translate_x = parseInt(str[1]);
+          if (isNaN(translate_x)) {
+            $("#elaboration_text").text("TRANSLATE_X NUMBER. Importing graph failed");
+            return;
+          }
+        } else if (specifier == "TRANSLATE_Y") {
+          if (size != 2) {
+            $("#elaboration_text").text("TRANSLATE_Y NUMBER. Importing graph failed");
+            return;
+          }
+          translate_y = parseInt(str[1]);
+          if (isNaN(translate_y)) {
+            $("#elaboration_text").text("TRANSLATE_Y NUMBER. Importing graph failed");
+            return;
+          }
+        }
         
+      }
+
+      dx = translate_x - TRANSLATE_X;
+      dy = translate_y - TRANSLATE_Y;
+  
+      for (let key in tmp_g.node_map) {
+        tmp_g.node_map[key].ani_circle.move(dx, dy);
       }
 
       tmp_g.draw();

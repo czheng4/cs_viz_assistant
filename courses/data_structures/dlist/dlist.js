@@ -56,6 +56,9 @@ class Dlist {
   first() {
     return this.sentinel.flink.value;
   }
+  last() {
+    return this.sentinel.blink.value;
+  }
 	insert_before_node(v, node) {
 		let prev_node, new_node;
 		new_node = new Dnode(v);
@@ -479,6 +482,7 @@ class dlistAnimation {
                            rev_action: { params: {index: 2, rect: next_obj, text: ref}, func: update_rect_text  } });
 
 
+    ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani( {pause: 1, text: "done" } );
 
     /* adjust the connection between last_node and sentinel */
@@ -615,11 +619,11 @@ class dlistAnimation {
     
     if (size != 0)
     ani.add_parallel_ani( { target: prev_obj,
-                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? ANIMATION_TIME - 3 : 3, end: ANIMATION_TIME * 8} } );
+                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? ANIMATION_TIME - 3 : 3, end: ANIMATION_TIME * 9} } );
 
 
     ani.add_parallel_ani( { target: next_obj,
-                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? 3 : ANIMATION_TIME - 3, end: ANIMATION_TIME * 8} } );
+                            prop: { strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, start: (type == "before")? 3 : ANIMATION_TIME - 3, end: ANIMATION_TIME * 9} } );
     
 
 
@@ -627,7 +631,7 @@ class dlistAnimation {
 
    
     ani.add_parallel_ani( { target: rect,
-                            prop: { strokeStyle: 'red', shadowColor:"#FF0000", shadowBlur:15, start: 3, end: ANIMATION_TIME * 8} } );
+                            prop: { strokeStyle: 'red', shadowColor:"#FF0000", shadowBlur:15, start: 3, end: ANIMATION_TIME * 9} } );
  
   
     

@@ -1,6 +1,7 @@
 /*
   ChaoHui Zheng
   11/22/2020
+  last modified 12/03/2020
 */
 const UNION_BY_SIZE = 0b1;
 const UNION_BY_RANK = 0b11;
@@ -370,7 +371,7 @@ class disjointSetAnimation {
       parent_p = ani.get_point(circle.x, circle.y);
 
       // v[v.length - 1] is the root id. We don't need to process root set id here.
-      for (i = 0; i < v.length - 1; i++) {
+      for (i = 0; i < v.length - 2; i++) {
         old_ds = this.deep_copy();
         this.links[v[i]] = ele;
         circle = g.get_node(v[i]).ani_circle;

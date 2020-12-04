@@ -9,8 +9,23 @@ body {
   width: 90px;
 }
 
+.script-table {
+  width:  97%;
+  border-spacing: 0px;  
+  border: none; 
+  padding: 0px; 
+  margin-top: 10px;
+}
 
+.script-table-td1 {
+  width: 50px;
+  text-align: center;
+}
 
+.script-table-td2 {
+  border: 1px solid rgb(1,1,1,0.5); 
+  padding: 5px 5px 5px 15px;
+}
 
 .elaboration-table {
   border-collapse: collapse; 
