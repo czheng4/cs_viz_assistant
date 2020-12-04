@@ -266,7 +266,7 @@ class kruskalAnimation {
 
         ani.add_sequence_ani({
           pause:1,
-          text: "Connect edge {} {} {}. Number of Component: {}".format(e.n1.id, "&harr;",e.n2.id, ds.num_components),
+          text: "Connect edge {}{} {} {}</span>. Number of Component: {}".format(BLUE_SPAN, e.n1.id, "&harr;",e.n2.id, ds.num_components),
           action: {params: line, func: enable_visibility},
           rev_action: {params: line, func:disable_visibility},
           prop: {step: true},
@@ -292,7 +292,7 @@ class kruskalAnimation {
       } else {
         ani.add_sequence_ani({
           pause: ANIMATION_TIME,
-          text: "{} and {} are in the same components. We skip it".format(e.n1.id, e.n2.id),
+          text: "{}{} and {} </span>are in the same components. We skip it".format(BLUE_SPAN, e.n1.id, e.n2.id),
           prop : {step: true}
         })
       }

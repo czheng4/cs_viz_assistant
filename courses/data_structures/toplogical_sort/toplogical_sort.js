@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/30/2020
-  last modified 12/03/2020
+  last modified 12/04/2020
 */
 
 const blue_text = '<span style = "color: blue">';
@@ -190,7 +190,6 @@ class toplogicalSortAnimation {
     }
   }
 
-
   run(starting_node_id = "S") {
     let g = this.g,
         ani = this.ani;
@@ -201,8 +200,16 @@ class toplogicalSortAnimation {
     let q_rect;
 
     starting_node_id = starting_node_id.trim();
-    if (!g.is_node(starting_node_id)) {
-      $("#elaboration_text").text("Node {} does not exist", starting_node_id);
+    if (starting_node_id == "") {
+      $("#elaboration_text").text("Node id is empty");
+      return;
+    } else if (!g.is_node(starting_node_id)) {
+      $("#elaboration_text").text("Node {} does not exist".format(starting_node_id));
+      return;
+    }
+
+    if (g.cycle_detection() == true) {
+      $("#elaboration_text").text("It must be directed acyclic graph");
       return;
     }
     if (this.init == false) {
@@ -381,6 +388,11 @@ class toplogicalSortAnimation {
       }
       
     }
+
+    ani.add_sequence_ani({
+      pause:1,
+      text: "Done"
+    });
     ani.run_animation();
   }
   

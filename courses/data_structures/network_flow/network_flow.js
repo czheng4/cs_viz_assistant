@@ -325,7 +325,7 @@ class networkFlowAnimation {
 
     // the minimum cut is composes of a set of edges from reachable nodes of "S" to unreachable nodes.
     // we color these edges red.
-    text += NEW_LINE + "Minimum Cut is composed of any edges from Pink Set to Lightblue Set in Original Graph: ";
+    text += NEW_LINE + RED_SPAN + "Minimum Cut is composed of any edges from Pink Set to Lightblue Set in Original Graph: ";
     for (let key in g.node_map) {
       original_n = g.node_map[key];
 
@@ -340,10 +340,11 @@ class networkFlowAnimation {
         }
       }
     }
+    text += "</span>";
 
     $("#elaboration_text").text("");
     $("#elaboration_text").append(text);
-
+    this.ani.write_script([text], 0);
     this.ani.draw();
   }
 
@@ -448,7 +449,7 @@ class networkFlowAnimation {
     // color the path in both Residual Graph and Flow Graph
     ani.add_sequence_ani({
       pause: 1,
-      text: "Path: {}. Flow: {}. &emsp; &emsp; Total Flow: {} + {} = {}".format(path_str, flow, this.max_flow - flow, flow, this.max_flow),
+      text: "Path: {}{}</span>. Flow: {}. &emsp; &emsp; Total Flow: {} + {} = {}".format(BLUE_SPAN, path_str, flow, this.max_flow - flow, flow, this.max_flow),
       action: {params: {path: path, g:g, flow:flow, rev_path: rev_path}, func: color_path},
       rev_action: {params: {path: path, g:g, flow: -flow, rev_path: rev_path}, func: color_path}
     });
@@ -461,7 +462,7 @@ class networkFlowAnimation {
     // update the flow
     ani.add_sequence_ani({
       pause: 1,
-      text: "Process Residual Graph. Subtract flow {} from path {}, and add it to reverse path {}. Total Flow: {} + {} = {}".format(flow, path_str, rev_path_str, this.max_flow - flow, flow, this.max_flow),
+      text: "Process Residual Graph. Subtract flow {} from path {}{}</span>, and add it to reverse path {}{}</span>. Total Flow: {} + {} = {}".format(flow, BLUE_SPAN, path_str, BLUE_SPAN, rev_path_str, this.max_flow - flow, flow, this.max_flow),
       action: {params: {path: path, flow:flow, rev_path: rev_path, g:g}, func: update_path_weight},
       rev_action: {params: {path: rev_path, rev_path: path, flow:flow, g:g}, func: update_path_weight},
       concurrence: true,

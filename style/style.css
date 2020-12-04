@@ -14,7 +14,8 @@ body {
   border-spacing: 0px;  
   border: none; 
   padding: 0px; 
-  margin-top: 10px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
 .script-table-td1 {

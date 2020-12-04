@@ -373,7 +373,7 @@ class dlistAnimation {
     ani.add_sequence_ani( {pause: ANIMATION_TIME - 2, prop:{step:true}} );
 
     ani.add_sequence_ani( { prop: { time: 1},
-                            text: "remove " + ref,
+                            text: "Remove " + ref,
                             action: { params: {ani:ani, ref:ref}, func:rm_ani_object} ,
                             rev_action: { params: {lines: qs, obj: obj, ani:ani}, func:add_ani_object  }});
     
@@ -427,7 +427,7 @@ class dlistAnimation {
 
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: q_curve, 
-                           text: "set "  + blink_ref + "'s flink to " +  flink_ref,
+                           text: "Set "  + blink_ref + "'s flink to " +  flink_ref,
                            prop: {p:p2, type:"pivot", new_h_scale: h_scale, new_w_scale: w_scale, ani:ani},
                            action: { params: {index: 1, rect: prev_obj, text: flink_ref}, func: update_rect_text  },
                            rev_action: { params: {index: 1, rect: prev_obj, text: ref}, func: update_rect_text  }});
@@ -476,14 +476,14 @@ class dlistAnimation {
 
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: q_curve, 
-                           text: "set "  + flink_ref + "'s blink to " +  blink_ref,
+                           text: "Set "  + flink_ref + "'s blink to " +  blink_ref,
                            prop: {p:p2, type:"pivot", new_w_scale: w_scale, new_h_scale: h_scale, ani:ani},
                            action: { params: {index: 2, rect: next_obj, text: blink_ref}, func: update_rect_text  },
                            rev_action: { params: {index: 2, rect: next_obj, text: ref}, func: update_rect_text  } });
 
 
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
-    ani.add_sequence_ani( {pause: 1, text: "done" } );
+    ani.add_sequence_ani( {pause: 1, text: "Done" } );
 
     /* adjust the connection between last_node and sentinel */
     if (size == 2 && node.flink != sentinel) {
@@ -611,7 +611,7 @@ class dlistAnimation {
     // ani.add_object(rect);
 
     ani.add_sequence_ani( { prop: { time: 1},
-                            text: "add new node " + ref,
+                            text: "Add new node " + ref,
                             action: { params: {ani:ani, lines: lines, obj: rect}, func:add_ani_object} ,
                             rev_action: { params: {ref:ref, ani:ani}, func:rm_ani_object  }});
    
@@ -679,7 +679,7 @@ class dlistAnimation {
     lines.push(q_curve);
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5} );
     ani.add_sequence_ani( { target: q_curve, 
-                            text: "set "  + blink_ref + "'s flink to " +  ref,
+                            text: "Set "  + blink_ref + "'s flink to " +  ref,
                             prop: {p:p1, type:"pivot", new_h_scale: h_scale, ani:ani},
                             action: { params: {index: 1, rect: prev_obj, text: ref}, func: update_rect_text  },
                             rev_action: { params: {index:1, rect:prev_obj, text: prev_obj.text[1] }, func: update_rect_text} });
@@ -708,7 +708,7 @@ class dlistAnimation {
     } 
 
     ani.add_sequence_ani({ target: q_curve, 
-                           text: "set "  + flink_ref + "'s blink to " +  ref,
+                           text: "Set "  + flink_ref + "'s blink to " +  ref,
                            prop: {p:p2, type:"pivot", new_h_scale: h_scale, new_w_scale: w_scale, ani:ani},
                            action: { params: {index: 2, rect: next_obj, text: ref}, func: update_rect_text  },
                            rev_action: { params: {index:2, rect: next_obj, text: next_obj.text[2] }, func: update_rect_text} });
@@ -738,7 +738,7 @@ class dlistAnimation {
    
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: q_curve, 
-                           text: "set "  + rect.ref + "'s flink to " +  flink_ref,
+                           text: "Set "  + rect.ref + "'s flink to " +  flink_ref,
                            prop: {p:p, type:"pivot", new_h_scale: h_scale, new_w_scale: w_scale, ani:ani},
                            action: { params: {index: 1, rect: rect, text: flink_ref}, func: update_rect_text  },
                            rev_action: { params: {index:1, rect: rect, text: rect.text[1] }, func: update_rect_text} });
@@ -761,7 +761,7 @@ class dlistAnimation {
 
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: q_curve, 
-                           text: "set "  + rect.ref + "'s blink to " +  blink_ref,
+                           text: "Set "  + rect.ref + "'s blink to " +  blink_ref,
                            prop: {p:p, type:"pivot", new_h_scale: h_scale, ani:ani},
                            action: { params: {index: 2, rect: rect, text: blink_ref}, func: update_rect_text  },
                            rev_action: { params: {index:2, rect: rect, text: rect.text[2] }, func: update_rect_text} });
@@ -770,7 +770,7 @@ class dlistAnimation {
     // move new node up
     ani.add_sequence_ani( {pause: ANIMATION_TIME / 5, prop:{step:true}} );
     ani.add_sequence_ani({ target: rect, 
-                           text: "done",
+                           text: "Done",
                            prop: {p: new Point(x, y / 2) }});
 
 

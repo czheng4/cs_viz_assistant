@@ -38,16 +38,16 @@
      
       
       <div class = "line"></div>
-      
-      <button type="button" id = "run" style="width: 195px">Run Toplogical Sort</button>&emsp;
+      <input type = "text" placeholder="node id" id = "run_node_id">
+      <button type="button" id = "run" style="width: 182px">Run Toplogical Sort</button>&emsp;
 
       
 
       <!-- make the display none and check directed because network flow problem works on directed graph -->
       <div style="display: none">
-        <input type="radio" id="undirected" name="graph_type" value = "undirect" checked> 
+        <input type="radio" id="undirected" name="graph_type" value = "undirect"> 
         <label for="graph_type">Undirected Graph</label> 
-        <input type="radio" id="directed" name="graph_type" value = "direct">
+        <input type="radio" id="directed" name="graph_type" value = "direct" checked>
         <label for="graph_type">Directed Graph</label>
       </div>
       <div class = "line"></div>
@@ -144,7 +144,8 @@ $(document).ready(function(){
 
   DISABLE_IDS = ["[id*=node]", "[id*=edge]", "#download_graph"];
   ENABLE_STEP_IDS = ["#clear_graph"];
-  
+  START_IDS = ["#run_node_id"];
+
   MAIN_A = new toplogicalSortAnimation(); // must be name ani 
   MAIN_G = graph_example(MAIN_A.ani);
   MAIN_A.g = MAIN_G;
@@ -156,7 +157,7 @@ $(document).ready(function(){
   D_ANIMATION_TIME = 0;
  
   $("#run").click(function(){
-    MAIN_A.run();
+    MAIN_A.run($("#run_node_id").val());
 
    
   })
