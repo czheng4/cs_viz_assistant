@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/24/2020
-  last modified 12/03/2020
+  last modified 12/04/2020
 */
 const NODE_COLORS = ['#DDDDDD', 'pink', 'lightblue', 'yellow'];
 const EDGE_COLORS = ["black", "red", "blue", "#FFB901"];

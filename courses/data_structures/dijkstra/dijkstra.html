@@ -15,6 +15,9 @@
     input[type = "text"]{
       width: 100px;
     }  
+    td {
+      height: 19px;
+    }
   </style>
   
 </head>
@@ -100,6 +103,7 @@
 <script src="../../../lib/memory_generator.js"></script>
 <script src="../dlist/dlist.js"></script>
 <script src="dijkstra.js"></script>
+<script src="dijkstra_test.js"></script>
 <script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
 
@@ -131,7 +135,7 @@ $(document).ready(function(){
   MAIN_G = dijkstra_example(MAIN_A.ani);
   MAIN_G.draw();
   
-
+  // dijkstra_test1();
   $("#get_path").click(function(){
     let id = $("#ending_node").val();
     let g = MAIN_G;

@@ -6,8 +6,7 @@
   last modified 12/04/2020
 */
 
-const blue_text = '<span style = "color: blue">';
-const red_text = '<span style = "color: red">';
+
 
 function set_color(dict) {
   if (dict.reverse) dict.q_rect.text_color = dict.q_rect.tmp_text_color;
@@ -80,14 +79,14 @@ function update_html_table(dict) {
 
     text = n.distance;
     $("#distance_" + n.id).text("");
-    if ("to_distance" in n) text += red_text + RIGHT_ARROW + n.to_distance + "</span>";
+    if ("to_distance" in n) text += RED_SPAN + RIGHT_ARROW + n.to_distance + "</span>";
     $("#distance_" + n.id).append(text);
 
 
     $("#backedge_" + n.id).text("");
     if ("to_backedge" in n) {
       text = (n.backedge == null) ? "NULL" : "[ {} ]".format(n.backedge.pretty_edge());
-      text += red_text + RIGHT_ARROW + " [ {} ]".format(n.to_backedge.pretty_edge()) + "</span>";
+      text += RED_SPAN + RIGHT_ARROW + " [ {} ]".format(n.to_backedge.pretty_edge()) + "</span>";
     } else {
       text = (n.backedge == null) ? "NULL" : n.backedge.pretty_edge();
     }
@@ -96,12 +95,12 @@ function update_html_table(dict) {
 
     $("#incoming_" + n.id).text("");
     text = n.num_in;
-    if ("to_num_in" in n) text += red_text + RIGHT_ARROW + n.to_num_in + "</span>";
+    if ("to_num_in" in n) text += RED_SPAN + RIGHT_ARROW + n.to_num_in + "</span>";
     $("#incoming_" + n.id).append(text);
 
     $("#path_" + n.id).text("");
     text = n.num_path;
-    if ("to_num_path" in n) text += red_text + RIGHT_ARROW + n.to_num_path + "</span>";
+    if ("to_num_path" in n) text += RED_SPAN + RIGHT_ARROW + n.to_num_path + "</span>";
     $("#path_" + n.id).append(text);
 
     $("#node_" + n.id).css("background", "lightblue");
@@ -224,7 +223,7 @@ class toplogicalSortAnimation {
 
     ani.add_sequence_ani({
       pause:1,
-      text: "Set starting node {}{}'s{} distance to 0. Compute the number of incoming edges. For nodes that have 0 incoming edges, set their number of distinctive path to 1".format(blue_text, starting_node_id, "</span>"),
+      text: "Set starting node {}{}'s{} distance to 0. Compute the number of incoming edges. For nodes that have 0 incoming edges, set their number of distinctive path to 1".format(BLUE_SPAN, starting_node_id, "</span>"),
       prop: {step: true},
     })
     for (let key in g.node_map) {
@@ -240,7 +239,7 @@ class toplogicalSortAnimation {
       n2.num_in++;
     }
 
-    e_text = "Node" + blue_text + " { "
+    e_text = "Node" + BLUE_SPAN + " { "
     for (let key in g.node_map) {
       n = g.node_map[key];
       if (n.num_in == 0) {
@@ -309,7 +308,7 @@ class toplogicalSortAnimation {
       this.reset_text_color();
       ani.add_sequence_ani({
         target: q_rect,
-        text: "Remove the first node {} {} {}from list and process its adjescent edges ".format(blue_text, n.id, "</span>") + e_text,
+        text: "Remove the first node {} {} {}from list and process its adjacent edges ".format(BLUE_SPAN, n.id, "</span>") + e_text,
         prop: {"text_fade_out": {index: queue.size, color: "red"}, step: true},
       })
 
@@ -350,7 +349,7 @@ class toplogicalSortAnimation {
 
         ani.add_sequence_ani({
           pause:1,
-          text: "Remove egde {} [ {} ] </span>. Update node {}{}</span>".format(blue_text, e.pretty_edge(), blue_text, e.n2.id),
+          text: "Remove egde {} [ {} ] </span>. Update node {}{}</span>".format(BLUE_SPAN, e.pretty_edge(), BLUE_SPAN, e.n2.id),
           action: {params: {nodes: [node_copy(e.n1), tmp_n]}, func: update_html_table },
           rev_action: {params: {nodes: [node_copy(e.n1), tmp_n1]}, func: update_html_table },
           concurrence: true
@@ -366,7 +365,7 @@ class toplogicalSortAnimation {
           l_text = dlist_to_rect_texts(queue);
           ani.add_sequence_ani({
             pause:1,
-            text: "Node {}{}</span> has 0 incoming edges. Append it to the list".format(blue_text, n2.id),
+            text: "Node {}{}</span> has 0 incoming edges. Append it to the list".format(BLUE_SPAN, n2.id),
             action: {params: {q_rect: q_rect, texts: l_text}, func: update_rect_text},
             rev_action: {params: {q_rect: q_rect, texts: pre_l_text}, func: update_rect_text},
           })

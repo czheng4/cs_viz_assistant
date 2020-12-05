@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/22/2020
-  Last Modified 12/03/2020
+  Last Modified 12/04/2020
 */
 
 function update_ctx_prop(dict) {
@@ -45,8 +45,8 @@ function html_table(g) {
 
 function hightlight_col(dict) {
   let g = dict.g,
-      node = dict.node;
-  let hightlight;
+      n = dict.node;
+  let hightlight, text;
 
   if ("hightlight" in dict) hightlight = dict.hightlight;
   else hightlight = true;
@@ -56,17 +56,26 @@ function hightlight_col(dict) {
   $("[id^=distance_").css("background", "");
   $("[id^=backedge_").css("background", "");
 
-  $("#distance_" + node.id).text(node.distance);
-  if (node.backedge != null) {
-    $("#backedge_" + node.id).text("");
-    $("#backedge_" + node.id).append(node.backedge.pretty_edge());
+  console.log(n);
+  text = n.distance;
+  $("#distance_" + n.id).text("");
+  if ("to_distance" in n) text += RED_SPAN + RIGHT_ARROW + n.to_distance + "</span>";
+  $("#distance_" + n.id).append(text);
+
+  $("#backedge_" + n.id).text("");
+  if ("to_backedge" in n) {
+    text = (n.backedge == null) ? "NULL" : "[ {} ]".format(n.backedge.pretty_edge());
+    text += RED_SPAN + RIGHT_ARROW + " [ {} ]".format(n.to_backedge.pretty_edge()) + "</span>";
   } else {
-    $("#backedge_" + node.id).text("NULL");
+    text = (n.backedge == null) ? "NULL" : n.backedge.pretty_edge();
   }
+
+  $("#backedge_" + n.id).append(text);
+
   if (hightlight) {
-    $("#node_" + node.id).css("background", "pink");
-    $("#distance_" + node.id).css("background", "pink");
-    $("#backedge_" + node.id).css("background", "pink");
+    $("#node_" + n.id).css("background", "lightblue");
+    $("#distance_" + n.id).css("background", "lightblue");
+    $("#backedge_" + n.id).css("background", "lightblue");
   }
 
 }
@@ -96,7 +105,6 @@ function multimap_content(node_q, dist_q, hightlight_node = null, dist = -1) {
 
 function update_multimap_content(dict) {
   let content = dict.content;
-  console.log(content);
   $("#multimap_t").text("");
   $("#multimap_t").append(content);
 }
@@ -220,7 +228,7 @@ class dijkstraAnimation {
     let dist_q = new Dlist();
     let node_q = new Dlist();
     let ani = this.ani;
-    let n, n2, e, b_dist, dist, pre_n;
+    let n, n2, e, b_dist, dist, pre_n, tmp_n;
     let i, pos;
     let ctx_prop, tmp_ctx_prop;
     let circle, line;
@@ -270,7 +278,7 @@ class dijkstraAnimation {
     // insert starting node animation
     ani.add_sequence_ani({ 
       pause: 1, 
-      text: "Set starting node " + starting_node.id + "'s distance to 0 and insert it to the multimap",
+      text: "Set starting node " + BLUE_SPAN + starting_node.id + "'s </span> distance to 0 and insert it to the multimap",
       action: { params: {g:g, node:starting_node}, func: hightlight_col },
       rev_action : { params: {g:g, node:pre_n, hightlight: false}, func: hightlight_col },
       concurrence:true
@@ -315,7 +323,7 @@ class dijkstraAnimation {
       multimap_text = multimap_content(node_q, dist_q, n, dist);
       ani.add_sequence_ani({ 
         pause: 1,
-        text: "Remove node {} from the front of the multimap.".format(n.id),
+        text: "Remove {}({}, {})</span> from the front of the multimap.".format(BLUE_SPAN, dist, n.id),
         action: { params: {content: multimap_text }, func: update_multimap_content },
         rev_action: { params: {content: pre_multimap_text }, func: update_multimap_content },
         concurrence: true,
@@ -356,10 +364,10 @@ class dijkstraAnimation {
       
 
       if (dist != n.distance) {
-        e_text = "node's distance != key on multimap ({} != {}). Do nothing".format(n.distance, dist);
+        e_text = "Node {}{}'s</span> distance != key on multimap ({} != {}). Do nothing".format(BLUE_SPAN, n.id, n.distance, dist);
       } else {
 
-        e_text = "Process node {}' adj list".format(n.id);
+        e_text = "Process node {}{}'s</span> adj list".format(BLUE_SPAN, n.id);
 
 
       
@@ -394,7 +402,7 @@ class dijkstraAnimation {
           e = n.adj[i];
           n2 = e.n2;
           b_dist = e.weight + dist;
-          
+          tmp_n = n2.shallow_copy();
 
           // set line(edge) prop
           line = e.ani_line;       
@@ -409,7 +417,7 @@ class dijkstraAnimation {
             adj_prop.fillStyle = "yellow";
           }
           
-          e_text = "Process edge ( " + e.pretty_edge() + " ): ";
+          e_text = "Process edge {}[ {} ]</span>: ".format(BLUE_SPAN, e.pretty_edge());
           e_text += "New Distance = " + dist + " + " + e.weight + " = " + (dist + e.weight); 
           if (n2.distance == -1 || n2.distance > b_dist) {}
           else e_text += " > {}. Do Nothing".format(n2.distance);
@@ -422,10 +430,15 @@ class dijkstraAnimation {
 
 
           // animation of highlighting the node in the table
+          ani.add_sequence_ani({
+            pause:1,
+            rev_action: { params: {g:g, node:n2.shallow_copy()}, func: hightlight_col },
+            concurrence: true
+          })
           ani.add_sequence_ani({ 
             pause: 1, 
             text: e_text,
-            action: { params: {g:g, node:n2.shallow_copy()}, func: hightlight_col},
+            action: { params: {g:g, node:tmp_n}, func: hightlight_col},
             rev_action : { params: {g:g, node:pre_n}, func: hightlight_col },
             concurrence:true 
           });
@@ -449,7 +462,7 @@ class dijkstraAnimation {
 
               ani.add_sequence_ani({
                 pause:ANIMATION_TIME, 
-                text: "node {} is in the multimap, remove it".format(n2.id),
+                text: "Node {}{}</span> is in the multimap, remove {}({}, {})</span>".format(BLUE_SPAN, n2.id, BLUE_SPAN, n2.distance, n2.id),
                 prop: {step:true}
               });
 
@@ -461,6 +474,8 @@ class dijkstraAnimation {
             }
             n2.distance = b_dist;
             n2.backedge = e;
+            tmp_n.to_distance = b_dist;
+            tmp_n.to_backedge = e;
             pos = dist_q.insert_sort(b_dist);
             n2.itr = node_q.insert_before_pos(n2, pos);
 
@@ -474,7 +489,8 @@ class dijkstraAnimation {
             });
             pre_multimap_text = multimap_text;
 
-
+            pre_n.to_backedge = tmp_n.to_backedge;
+            pre_n.to_distance = tmp_n.to_distance;
             ani.add_sequence_ani({ 
               pause: 1, 
               action: { params: {g:g, node:n2.shallow_copy()}, func: hightlight_col},
@@ -486,7 +502,7 @@ class dijkstraAnimation {
 
             ani.add_sequence_ani({
               pause: ANIMATION_TIME,
-              text: "Update node {} and insert ({}, {}) to multimap".format(n2.id, b_dist, e.n2.id),
+              text: "Update node {}{}</span> and insert {}({}, {})</span> to multimap".format(BLUE_SPAN, n2.id, BLUE_SPAN, b_dist, e.n2.id),
               prop: {step: true}
             })
             total_animation_time += ANIMATION_TIME;
@@ -540,7 +556,10 @@ class dijkstraAnimation {
       // console.log(dist, node);
     }
 
-
+    ani.add_sequence_ani({
+      pause:1,
+      text: "Done",
+    })
     ani.run_animation();
   }
 }

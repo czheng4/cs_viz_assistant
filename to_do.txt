@@ -1,3 +1,0 @@
-1. Top sort -- let user set the starting node
-2. Change dijkstra table like toplogical sort
-3. work on binary search tree.
