@@ -40,7 +40,6 @@ function html_table(g) {
   $("#backedge").append(table_td("backedgeH", "Backedge"));
   $("#num_incoming").append(table_td("num_incomingH", "# Incoming"));
   $("#num_path").append(table_td("num_pathH", "# Path"));
-  // $("#multimap").append("<td id = \"multimap_t\" colspan=" + keys.length + " style=\"text-align: left\"></td>");
 
   for (i = 0; i < keys.length; i++) {
     n = g.node_map[keys[i]];
@@ -255,6 +254,7 @@ class toplogicalSortAnimation {
     ani.add_sequence_ani({
       pause:1,
       text: e_text,
+      rev_action: {params: {nodes: []}, func: update_html_table },
       concurrence: true,
     })
 
@@ -307,9 +307,19 @@ class toplogicalSortAnimation {
       
       this.reset_text_color();
       ani.add_sequence_ani({
+        pause:1,
+        action: {params: {nodes: [node_copy(n)]}, func: update_html_table },
+        concurrence:true,
+      })
+      ani.add_sequence_ani({
         target: q_rect,
         text: "Remove the first node {} {} {}from list and process its adjacent edges ".format(BLUE_SPAN, n.id, "</span>") + e_text,
         prop: {"text_fade_out": {index: queue.size, color: "red"}, step: true},
+      })
+      ani.add_sequence_ani({
+        pause:1,
+        rev_action: {params: {nodes: [node_copy(n)]}, func: update_html_table },
+        concurrence:true,
       })
 
       l_text = dlist_to_rect_texts(queue);
@@ -396,11 +406,5 @@ class toplogicalSortAnimation {
   }
   
 }
-
-
-
-
-
-
 
 
