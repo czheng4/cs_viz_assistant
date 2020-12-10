@@ -12,6 +12,9 @@
   <style type="text/css">
     input[type = "text"]{
       width: 50px;
+    }
+    #insert, #delete, #find {
+      width: 55px;
     }  
   </style>
   
@@ -22,11 +25,9 @@
     <div class = "control"> 
 
       
-      <input type = "text" id = "insert_t">
-      <button type="button" id = "insert">Insert</button> &emsp;
-      <input type="text" id = "delete_t"> 
-      <button type = "button" id = "delete">Delete</button> &emsp;
-      <input type="text" id = "find_t">
+      <input type = "text" id = "key">
+      <button type="button" id = "insert">Insert</button> 
+      <button type = "button" id = "delete">Delete</button>
       <button type = "button" id = "find">Find</button> &emsp;&emsp;
 
       <button type="button" id = "clear_network">Clear Tree</button>
@@ -66,6 +67,24 @@
 <script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
 
+function bst_test1() {
+
+  aniTester = new animationTester(100);
+ 
+  aniTester.add_func("insert", [10]);
+  aniTester.add_func("insert", [4]);
+  aniTester.add_func("insert", [3]);
+  aniTester.add_func("insert", [7]);
+  aniTester.add_func("insert", [2]);
+
+  
+  // for (let i = 0; i < 10; i++) aniTester.add_func("go_forward");
+
+  aniTester.run_test();
+
+}
+
+
 $(document).ready(function(){
   
 
@@ -74,12 +93,13 @@ $(document).ready(function(){
   MAIN_G_SPEC.weight_type = T_CONSTANT;
   MAIN_G_SPEC.enable_node_color_change = false;
   MAIN_G_SPEC.enable_edge_color_change = false;
-  MAIN_G_SPEC.graph_type = T_UNDIRECTED;
-  MAIN_G_SPEC.create_reverse_edge = false;
+  MAIN_G_SPEC.graph_type = T_DIRECTED;
+  MAIN_G_SPEC.enable_node_move = true;
+  MAIN_G_SPEC.enable_edge_create = false;
   MAIN_G_SPEC.layout = "tree";
   MAIN_G_SPEC.gap_x = 475;
-  MAIN_G_SPEC.center_x = 500;
-  MAIN_G_SPEC.node_radius = 28;
+  MAIN_G_SPEC.center_x = 600;
+  MAIN_G_SPEC.node_radius = 20;
 
  
   
@@ -89,36 +109,41 @@ $(document).ready(function(){
   D_ANIMATION_TIME = 100 - $("#speed").val();
  
   MAIN_G = MAIN_A.g;
+  bst_test1();
+  // MAIN_G.get_node("S");
+  // MAIN_G.get_node("S", null, null, null, true);
+  // MAIN_G.get_node("S", null, null, null, true);
+  
+  // for (let i = 0; i < 10; i++) MAIN_A.insert(parseInt(Math.random() * 100));
+  // MAIN_A.insert(20);
+  // MAIN_A.insert(15);
+  // MAIN_A.insert(7);
+  // MAIN_A.insert(3);
+  // MAIN_A.insert(4);
+  // MAIN_A.insert(6);
+  // MAIN_A.insert(5);
+  // MAIN_A.insert(8);
+  // MAIN_A.insert(6.5);
+  // MAIN_A.insert(8.5);
+  // MAIN_A.insert(43);
+  // MAIN_A.insert(2);
 
-  MAIN_G.get_node("S");
-   MAIN_G.get_node("1");
-    MAIN_G.get_node("2");
-     MAIN_G.get_node("3");
-
-      MAIN_G.get_node("4");
-       MAIN_G.get_node("5");
-       MAIN_G.get_node("34");
-       MAIN_G.get_node("54");
-       MAIN_G.get_node("521");
-       MAIN_G.get_node("5f");
-
-       MAIN_G.get_node("5f");
-       MAIN_G.get_node("5we");
-        MAIN_G.get_node("32we");
-          MAIN_G.get_node("Dinsey");
-
-            MAIN_G.get_node("32fewwe");
-              MAIN_G.get_node("3few2we");
-                MAIN_G.get_node("3few2we");
-                  MAIN_G.get_node("Baby Daisey");
-                    MAIN_G.get_node("12,f");
-                      MAIN_G.get_node("2f0/");
-                        MAIN_G.get_node("323.-0");
+ 
   MAIN_G.draw();
 
   
  
+  $("#insert").click(function() {
+    MAIN_A.insert($("#key").val())
+  })
 
+  $("#find").click(function() {
+    MAIN_A.find($("#key").val())
+  })
+
+  $("#delete").click(function() {
+    MAIN_A.delete($("#key").val())
+  })
 
 
 
