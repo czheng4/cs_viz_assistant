@@ -56,6 +56,9 @@
     <div class = "canvas"> 
        <canvas id = "draw"></canvas>
     </div>
+    <div class = "bottom-nav">
+      <button id = "script">Script</button>
+    </div>
   </div>
   
 </body>
@@ -76,8 +79,10 @@ function bst_test1() {
   aniTester.add_func("insert", [3]);
   aniTester.add_func("insert", [7]);
   aniTester.add_func("insert", [2]);
-
-  
+  aniTester.add_func("insert", [2.5]);
+  aniTester.add_func("insert", [2.45]);
+  aniTester.add_func("insert", [2.55]);
+  // aniTester.add_func("insert", [3.55]);
   // for (let i = 0; i < 10; i++) aniTester.add_func("go_forward");
 
   aniTester.run_test();
