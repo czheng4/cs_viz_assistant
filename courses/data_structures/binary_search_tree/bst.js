@@ -121,6 +121,7 @@ class BSTree {
   make_key() {
     let keys = [];
     this.recursive_make_key(this.root, keys);
+    return keys;
     console.log(keys);
   }
   recursive_make_key(node, keys) {
@@ -136,6 +137,7 @@ class BSTree {
     let bst_tree = new BSTree();
 
     bst_tree.root = this.recursive_copy(this.root);
+    bst_tree.size = this.size;
     return bst_tree;
   }
 
@@ -264,7 +266,7 @@ class BSTree {
       repo_node = parent;
       delete_case = T_NO_BOTH;
       type = n.type;
-
+      this.size--;
     /* one child */
     } else if (n.left == null || n.right == null) {
       tmp_n = (n.left != null)? n.left : n.right;
@@ -281,7 +283,7 @@ class BSTree {
       repo_node = tmp_n;
 
       if (parent == null) this.root = tmp_n;
-
+      this.size--;
       
 
     } else {
@@ -301,6 +303,7 @@ class BSTree {
       // tmp_n.parent.right = null;
 
     }
+
 
     return { 
       delete: true,
@@ -327,11 +330,42 @@ class BSTree {
 class binarySearchTreeAnimation {
 
 
+
+  clear_after_func_ani(visible = false) {
+    let dict;
+    let show_rect = function(dict) {
+      console.log(dict);
+      dict.rect.visible = dict.visible;
+      if ("text" in dict) dict.rect.text = dict.text;
+    }
+
+    dict = {};
+    dict.rect = this.key_rect;
+    dict.visible = visible;
+    if (visible == true) {
+      dict.text = deep_copy(this.bst_tree.make_key());
+      console.log(dict.text);
+    }
+
+    this.ani.add_sequence_ani({
+      target: this.func_text,
+      prop: {text: this.func_text.text, time:1},
+      rev_action: {params: dict, func: show_rect},
+    })
+
+  }
+
   inorder_print() {
     let keys = [];
+    this.ani.set_function_call("inorder_print");
+    this.set_state();
+
+    this.func_text.text = "Call inorder print";
     this.reset_graph();
+    this.show_sorted_keys_rect();
     this.recursive_inorder_print(this.bst_tree.root, keys);
     console.log(keys);
+    this.clear_after_func_ani(true);
 
     this.ani.run_animation();
   }
@@ -340,47 +374,74 @@ class binarySearchTreeAnimation {
 
     let ani = this.ani;
     let g = this.g;
-    let e, c;
+    let e,e_left,e_right, c, c_left, c_right;
     if (node == null) return;
 
     c = node.ani_node.ani_circle;
-    this.ani.add_sequence_ani({
+    ani.add_sequence_ani({
       target: c,
-      prop: {fade_in: true, fillStyle: "yellow", time : 1, lineWidth:4, shadowBlur: 10},
+      prop: {fade_in: true, fillStyle: "yellow", time : 1, lineWidth:4, step:true},
     })
-    this.ani.add_sequence_ani({ pause: ANIMATION_TIME });
+    ani.add_sequence_ani({ pause: ANIMATION_TIME });
 
     if (node.left != null) {
-      e = g.get_edge_by_name(node.key, node.left.key);
-      this.ani.add_sequence_ani({
-        target: e.ani_line,
+      e_left = g.get_edge_by_name(node.ani_node.id, node.left.ani_node.id);
+      c_left = node.left.ani_node.ani_circle;
+
+      ani.add_sequence_ani({
+        target: e_left.ani_line,
         prop: {fade_in: true, strokeStyle: "red", time : 1, },
       })
-      this.ani.add_sequence_ani({ 
+
+      ani.add_sequence_ani({ 
         target: c,
-        prop: {"walk": {circle: node.left.ani_node.ani_circle, h_scale : 0}},
+        prop: {"walk": {circle: c_left, h_scale : 0}},
       });
-      this.ani.add_sequence_ani({ pause: ANIMATION_TIME });
+    
     }
 
     this.recursive_inorder_print(node.left, keys);
+    ani.add_sequence_ani({
+      target: this.key_rect,
+      text: "Push back key {}".format_b(node.key),
+      prop: {text_fade_in: {index: keys.length, color: "black", fillStyle:"lightblue", text: node.key }, step: true}
+    })
     keys.push(node.key);
 
     if (node.right != null) {
-      e = g.get_edge_by_name(node.key, node.right.key);
-      this.ani.add_sequence_ani({
-        target: e.ani_line,
+      e_right = g.get_edge_by_name(node.ani_node.id, node.right.ani_node.id);
+      c_right = node.right.ani_node.ani_circle;
+
+      ani.add_sequence_ani({
+        target: e_right.ani_line,
         prop: {fade_in: true, strokeStyle: "red", time : 1, },
       })
-      this.ani.add_sequence_ani({ pause: ANIMATION_TIME });
+      ani.add_sequence_ani({ 
+        target: c,
+        prop: {"walk": {circle: c_right, h_scale : 0}},
+      });
     }
     this.recursive_inorder_print(node.right, keys);
 
-    this.ani.add_sequence_ani({
+
+    if (node.parent != null) {
+      ani.add_sequence_ani({
+        target: c,
+        prop: {"walk" : {circle: node.parent.ani_node.ani_circle, h_scale: 0}}
+      })
+
+      e = g.get_edge_by_name(node.parent.ani_node.id, node.ani_node.id);
+      ani.add_sequence_ani({
+        target: e.ani_line,
+        prop: {fade_in: true, strokeStyle: "black", time : 1},
+      })
+    }
+
+    ani.add_sequence_ani({
       target: c,
       prop: {fade_in: true, fillStyle: "#DDDDDD", time : 1, lineWidth:1},
     })
-    this.ani.add_sequence_ani({ pause: ANIMATION_TIME });
+    // ani.add_sequence_ani({ pause: ANIMATION_TIME });
   }
 
   delete(key) {
@@ -561,10 +622,7 @@ class binarySearchTreeAnimation {
       })
     }
 
-    ani.add_sequence_ani({
-      target: this.func_text,
-      prop: {text: this.func_text.text},
-    })
+    this.clear_after_func_ani(false);
 
     ani.run_animation();
   }
@@ -575,7 +633,31 @@ class binarySearchTreeAnimation {
     this.g = new Graph(this.ani, "directed");
     this.bst_tree = new BSTree(this.g);
     this.func_text = new Text("", 100, -20, 100, "13px Arial");
+    this.key_rect = new Rect(0, 0, 0, 0, "INRODER_KEY", [], "Sorted Keys", "top", "h");
+    this.key_rect.visible = false;
+    this.ani.add_object(this.key_rect);
     this.ani.add_object(this.func_text);
+  }
+
+
+  show_sorted_keys_rect() {
+    let size = this.bst_tree.size;
+    let texts = [];
+    let f_styles = [];
+
+    console.log(size);
+    this.key_rect.width = 40 * size;
+    this.key_rect.height = 30;
+    this.key_rect.visible = true;
+    this.key_rect.x = MAIN_G_SPEC.center_x - this.key_rect.width / 2;
+    this.key_rect.y = -55;
+    for (let i = 0; i < size; i++) {
+      texts.push("");
+      f_styles.push("#DDDDDD");
+    }
+    this.key_rect.fillStyles = f_styles;
+    this.key_rect.text = texts;
+
   }
 
   deep_copy() {
@@ -584,6 +666,7 @@ class binarySearchTreeAnimation {
     bst.g = this.g;
     bst.ani = this.ani;
     bst.func_text = this.func_text;
+    bst.key_rect = this.key_rect;
     return bst;
   }
   set_state() {
@@ -606,6 +689,7 @@ class binarySearchTreeAnimation {
     for (let key in g.edge_map) {
       g.edge_map[key].ani_line.ctx_prop = deep_copy(DEFAULT_LINE_CTX);
     }
+    this.key_rect.visible = false;
   }
 
 
@@ -674,10 +758,7 @@ class binarySearchTreeAnimation {
       rev_action: {params: {g:this.g, path:rv.path, last_node_color:"pink"}, func: color_path},
     })
     
-    ani.add_sequence_ani({
-      target: this.func_text,
-      prop: {text: this.func_text.text},
-    })
+    this.clear_after_func_ani(false);
     ani.run_animation();
 
   }
@@ -748,12 +829,14 @@ class binarySearchTreeAnimation {
       });
     }
 
+
+
     ani.add_sequence_ani({
       pause:1,
-      target: this.func_text,
-      prop: {text: this.func_text.text},
       rev_action: {params: {g:g, path:rv.path}, func: color_path},
-    })
+      concurrence:true
+    });
+    this.clear_after_func_ani(false);
     
     ani.run_animation();
   }
