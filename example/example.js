@@ -65,8 +65,9 @@ function example1() {
 
   /* another way to do this is to use text_fade_in with time 1
      Any ctx prop specified by text_fade_in will be kept after animation.
-     The reason for that it's because the object will be gone anyway after animation.
-     However, when time is specified as 1, the object will be kept.
+     During reverse process, it will do the fade_out effect. 
+     However, when time is specified as 1, the fade out effect is ignored.
+     You can change the time to see how it plays.
 
      color specifies the text color
      fillStyle specifies the subrect color.
