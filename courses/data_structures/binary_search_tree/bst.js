@@ -358,7 +358,7 @@ class binarySearchTreeAnimation {
       })
       this.ani.add_sequence_ani({ 
         target: c,
-        prop: {"copy": {circle: node.left.ani_node.ani_circle, h_scale : 0}},
+        prop: {"walk": {circle: node.left.ani_node.ani_circle, h_scale : 0}},
       });
       this.ani.add_sequence_ani({ pause: ANIMATION_TIME });
     }

@@ -63,6 +63,30 @@ function example1() {
     
   })
 
+  /* another way to do this is to use text_fade_in with time 1
+     Any ctx prop specified by text_fade_in will be kept after animation.
+     The reason for that it's because the object will be gone anyway after animation.
+     However, when time is specified as 1, the object will be kept.
+
+     color specifies the text color
+     fillStyle specifies the subrect color.
+  */
+  ani.add_sequence_ani({
+    target: rect,
+    prop: {
+      text_fade_in: {index: 0, fillStyle: "pink", color: "red"},
+      time: 1,
+    },
+  })
+
+  ani.add_sequence_ani({
+    target: rect,
+    prop: {
+      text_fade_in: {index: 3, fillStyle: "lightblue", color: "red"},
+      time: 1,
+    },
+  })
+
   // what if we want to copy a text field of rect to rect1
   // it copies rect's index1 entry to rect's index2 entry
   // h_scale, w_scale controls the path of copying. Change it to see how it change the path.
