@@ -30,6 +30,8 @@
       <button type = "button" id = "delete">Delete</button>
       <button type = "button" id = "find">Find</button> &emsp;&emsp;
 
+      <button type = "button" id = "print">Inorder Print</button> &emsp;
+
       <button type="button" id = "clear_network">Clear Tree</button>
      
       
@@ -148,6 +150,10 @@ $(document).ready(function(){
 
   $("#delete").click(function() {
     MAIN_A.delete($("#key").val())
+  })
+
+  $("#print").click(function() {
+    MAIN_A.inorder_print();
   })
 
 

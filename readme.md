@@ -112,17 +112,3 @@ aniTester.run_test();
 | t/T + mouse down | Switch text direction of edge |
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-

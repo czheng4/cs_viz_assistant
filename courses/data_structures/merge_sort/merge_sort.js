@@ -14,6 +14,7 @@ function add_objs_to_ani(dict) {
   for (let i = 0; i < objs.length; i++) ani.add_object(objs[i]);
   for (let i = 0; i < lines.length; i++) ani.connect_object(lines[i]);
   
+
 }
 
 function rm_objs_from_ani(dict) {
