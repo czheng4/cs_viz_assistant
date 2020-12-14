@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../../../style/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <style type="text/css">
-    input[type = "text"]{
+    input[type = "number"]{
       width: 50px;
     }
     #insert, #delete, #find {
@@ -25,12 +25,13 @@
     <div class = "control"> 
 
       
-      <input type = "text" id = "key">
+      <input type = "number" id = "key">
       <button type="button" id = "insert">Insert</button> 
       <button type = "button" id = "delete">Delete</button>
       <button type = "button" id = "find">Find</button> &emsp;&emsp;
 
       <button type = "button" id = "print">Inorder Print</button> &emsp;
+      <button type = "button" id = "rebalance">Rebalance Tree</button> &emsp;
 
       <button type="button" id = "clear_network">Clear Tree</button>
      
@@ -86,7 +87,7 @@ function bst_test1() {
   aniTester.add_func("insert", [2.55]);
   // aniTester.add_func("insert", [3.55]);
   // for (let i = 0; i < 10; i++) aniTester.add_func("go_forward");
-
+  for (let i = 0; i < 5; i++) aniTester.add_func("insert", [parseInt(Math.random() * 1000)]);
   aniTester.run_test();
 
 }
@@ -154,6 +155,10 @@ $(document).ready(function(){
 
   $("#print").click(function() {
     MAIN_A.inorder_print();
+  })
+
+  $("#rebalance").click(function(){
+    MAIN_A.rebalance_tree();
   })
 
 
