@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/28/2020
-  last modified 12/10/2020
+  last modified 12/13/2020
 */
 
 // for node type
@@ -27,6 +27,7 @@ function update_circle_text(dict) {
   dict.circle.text = dict.text;
 }
 
+
 function traverse_to_root(n) {
   let path = [];
   while (n!=null) {
@@ -35,6 +36,7 @@ function traverse_to_root(n) {
   }
   return path;
 }
+
 function color_path(dict) {
   let n, e;
   let path = dict.path,
@@ -117,14 +119,12 @@ class BSTree {
     this.g = g;
   }
 
-
+  /* return new binarySearchTreeAnimation */
   rebalance_tree() {
 
     let bst_ani = new binarySearchTreeAnimation();
     let bst = bst_ani.bst_tree;
-    // let bst = new BSTree(new Graph("directed"));
     let keys = this.make_key();
-    // console.log(keys.length);
     this.recursive_rebalance_tree(keys, 0, keys.length, bst);
     console.log(bst.make_key());
 
@@ -137,31 +137,22 @@ class BSTree {
     if (num_indices == 0) return null;
   
     m_index = parseInt(starting_index + num_indices / 2);
-    // n = new BSTnode(sorted_keys[m_index]);
+
+    /* we actually call the insert such that i can reposition the node */
     dict = bst.insert(sorted_keys[m_index]);
-    // dict.node.ani_node.ani_circle.visible = false;
-    // dict.node.ani_node.ani_circle.alpha = 0;
+  
     reposition_node({type:dict.node.type, path:traverse_to_root(dict.node)});
     left = this.recursive_rebalance_tree(sorted_keys, starting_index, m_index - starting_index, bst);
     right = this.recursive_rebalance_tree(sorted_keys, m_index + 1, starting_index + num_indices - m_index - 1, bst);
 
-    // if (left != null) {
-    //   n.left = left;
-    //   left.parent = n;
-    // }
-    // if (right != null) {
-    //   n.right = right;
-    //   right.parent = n;
-    // }
-    // return n;
   }
 
   make_key() {
     let keys = [];
     this.recursive_make_key(this.root, keys);
     return keys;
-    console.log(keys);
   }
+
   recursive_make_key(node, keys) {
 
     if (node == null) return;
@@ -350,7 +341,7 @@ class BSTree {
       repo_node, repo_node, /* the node we traverse back and reposition the node position */
       type: type, /* the initial node type for reposition node */
       delete_case: delete_case,
-      lm_path: lm_path,
+      lm_path: lm_path, /* for case where it has both children. The path to rightmost node in the left subtree */
       rv: rv,
     };
 
@@ -365,12 +356,24 @@ class BSTree {
 
 
 class binarySearchTreeAnimation {
+  constructor() {
+    this.ani = new Animation();
+    this.g = new Graph(this.ani, "directed");
+    this.bst_tree = new BSTree(this.g);
+    this.func_text = new Text("", 100, -20, 100, "13px Arial");
+    this.key_rect = new Rect(0, 0, 0, 0, "INRODER_KEY", [], "Sorted Keys", "top", "h");
+    this.key_rect.visible = false;
+    this.ani.add_object(this.key_rect);
+    this.ani.add_object(this.func_text);
+
+    this.is_rebalance = false;
+  }
 
 
   rebalance_tree() {
     let bst_ani = this.bst_tree.rebalance_tree();
-
     bst_ani.ani.step_by_step = this.ani.step_by_step;
+
     this.ani = bst_ani.ani;
     this.g = bst_ani.g;
     this.bst_tree = bst_ani.bst_tree;
@@ -379,7 +382,7 @@ class binarySearchTreeAnimation {
     this.is_rebalance = true;
 
     let keys = this.bst_tree.make_key();
-
+    this.func_text.text = "Call balance tree".format(key);
     this.recursive_rebalance_tree(keys, 0, keys.length);
     this.show_sorted_keys_rect();
     this.key_rect.text = keys;
@@ -415,18 +418,7 @@ class binarySearchTreeAnimation {
       target: this.key_rect,
       prop: {text_fade_in: {index: m_index, fillStyle:"lightblue" }, time:1 }
     })
-    // n = new BSTnode(sorted_keys[m_index]);
     
-    // ani.add_sequence_ani({
-    //   target:c,
-    //   text: "Make a new node with key {}".format_b(c.text),
-    //   prop: {fade_in: true, fillStyle: "yellow", visible:true}
-    // })
-
-    // ani.add_sequence_ani({
-    //   text: "sorted_keys{} belongs to left subtree".format_b("[{}:{}]".format(starting_index, m_index - starting_index)),
-    //   prop: {fade_in: true, fillStyle: "yellow", visible:true}
-    // })
 
     left = this.recursive_rebalance_tree(sorted_keys, starting_index, m_index - starting_index);
     if (left != null) {
@@ -454,8 +446,6 @@ class binarySearchTreeAnimation {
     }
 
 
-   
-
     if (c.from.length != 0) {
       ani.add_sequence_ani({
         target: c,
@@ -467,18 +457,12 @@ class binarySearchTreeAnimation {
       target: c,
       prop: {fade_in: true, fillStyle: "#DDDDDD", time : 1, lineWidth:1},
     })
-    // if (left != null) {
-    //   n.left = left;
-    //   left.parent = n;
-    // }
-    // if (right != null) {
-    //   n.right = right;
-    //   right.parent = n;
-    // }
+   
     return n;
   }
 
 
+  /* set the func text and if we show key_rect when the animation goes back */
   clear_after_func_ani(visible = false) {
     let dict;
     let show_rect = function(dict) {
@@ -515,7 +499,6 @@ class binarySearchTreeAnimation {
     this.reset_graph();
     this.show_sorted_keys_rect();
     this.recursive_inorder_print(this.bst_tree.root, keys);
-    console.log(keys);
     this.clear_after_func_ani(true);
 
     this.ani.run_animation();
@@ -562,6 +545,7 @@ class binarySearchTreeAnimation {
     })
     keys.push(node.key);
 
+    // go right
     if (node.right != null) {
       e_right = g.get_edge_by_name(node.ani_node.id, node.right.ani_node.id);
       c_right = node.right.ani_node.ani_circle;
@@ -577,7 +561,7 @@ class binarySearchTreeAnimation {
     }
     this.recursive_inorder_print(node.right, keys);
 
-    // go right
+    // go back
     if (node.parent != null) {
       ani.add_sequence_ani({
         target: c,
@@ -599,11 +583,12 @@ class binarySearchTreeAnimation {
   }
 
   delete(key) {
+    
     key = parseFloat(key);
-
     this.is_rebalanced_tree();
     this.ani.set_function_call("delete", [key]);
     this.set_state();
+    
 
     let dx, dy;
     let tmp_rv, rv = this.bst_tree.delete(key);
@@ -783,20 +768,6 @@ class binarySearchTreeAnimation {
   }
 
 
-  constructor() {
-    this.ani = new Animation();
-    this.g = new Graph(this.ani, "directed");
-    this.bst_tree = new BSTree(this.g);
-    this.func_text = new Text("", 100, -20, 100, "13px Arial");
-    this.key_rect = new Rect(0, 0, 0, 0, "INRODER_KEY", [], "Sorted Keys", "top", "h");
-    this.key_rect.visible = false;
-    this.ani.add_object(this.key_rect);
-    this.ani.add_object(this.func_text);
-
-    this.is_rebalance = false;
-  }
-
-
   show_sorted_keys_rect() {
     let size = this.bst_tree.size;
     let texts = [];
@@ -895,13 +866,13 @@ class binarySearchTreeAnimation {
   
 
   find (key) {
-    let ani = this.ani;
-
-    this.is_rebalanced_tree();
-    ani.set_function_call("find", [key]);
-    this.set_state();
+    
     key = parseFloat(key);
-
+    this.is_rebalanced_tree();
+    this.ani.set_function_call("find", [key]);
+    this.set_state();
+    
+    let ani = this.ani;
     let rv = this.bst_tree.find(key);
     let path = rv.path,
         find = rv.find;
@@ -930,23 +901,24 @@ class binarySearchTreeAnimation {
   }
 
   insert(key) {
+
+    key = parseFloat(key);
+    this.is_rebalanced_tree();
+    this.ani.set_function_call("insert", [key]);
+    this.set_state();
+    
+
     let i;
     let type;
     let e, parent;
     let text;
     let ani = this.ani,
         g = this.g;
-
-
-    this.is_rebalanced_tree();
-    ani.set_function_call("insert", [key]);
-    this.set_state();
-    
     let rv = this.bst_tree.insert(key);
     let path = rv.path,
         node = rv.node;
 
-    key = parseFloat(key);
+    
     
 
     this.reset_graph();
@@ -993,7 +965,6 @@ class binarySearchTreeAnimation {
         text: "Key {} is already in the tree. Insert({}) = False".format(key, key)
       });
     }
-
 
 
     ani.add_sequence_ani({

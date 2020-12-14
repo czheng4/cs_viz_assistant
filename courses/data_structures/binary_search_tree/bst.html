@@ -11,7 +11,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <style type="text/css">
     input[type = "number"]{
-      width: 50px;
+      width: 70px;
     }
     #insert, #delete, #find {
       width: 55px;
@@ -25,15 +25,15 @@
     <div class = "control"> 
 
       
-      <input type = "number" id = "key">
+      <input type = "number" id = "key" placeholder="number">
       <button type="button" id = "insert">Insert</button> 
       <button type = "button" id = "delete">Delete</button>
       <button type = "button" id = "find">Find</button> &emsp;&emsp;
 
       <button type = "button" id = "print">Inorder Print</button> &emsp;
-      <button type = "button" id = "rebalance">Rebalance Tree</button> &emsp;
+      <button type = "button" id = "balance">Balance Tree</button> &emsp;
 
-      <button type="button" id = "clear_network">Clear Tree</button>
+      <button type="button" id = "clear_tree">Clear Tree</button>
      
       
       <div class = "line"></div>
@@ -92,6 +92,15 @@ function bst_test1() {
 
 }
 
+function input_check() {
+  let val = $("#key").val();
+  val = parseFloat(val);
+  if (isNaN(val)) {
+    $("#elaboration_text").text("Input is not a valid number");
+    return false;
+  }
+  return true;
+}
 
 $(document).ready(function(){
   
@@ -112,53 +121,39 @@ $(document).ready(function(){
  
   
   MAIN_A = new binarySearchTreeAnimation(); 
-  
+  MAIN_G = MAIN_A.g;
 
   D_ANIMATION_TIME = 100 - $("#speed").val();
  
-  MAIN_G = MAIN_A.g;
+  
   bst_test1();
-  // MAIN_G.get_node("S");
-  // MAIN_G.get_node("S", null, null, null, true);
-  // MAIN_G.get_node("S", null, null, null, true);
-  
-  // for (let i = 0; i < 10; i++) MAIN_A.insert(parseInt(Math.random() * 100));
-  // MAIN_A.insert(20);
-  // MAIN_A.insert(15);
-  // MAIN_A.insert(7);
-  // MAIN_A.insert(3);
-  // MAIN_A.insert(4);
-  // MAIN_A.insert(6);
-  // MAIN_A.insert(5);
-  // MAIN_A.insert(8);
-  // MAIN_A.insert(6.5);
-  // MAIN_A.insert(8.5);
-  // MAIN_A.insert(43);
-  // MAIN_A.insert(2);
-
  
-  MAIN_G.draw();
-
-  
+  MAIN_G.draw();  
  
   $("#insert").click(function() {
-    MAIN_A.insert($("#key").val())
+    if (input_check()) MAIN_A.insert($("#key").val());
   })
 
   $("#find").click(function() {
-    MAIN_A.find($("#key").val())
+    if (input_check()) MAIN_A.find($("#key").val());
   })
 
   $("#delete").click(function() {
-    MAIN_A.delete($("#key").val())
+    if (input_check()) MAIN_A.delete($("#key").val());
   })
 
   $("#print").click(function() {
     MAIN_A.inorder_print();
   })
 
-  $("#rebalance").click(function(){
+  $("#balance").click(function(){
     MAIN_A.rebalance_tree();
+  })
+
+  $("#clear_tree").click(function() {
+    MAIN_A = new binarySearchTreeAnimation(); 
+    MAIN_G = MAIN_A.g;
+    MAIN_G.draw();
   })
 
 
