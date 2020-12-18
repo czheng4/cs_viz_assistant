@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+<h2>Toplogical Sort - Pseudo Code</h2>
+1. For all nodes, set their backedges to NULL, <strong>distances</strong> to -1, number of distinctive path to 0, and compute the number of incoming edges. <br>
+2. For nodes whose incoming edge is 0, set their number of distinctive path to 1 and append them to a list. <br>
+3. Set the staring node's distance to 0. <br>
+4. Repeat the following: <br>
+<div style="margin-left: 50px">
+1. Remove the first node n from the list. Let d be n's distance.
+2. For each adjescent edge. Let n2 be the destination node. Do the following: <br>
+  <div style="margin-left: 50px">
+    1. Decrement n2's number of incoming edges by one. If n2's incoming edges is reduced to 0. We append n2 to the list. <br>
+    2. Add n's number of distinctive path to n2's number of distinctive path <br>
+    3. If n2's distance is -1 or d + edge's weight < n2's distance, update n2's distance.
+  </div>
+</div>
+
+</body>
+</html>

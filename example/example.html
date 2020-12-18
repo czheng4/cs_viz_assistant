@@ -1,0 +1,52 @@
+<!--
+  ChaoHui Zheng
+  11/22/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <link rel="stylesheet" href="../style/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="../lib/memory_generator.js"></script>
+</head>
+<body>
+ <div> 
+  <div class = "grid-container">
+    <div class = "control"> 
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        animation speed&emsp;<input type="range" min="0" max="90" value="50" id="speed"> 
+      </div>
+      <div class = "elaboration">
+        Elaboration: <span id = "elaboration_text" style="color:red"></span> 
+      </div>
+    </div>
+
+   
+
+    <div class = "canvas"> 
+   	  <canvas id = "draw" width ="1000" height="2000" ></canvas>
+    </div>
+  </div>
+</div>
+ 
+</body>
+
+<script src="../lib/drawing.js"></script>
+<script src="../lib/canvas_helper.js"></script>
+<script src="example.js"></script>
+<script type="text/javascript">
+
+
+set_canvas(1200, 700, 100, 100);
+example1();
+
+</script>
+
+<script src="../lib/control.js"></script>
+
+</html>

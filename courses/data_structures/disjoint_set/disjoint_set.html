@@ -1,0 +1,215 @@
+<!--
+  ChaoHui Zheng
+  11/22/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style type="text/css">
+    input[type = "number"], input[type = "text"]{
+      width: 100px;
+    }
+    .elaboration-table td {
+    
+      text-align: center;
+      padding: 5px 15px 5px 15px;
+      /* background-color: pink;*/
+    }
+
+  </style>
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header">Disjoint Set</div>
+    <div class = "control"> 
+
+     
+      <input type="number" id="num_elements_t" min = 1 max = 20 value = 10 placeholder="number of elements"> 
+      <button type="button" id = "num_elements">Initialize Disjoint Set</button> &emsp;
+      <button type="button" id = "clear">Clear</button>  &emsp;
+      
+      <input type="radio" id="union_by_rank" name="union_type" value = "union_by_rank" checked> 
+      <label for="union_type">Union-By-Rank</label> 
+
+      <input type="radio" id="union_by_size" name="union_type" value = "union_by_size"> 
+      <label for="union_type">Union-By-Size</label> 
+
+      <input type="radio" id="union_by_height" name="union_type" value = "union_by_height"> 
+      <label for="union_type">Union-By-Height</label> 
+
+      
+      
+      <div class = "line"></div>
+
+      <input type="text" id="union_t" placeholder="setId1 setId2"> 
+      <button type="button" id = "union">Union</button> &emsp;&emsp;
+
+      <input type="number" id="find_t" placeholder="setId"> 
+      <button type="button" id = "find">Find</button> 
+
+      <div class = "line"></div>
+    
+      
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="50" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
+        <table border = 1 class = "elaboration-table">
+          <tr id = "node">
+            <td>Node</td>
+          </tr>
+
+          <tr id = "link">
+            <td>Link</td>
+          </tr>
+
+          <tr id = "size_or_height">
+            <td>Size</td>
+          </tr>
+
+        </table>
+      </div>
+    </div>
+
+    <div class = "canvas"> 
+       <canvas id = "draw"></canvas>
+    </div>
+
+    <div class = "bottom-nav">
+      <button id = "script">Script</button>
+    </div>
+  </div>
+
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="../../../lib/memory_generator.js"></script>
+<script src="disjoint_set.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+
+
+
+$(document).ready(function(){
+  
+  set_canvas(1200, 800, 75, 50);
+
+  MAIN_G_SPEC.weight_type = T_CONSTANT;
+  MAIN_G_SPEC.num_cols = 10;
+  MAIN_G_SPEC.show_edge_weight = false;
+  
+  MAIN_G_SPEC.enable_edge_color_change = false;
+  MAIN_G_SPEC.enable_edge_create = false;
+  MAIN_G_SPEC.gap_y = 300;
+
+  MAIN_A = new disjointSetAnimation(); // must be name a
+
+
+  D_ANIMATION_TIME = 100 - $("#speed").val();
+  
+
+  $("#num_elements").click(function(){
+    let num = parseInt($("#num_elements_t").val());
+    let ani, node;
+    let type;
+    if (isNaN(num)) {
+      $("#elaboration_text").text("number of num_elements: must be int");
+    } else if (num <= 0 || num > 20) {
+      $("#elaboration_text").text("number of elements must > 0 and <= 20");
+    } else {
+
+      type = $("input[name=union_type]:checked").val();
+      if (type == "union_by_size") MAIN_A = new disjointSetAnimation(UNION_BY_SIZE);
+      else if (type == "union_by_height") MAIN_A = new disjointSetAnimation(UNION_BY_HEIGHT);
+      else MAIN_A = new disjointSetAnimation(UNION_BY_RANK);
+
+
+      MAIN_G = new Graph(MAIN_A.ani, "direct");
+      MAIN_A.init(num, MAIN_G);
+      MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
+      for (let i = 0; i < num; i++) {
+        node = MAIN_G.get_node(i);
+        node.ani_circle.propagation = true;
+      }
+
+      MAIN_G.draw();
+    }
+  })
+  $("#num_elements").click();
+
+  $("#clear").click(function(){
+    $("input[name=union_type]").prop("disabled", false);
+    let ani = new Animation();
+    ani.draw();
+    MAIN_G = null;
+  })
+ 
+
+  $("#union").click(function(){
+    let str = $("#union_t").val();
+    str = str.trim();
+    str = str.split(" ");
+
+    if (MAIN_G == null) {
+      $("#elaboration_text").text("Must initialize Disjoint Set");
+      return;
+    } else if (str.length != 2) {
+      $("#elaboration_text").text("Union: id1 id2");
+    }
+
+    
+
+    MAIN_A.union(str[0], str[1]);
+    console.log(MAIN_A.ani.connection_map);
+
+    $("#union_t").val("");
+    $("#union_t").focus("");
+
+  })
+
+  $("#find").click(function(){
+    let num = $("#find_t").val();
+    num = parseInt(num);
+   
+    if (MAIN_G == null) {
+      $("#elaboration_text").text("Must initialize Disjoint Set");
+      return;
+    } else if (isNaN(num)) {
+      $("#elaboration_text").text("Find: id");
+      return;
+    }
+
+    MAIN_A.find(num);
+    $("#find_t").val("");
+    $("#find_t").focus();
+  })
+
+  $("body").keypress(function(e) {
+    let id = $("input:focus").attr("id");
+    if (e.keyCode == 13) {
+      if (id == "num_elements_t") $("#num_elements").click();
+      if (id == "union_t") $("#union").click();
+      if (id == "find_t") $("#find").click();    
+    }
+
+  })
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+<script src="../graph_creator/graph_creator.js"></script>
+
+</html>
