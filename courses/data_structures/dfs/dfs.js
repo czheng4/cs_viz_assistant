@@ -14,6 +14,10 @@ class dfsAnimation {
     this.ending_node = null;
   }
 
+  make_new() {
+    return new dfsAnimation();
+  }
+
   run_dfs(node_id, node_id2) {
     let g = this.g;
     let n;
@@ -117,7 +121,7 @@ class dfsAnimation {
           
           ani.add_sequence_ani({
             target: e.ani_line,
-            text: "Call {}. Adjacency list {}".format("{}".format_b("DFS({})".format(to_n.id)), this.hightlight_adj_test(n.adj, i)),
+            text: "Call {}. Adjacency list {}".format("{}".format_b("DFS({})".format(to_n.id)), this.hightlight_adj_text(n.adj, i)),
             prop: {fade_in: true, strokeStyle: "red", time : 1},
             concurrence:true,
           });
@@ -167,7 +171,7 @@ class dfsAnimation {
   }
 
 
-  hightlight_adj_test(adj, index) {
+  hightlight_adj_text(adj, index) {
     let i, to;
 
     let text = "{";
