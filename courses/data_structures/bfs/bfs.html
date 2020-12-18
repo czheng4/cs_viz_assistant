@@ -39,8 +39,7 @@
       <div class = "line"></div>
 
       <input type = "text" id = "start_node_id" placeholder="starting node">
-      <input type = "text" id = "end_node_id" placeholder="ending node(optional)">
-      <button type = "button" id = "run_dfs">Run DFS</button> &emsp;
+      <button type = "button" id = "run_bfs">Run BFS</button> &emsp;
       <button type="button" id = "clear_graph">Clear Graph</button>      
       <div class = "line"></div>
       
@@ -108,13 +107,13 @@ $(document).ready(function(){
   MAIN_A = new bfsAnimation(); 
   MAIN_G = example(MAIN_A.ani);
   MAIN_A.g = MAIN_G;
-  MAIN_A.ani.step_by_step = true;
+  // MAIN_A.ani.step_by_step = true;
   D_ANIMATION_TIME = 100 - $("#speed").val();
   MAIN_G.draw();  
 
-  MAIN_A.run_bfs(0);
-  $("#run_dfs").click(function() {
-    MAIN_A.run_bfs($("#start_node_id").val().trim(), $("#end_node_id").val().trim());
+  // MAIN_A.run_bfs(0);
+  $("#run_bfs").click(function() {
+    MAIN_A.run_bfs($("#start_node_id").val().trim());
   })
 
 });

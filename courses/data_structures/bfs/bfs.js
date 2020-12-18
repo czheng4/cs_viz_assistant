@@ -31,7 +31,6 @@ class bfsAnimation {
   constructor() {
     this.ani = new Animation();
     this.g = null;
-    this.ending_node = null;
     this.q_rect = null;
   }
 
@@ -58,7 +57,9 @@ class bfsAnimation {
       this.q_rect.fillStyles.push("");
     }
   }
-
+  make_new() {
+    return new bfsAnimation();
+  }
   run_bfs(node_id, node_id2) {
     let g = this.g;
     let ani = this.ani;
@@ -76,12 +77,7 @@ class bfsAnimation {
 
     n = g.get_node(node_id);
 
-    this.ending_node = null;
-    if (g.is_node(node_id2)) {
-      this.ending_node = g.get_node(node_id2);
-    }
-
-    this.make_queue_rect();
+    if (this.q_rect == null) this.make_queue_rect();
     this.ani.clear_animation();
     for (let key in g.node_map) {
       n = g.node_map[key];
@@ -122,12 +118,6 @@ class bfsAnimation {
     let e, n2, i, pre_n;
     let size;
     let visited_text, unvisited_text, text;
-
-
-    // ani.add_sequence_ani({
-    //   text: "Push back the starting node {} into queue. And set its distance to {}".format_b(n.id, "0"),
-    //   pause:1,
-    // })
 
     queue.push_back(n);
     n.distance = 0;
@@ -266,7 +256,7 @@ class bfsAnimation {
       }
 
       if (text == "") {
-        text = "Node {} has not adjacent nodes. Do nothing".format_b(n.id);
+        text = "Node {} has no adjacent nodes. Do nothing".format_b(n.id);
       }
 
       ani.add_sequence_ani({
@@ -283,34 +273,12 @@ class bfsAnimation {
 
   }
 
-
-  line_width(from, to) {
-    let ani = this.ani;
-    let e;
-    let g = this.g;
-
-    if (from != null) {
-      ani.add_sequence_ani({
-        target: from.ani_circle,
-        prop: {fade_in: true, fillStyle: "yellow", time : 1, lineWidth:1},
-      })
-    }
-    if (to != null) {
-      ani.add_sequence_ani({
-        target: to.ani_circle,
-        prop: {fade_in: true, fillStyle: "yellow", time : 1, lineWidth:4},
-      })
-    }
-  }
-
-
-
   make_fillstyles(size, start, end) {
     let i;
     let fillStyle = [];
     for (i = 0; i < size; i++) {
       if (i >= start && i < end) fillStyle.push("lightblue");
-      else fillStyle.push("white");
+      else fillStyle.push(BACKGROUND_COLOR);
     }
     return fillStyle;
   }
