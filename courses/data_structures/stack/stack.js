@@ -3,7 +3,7 @@
   All rights reserved.
   
   12/18/2020
-  Last Modified 12/18/2020
+  Last Modified 12/19/2020
 */
 
 const R_WIDTH = 100;
@@ -11,6 +11,24 @@ const R_HEIGHT = 80;
 const R_MARGIN = 60;
 const R_OFFSET_Y = 160;
 
+/* a callback function to remove a rect object when node is erased */
+function rm_ani_object(dict) {
+  let ref = dict.ref,
+      ani = dict.ani;
+
+  dict.ani.remove_object(ref);
+}
+
+function add_ani_object(dict) {
+  let obj = dict.obj;
+  let lines = dict.lines;
+  let ani = dict.ani;
+  let i;
+  ani.add_object(obj);
+  for (i = 0; i < lines.length; i++) {
+    ani.connect_object(lines[i]);
+  }
+}
 
 class Snode {
   constructor(val) {
@@ -48,13 +66,12 @@ class Snode {
     rect.attach_point(this.next_p = ani.get_point(x, y + R_HEIGHT * 3 / 4.0));
     rect.attach_point(this.left_top_p = ani.get_point(x, y));
     rect.attach_point(this.right_top_p = ani.get_point(x + R_WIDTH, y));
-    ani.add_object(this.next_line = new quadraticCurve(this.next_p, this.next_p, 0));
+    ani.connect_object(this.next_line = new quadraticCurve(this.next_p, this.next_p, 0));
     this.next_line.angle_degree = 22;
     this.next_line.angle_length = 13;
 
   }
 }
-
 
 class Stack {
   constructor() {
@@ -117,9 +134,10 @@ class stackAnimation {
     this.stack_rect.attach_point(p);
     this.top_ptr_line = new quadraticCurve(p, p, 0);
     this.top_ptr_line.angle_degree = 20;
-    // this.top_ptr_line.ctx_prop.strokeStyle = "";
+    this.top_ptr_line.ctx_prop.strokeStyle = "blue";
+    this.top_ptr_line.ctx_prop.lineWidth = 2.5;
+
     this.ani.connect_object(this.top_ptr_line);
-    this.ani.add_object(this.stack_rect);
     this.ani.draw();
     this.stack = new Stack();
   }
@@ -172,7 +190,7 @@ class stackAnimation {
     ani.add_sequence_ani({
       target: this.top_ptr_line,
       text: "Move stack top to {}'s next node, which is {}. Decrement the size by one".format_b(snode.ref, pre_ref),
-      prop: {p: p, type:"pivot"},
+      prop: {p: p, type:"pivot", ani:ani},
     })
 
 
@@ -197,7 +215,13 @@ class stackAnimation {
     });
     ani.add_sequence_ani({
       target: snode.next_line,
-      prop:{fade_out:true},
+      prop:{fade_out:true}
+    });
+
+    ani.add_sequence_ani({
+      pause:1,
+      action: {params: {ani:ani, ref: snode.ref}, func: rm_ani_object},
+      rev_action: {params: {ani:ani, obj:snode.rect, lines: [snode.next_line]}, func: add_ani_object},
     });
 
     ani.run_animation();
@@ -243,14 +267,9 @@ class stackAnimation {
     ani.add_sequence_ani({
       target:rect,
       text: "Make a new stack node {}".format_b(ref),
-      prop: {fade_in:true, strokeStyle: 'red', shadowColor:"#FF0000", shadowBlur:15, step:true},
-      concurrence:true,
+      prop: {fade_in:true, strokeStyle: 'red', shadowColor:"#FF0000", shadowBlur:15, step:true}
     })
 
-    ani.add_sequence_ani({
-      target: this.top_ptr_line,
-      prop: {fade_in:true, strokeStyle:"blue", lineWidth:2.5, time:1},
-    })
 
     if (pre_node != null) {
      
@@ -258,7 +277,7 @@ class stackAnimation {
       ani.add_sequence_ani({
         text: "Set added node {}'s next to {}".format_b(snode.ref, pre_node.ref),
         target: snode.next_line,
-        prop: {p: pre_node.right_top_p, type:"pivot"}
+        prop: {p: pre_node.right_top_p, type:"pivot", ani:ani}
       })
 
       ani.add_sequence_ani({
@@ -271,9 +290,9 @@ class stackAnimation {
 
     p = snode.right_top_p;
     ani.add_sequence_ani({
-      text: "Make top to point to new node {}. Increment the size by one".format_b(ref),
+      text: "Move top point to the new node {}. Increment the size by one".format_b(ref),
       target: this.top_ptr_line,
-      prop: {p:p, type: "pivot"},
+      prop: {p:p, type: "pivot", ani:ani},
     })
 
 
