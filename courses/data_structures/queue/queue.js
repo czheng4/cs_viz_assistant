@@ -154,9 +154,8 @@ class queueAnimation {
     this.last_ptr_line.angle_degree = 20;
     this.ani.connect_object(this.last_ptr_line);
   
-
-    this.ani.draw();
     this.queue = new Queue();
+    this.ani.draw();
   }
 
 

@@ -75,7 +75,6 @@ $(document).ready(function(){
   MAIN_A = new queueAnimation(); // must use name a for every animation
   D_ANIMATION_TIME = 100 - $("#speed").val();
 
-  MAIN_A.push(3);
 
   $("#push_back").click(function(){
     MAIN_A.push($("#push_back_t").val());
@@ -87,7 +86,7 @@ $(document).ready(function(){
   })
 
   $("#clear").click(function() {
-    MAIN_A = new queuekAnimation();
+    MAIN_A = new queueAnimation();
     MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
 
   });
