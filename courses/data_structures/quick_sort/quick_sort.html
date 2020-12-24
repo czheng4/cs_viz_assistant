@@ -1,0 +1,120 @@
+<!--
+  ChaoHui Zheng
+  12/20/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header">Quick Sort</div>
+    <div class = "control"> 
+
+      Array <input type="text" id="array" placeholder="Enter values separated by space" style = "width: 500px; height:25px; font-size:20px"> 
+
+      <button type="button" id = "run">run</button>
+      <div class="line"></div>
+
+      <strong>Pivot Choice:</strong>
+      <input type="radio" id="" name="pivot_choice" value = "first" checked> 
+      <label for="pivot_choice">First</label> 
+      <input type="radio" id="" name="pivot_choice" value = "last"> 
+      <label for="pivot_choice">Last</label> 
+      <input type="radio" id="" name="pivot_choice" value = "median"> 
+      <label for="pivot_choice">Median-of-three</label> 
+      
+      &emsp;&emsp;&emsp;
+      <strong>Partition scheme:</strong>
+      <input type="radio" id="" name="partition_type" value = "lomuto"> 
+      <label for="partition_type">Lomuto partition</label> 
+      <input type="radio" id="" name="partition_type" value = "hoare"> 
+      <label for="partition_type">Hoare partition</label> 
+      <input type="radio" id="" name="partition_type" value = "lab"> 
+      <label for="partition_type">Hoare's modified partition</label> 
+      
+
+      <div class="line"></div>
+
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="0" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
+      </div>
+    </div>
+
+    <div class = "canvas"> 
+       <canvas id = "draw"></canvas>
+    </div>
+    <div class = "bottom-nav">
+      <button id = "script">Script</button>
+    </div>
+  </div>
+
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="../../../lib/memory_generator.js"></script>
+<script src="quick_sort.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+  
+  set_canvas(1200, 800, 0, 50);
+
+  var v = [21,35,12,9,4,56,3,5,10,34,21,55,98];
+  // for (let i = 0; i < 10; i++) v.push(i);
+  MAIN_A = new quickSortAnimation(deep_copy(v)); //must use name MAIN_A
+
+  // MAIN_A.ani.step_by_step = true;
+
+  // $("#run").click();
+  $("#run").click(function() {
+
+    let str = $("#array").val();
+    let d;
+    let v1 = v;
+    str = str.split(/[ ,]+/);
+   
+    v = [];
+    for (let i = 0; i < str.length; i++) {
+      d = parseFloat(str[i]);
+      if (!isNaN(d)) v.push(d);
+    }
+    
+    
+    if(v.length == 0) v = v1;
+    else if(v.length <= 2) {
+      v = v1;
+      MAIN_A.ani.elaboration.text("array size must be > 2");
+      return;
+    }
+
+    if (v.length != 0) {
+      MAIN_A = new quickSortAnimation(deep_copy(v));
+      MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
+      MAIN_A.run_animation();
+    }
+  })
+
+
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+
+</html>
