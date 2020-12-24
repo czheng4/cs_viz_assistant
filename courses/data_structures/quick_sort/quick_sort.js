@@ -3,7 +3,7 @@
   All rights reserved.
   
   12/20/2020
-  Last Modified 12/20/2020
+  Last Modified 12/24/2020
 */
 
 /*
@@ -117,28 +117,28 @@ const right_color = "#FFD300";
 const merge_color = "red";
 const default_color = "#DDDDDD";
 
-const PIVOT_FIRST = 0b1;
-const PIVOT_LAST = 0b11;
-const PIVOT_MEDIAN = 0b111;
+const PIVOT_FIRST = "first";
+const PIVOT_LAST = "last";
+const PIVOT_MEDIAN = "median"
 
 
-const PARTITION_LOMUTO = 0b1;
-const PARTITION_HOARE = 0b11;
-const PARTITION_LAB = 0b111;
+const PARTITION_LOMUTO = "lumoto";
+const PARTITION_HOARE = "hoare"
+const PARTITION_LAB = "lab";
 
 
 
 
 class quickSortAnimation {
-	constructor(v) {
+	constructor(v, pivot_type, partition_type) {
     this.v = v;
     this.ani = new Animation();
     this.ss = 45; //square_size
     this.margin = 80;
     this.margin_y = 60;
     this.ref = 0;
-    this.partition_type = PARTITION_HOARE;
-    this.pivot_type = PIVOT_FIRST;
+    this.partition_type = partition_type;
+    this.pivot_type = pivot_type;
 
     let x,y;
     let rect,p;
