@@ -15,7 +15,7 @@
     <div class = "header">Quick Sort</div>
     <div class = "control"> 
 
-      Array <input type="text" id="array" placeholder="Enter values separated by space" style = "width: 500px; height:25px; font-size:20px"> 
+      Array  <input type="text" id="array" placeholder="Enter values separated by space" style = "width: 500px; height:25px; font-size:20px" value="21 35 12 9 4 56 3 5 10 34 21"> 
 
       <button type="button" id = "run">run</button>
       <div class="line"></div>
@@ -74,7 +74,7 @@ $(document).ready(function(){
   
   set_canvas(1200, 800, 0, 50);
 
-  var v = [21,35,12,9,4,56,3,5,10,34,21,55,98];
+  var v = [21,35,12,9,4,56,3,5,10,34,21];
   // for (let i = 0; i < 10; i++) v.push(i);
   MAIN_A = new quickSortAnimation(deep_copy(v)); //must use name MAIN_A
   ENABLE_IDS = ["input[name=pivot_type]", "input[name=partition_type]"];

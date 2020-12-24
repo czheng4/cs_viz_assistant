@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/22/2020
-  Last Modified 11/24/2020
+  Last Modified 12/24/2020
 */
 
 function add_objs_to_ani(dict) {
@@ -56,16 +56,14 @@ class mergeSortAnimation {
 	constructor(v) {
     this.v = v;
     this.ani = new Animation();
-    this.ss = 50; //square_size
+    this.ss = 45; //square_size
     this.ms = new memorySimulator();
-    this.width = 900;
     this.margin = 75;
-
 
     let x,y;
     let rect,p;
 
-    x = (this.width - this.ss * v.length) / 2;
+    x = this.margin * 2.5;
     y = 0;
     rect = new Rect(x, y, v.length * this.ss, this.ss, this.ms.get_reference(v), deep_copy(v), "", "bottom", "h");
     p = this.ani.get_point((rect.x + rect.width) / 2, rect.y + rect.height);
