@@ -11,13 +11,16 @@
   <script src="../../../lib/jquery.js"></script>
   <style type="text/css">
     input[type = "number"], input[type = "text"]{
-      width: 100px;
+      width: 120px;
     }
     .elaboration-table td {
     
       text-align: center;
       padding: 5px 15px 5px 15px;
       /* background-color: pink;*/
+    }
+    #union_t1, #union_t2 {
+      width: 55px;
     }
 
   </style>
@@ -45,7 +48,8 @@
       
       <div class = "line"></div>
 
-      <input type="text" id="union_t" placeholder="setId1 setId2"> 
+      <input type="number" id="union_t1" placeholder="id1"> 
+      <input type="number" id="union_t2" placeholder="id2"> 
       <button type="button" id = "union">Union</button> &emsp;&emsp;
 
       <input type="number" id="find_t" placeholder="setId"> 
@@ -118,7 +122,11 @@ $(document).ready(function(){
 
   D_ANIMATION_TIME = 100 - $("#speed").val();
   
-
+  $(document).on('keypress', ':input[type="number"]', function (e) {
+    if (e.key == '-' || e.key == '+' || e.key == 'e') {
+      return false;
+    }
+  });
   $("#num_elements").click(function(){
     let num = parseInt($("#num_elements_t").val());
     let ani, node;
@@ -157,20 +165,19 @@ $(document).ready(function(){
  
 
   $("#union").click(function(){
-    let str = $("#union_t").val();
-    str = str.trim();
-    str = str.split(" ");
-
+    let id1 = $("#union_t1").val();
+    let id2 = $("#union_t2").val();
+   
     if (MAIN_G == null) {
       $("#elaboration_text").text("Must initialize Disjoint Set");
       return;
-    } else if (str.length != 2) {
+    } else if (id1 == "" || id2 == "") {
       $("#elaboration_text").text("Union: id1 id2");
+      return;
     }
 
-    
 
-    MAIN_A.union(str[0], str[1]);
+    MAIN_A.union(id1, id2);
 
     $("#union_t").val("");
     $("#union_t").focus("");

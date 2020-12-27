@@ -17,6 +17,11 @@
       padding: 5px 13px 5px 13px;
       text-align: center;
     }
+    #fme_table th{
+      padding: 5px 13px 5px 13px;
+      text-align: center;
+      background: #87AFC7;
+    }
    
   </style>
   
@@ -30,7 +35,7 @@
       <input type = "number" id = "base" placeholder="b" value=4235880211405804673>
       <input type = "number" id = "exponentiation" placeholder="e" value=131> 
       <input type = "number" id = "modn" placeholder="n" value=12855544647099734480> 
-      <button id = "compute">Compute b^e % n</button>
+      <button id = "compute">Compute b<sup>e</sup> % n</button>
       <div class = "line"></div>
       
       <div class = "animation-control">
@@ -51,12 +56,7 @@
       <div id ="board"  style="margin-left: 300px; margin-bottom: 60px; margin-top: 28px">
     
           <table id = "fme_table" border = 1 style= "border-collapse: collapse;">
-            <tr> 
-              <th>i</th>
-              <th>ei</th>
-              <th>b</th>
-              <th>product</th>
-            </tr>
+            
           </table>
       </div>
     </div>
@@ -82,9 +82,15 @@ $(document).ready(function(){
   
 
 
- 
+  /* get rid of - + and e*/
+  $(document).on('keypress', ':input[type="number"]', function (e) {
+    if (e.key == '-' || e.key == '+' || e.key == 'e') {
+      return false;
+    }
+  });
+
   set_canvas(270,250,0,0);
-  
+  MAIN_A = {ani:new Animation()};
   D_ANIMATION_TIME = 100 - $("#speed").val();
   
 
@@ -93,12 +99,14 @@ $(document).ready(function(){
     b = $("#base").val();
     e = $("#exponentiation").val();
     n = $("#modn").val();
-    // b = parseInt(b);
-    // e = parseInt(e);
-    // n = parseInt(n);
+    
+    if (b == "" || e == "" || n == "") {
+      $("#elaboration_text").text("One of values is empty");
+      return;
+    }
     MAIN_A = new fmeAnimation(b, e, n, $("#fme_table"));
   })
-  $("#compute").click();
+
 
 });
 
