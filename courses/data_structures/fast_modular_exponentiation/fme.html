@@ -1,0 +1,109 @@
+<!--
+  ChaoHui Zheng
+  12/26/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="../../../lib/jquery.js"></script>
+  <style type="text/css">
+    input[type = "text"]{
+      width: 82px;
+    }
+    #fme_table td{
+      padding: 5px 13px 5px 13px;
+      text-align: center;
+    }
+   
+  </style>
+  
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header">Fast Modular Exponentiation</div>
+    <div class = "control"> 
+
+     
+      <input type = "number" id = "base" placeholder="b" value=4235880211405804673>
+      <input type = "number" id = "exponentiation" placeholder="e" value=131> 
+      <input type = "number" id = "modn" placeholder="n" value=12855544647099734480> 
+      <button id = "compute">Compute b^e % n</button>
+      <div class = "line"></div>
+      
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="50" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
+      </div>
+    </div>
+
+
+    <div class = "canvas"> 
+      <canvas id = "draw" style="position: fixed;"></canvas>
+      <div id ="board"  style="margin-left: 300px; margin-bottom: 60px; margin-top: 28px">
+    
+          <table id = "fme_table" border = 1 style= "border-collapse: collapse;">
+            <tr> 
+              <th>i</th>
+              <th>ei</th>
+              <th>b</th>
+              <th>product</th>
+            </tr>
+          </table>
+      </div>
+    </div>
+    
+    
+
+    <div class = "bottom-nav">
+      <button id = "script">Script</button>
+    </div>
+  </div>
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="fme.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+
+
+
+$(document).ready(function(){
+  
+
+
+ 
+  set_canvas(270,250,0,0);
+  
+  D_ANIMATION_TIME = 100 - $("#speed").val();
+  
+
+  $("#compute").click(function() {
+    let b, e, n;
+    b = $("#base").val();
+    e = $("#exponentiation").val();
+    n = $("#modn").val();
+    // b = parseInt(b);
+    // e = parseInt(e);
+    // n = parseInt(n);
+    MAIN_A = new fmeAnimation(b, e, n, $("#fme_table"));
+  })
+  $("#compute").click();
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+
+</html>

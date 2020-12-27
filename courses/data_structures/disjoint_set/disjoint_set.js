@@ -1,7 +1,7 @@
 /*
   ChaoHui Zheng
   11/22/2020
-  last modified 12/03/2020
+  last modified 12/26/2020
 */
 const UNION_BY_SIZE = 0b1;
 const UNION_BY_RANK = 0b11;
@@ -16,7 +16,7 @@ function node_pos_after_union(node, g, list_p = []) {
       x_gap = 60;
 
   let ok;
-  console.log(g);
+  // console.log(g);
   
   y = node.ani_circle.y + y_gap;
 
@@ -108,7 +108,7 @@ function color_two_sets(dict) {
   // }
   for (let i = 0; i < ds.num_elements; i++) {
     id = ds.find_no_animation(i);
-    console.log(id);
+    // console.log(id);
     if (id == id1) {
       c = g.get_node(i).ani_circle;
       // c.ctx_prop = deep_copy(DEFAULT_CIRCLE_CTX);
@@ -152,7 +152,7 @@ function hightlight_col(dict) {
   }
 
   for (let i = 0; i < ids.length; i++) {
-    id = ids[i]
+    id = ids[i];
     $("#link_" + id).text(ds.links[id]);
 
     $("#size_or_height_" + id).text(ds.union_type == UNION_BY_SIZE? ds.sizes[id] : ds.heights[id]);
@@ -236,7 +236,7 @@ class disjointSetAnimation {
     id2 = parseInt(id2);
 
     if (isNaN(id1) || isNaN(id2) || id1 < 0 || id2 < 0 || id1 >= this.num_elements || id2 >= this.num_elements) {
-      $("#elaboration_text").text("Call Union on invalid sets {} {}");
+      $("#elaboration_text").text("Call Union on invalid sets {} {}").format_b(id1, id2);
       return true;
     } else if (links[id1] != -1 || links[id2] != -1) {
       $("#elaboration_text").text("Must Call Union on set ids rather than element");
@@ -289,7 +289,7 @@ class disjointSetAnimation {
     // ani.clear_animation();
    
     if (id < 0 || id >= this.num_elements) {
-      $("#elaboration_text").text("{} is not a valid set id".format(id));
+      $("#elaboration_text").text("{} is not a valid set id".format_b(id));
       return;
     }
 
@@ -301,7 +301,7 @@ class disjointSetAnimation {
       action : { params: {g: this.g}, func: default_color},
       rev_action: { params: {g: this.g}, func: default_color},
       concurrence: true
-    })
+    });
 
     prev_ele = id;
     ele = id;
@@ -318,7 +318,7 @@ class disjointSetAnimation {
         action: { params: {g:this.g, ds: this, ids: [ele]}, func: hightlight_col },
         rev_action: {params: {g:this.g, ds: this, ids: [prev_ele]}, func: hightlight_col},
         concurrence: true,
-      })
+      });
 
       if (this.links[ele] != -1) line = g.get_edge_by_name(ele, this.links[ele], "").ani_line;
       
@@ -357,7 +357,7 @@ class disjointSetAnimation {
 
 
 
-      console.log(str);
+      // console.log(str);
     }
 
     ele = prev_ele;
@@ -380,17 +380,17 @@ class disjointSetAnimation {
         ani.add_sequence_ani({
           pause:1,
           target:circle,
-          text: "Path Compression. Set {}'s link to {}".format(v[i], ele),
+          text: "Path Compression. Set {}'s link to {}".format_b(v[i], ele),
           action: {params: {obj: circle, ctx_prop: PATH_COMPRESSION_NODE}, func: update_ctx_prop },
           concurrence: true,
-        })
+        });
 
         prev_ele = ((i == 0)? ele : v[i - 1]);
         ani.add_sequence_ani({
           pause: 1,
           action: { params: {g:this.g, ds: this, ids: [v[i]]}, func: hightlight_col },
           rev_action: { params: {g:this.g, ds: old_ds, ids: [prev_ele], update_ids:[v[i]] }, func: hightlight_col},
-        })
+        });
 
 
 
@@ -402,7 +402,7 @@ class disjointSetAnimation {
             target: line,
             prop: {p: parent_p, type: "pivot", ani:ani, step: true},
 
-          })
+          });
 
           stop_propagation = {};
           stop_propagation[ele] = true;
@@ -420,7 +420,7 @@ class disjointSetAnimation {
           ani.add_sequence_ani({
             pause:1,
             rev_action: {params: {obj:circle}, func: enable_propagation},
-          })
+          });
         }
         
 
@@ -428,7 +428,7 @@ class disjointSetAnimation {
     }
     ani.add_sequence_ani({
       pause:1,
-      text: "Done. Find({}) = {}".format(id, ele)
+      text: "Done. Find({}) = {}".format_b(id, ele)
     });
 
     ani.run_animation(function(){
@@ -465,7 +465,7 @@ class disjointSetAnimation {
       action: {params: {ds: old_ds, id1:id1, id2:id2}, func: color_two_sets},
       rev_action : { params: {g: this.g}, func: default_color},
       concurrence: true
-    })
+    });
 
     if (this.union_type == UNION_BY_SIZE) {
       if (sizes[id1] > sizes[id2]) {
@@ -501,9 +501,9 @@ class disjointSetAnimation {
     
 
     if (this.union_type == UNION_BY_SIZE) {
-      e_text = "Union({}, {}). Parent is {}. Child is {}. Set parent's size to {}. Set child's link to {}".format(id1, id2, parent, child, this.sizes[parent], parent);
+      e_text = "Union({}, {}). Parent is {}. Child is {}. Set parent's size to {}. Set child's link to {}".format_b(id1, id2, parent, child, this.sizes[parent], parent);
     } else {
-      e_text = "Union({}, {}). Parent is {}. Child is {}. Set parent's height to {}. Set child's link to {}".format(id1, id2, parent, child, this.heights[parent], parent);
+      e_text = "Union({}, {}). Parent is {}. Child is {}. Set parent's height to {}. Set child's link to {}".format_b(id1, id2, parent, child, this.heights[parent], parent);
     }
     
     ani.add_sequence_ani({
@@ -512,14 +512,14 @@ class disjointSetAnimation {
       action: { params: {g:this.g, ds: this, ids: [child, parent]}, func: hightlight_col },
       rev_action: { params: {g:this.g, ds: old_ds, ids: [child, parent]}, func: hightlight_col},
       concurrence: true
-    })
+    });
 
 
     // animation from child to parent
     ani.add_sequence_ani({
       target: line,
       prop: {p: parent_n.ani_circle.points[0], type:"pivot", ani:ani, step: true}
-    })
+    });
 
     // when we get to parent, we wanna stop propagation.
     stop_propagation[parent_n.ani_circle.ref] = true;
@@ -535,12 +535,12 @@ class disjointSetAnimation {
       pause:1,
       rev_action: {params: {obj:child_n.ani_circle}, func: enable_propagation},
       concurrence: true,
-    })
+    });
 
     ani.add_sequence_ani({
       pause:1,
       rev_action: {params: {ds: old_ds, id1:id1, id2:id2}, func: color_two_sets},
-    })
+    });
 
     ani.run_animation(function(){
       $("#union_t").focus();

@@ -21,7 +21,7 @@
 </head>
 <body>
    <div class = "grid-container">
-    <div class = "header">Hash Tables - Separate Chaining</div>
+    <div class = "header">Hash Tables - Open Addressing</div>
     <div class = "control"> 
 
       <input type = "number" id = "table_size" placeholder="size" min = 5 max = 20 value = 10>
@@ -34,12 +34,21 @@
       <button type = "button" id = "find">Find</button> &emsp;&emsp;
 
 
-
+      <div class = "line"></div>
       <strong>Hash Function:</strong>
       <input type="radio" id="" name="hash_function" value = "customer"> 
       <label for="hash_function">Custormer</label> 
       <input type="radio" id="" name="hash_function" value = "ASCII"> 
-      <label for="hash_function">ASCII</label> 
+      <label for="hash_function">ASCII</label> &emsp;&emsp;
+
+      <strong>Collision Strategy</strong>
+      <input type="radio" id="" name="collision_strategy" value = "linear"> 
+      <label for="collision_strategy">Linear(y = i)</label> 
+      <input type="radio" id="" name="collision_strategy" value = "quadratic"> 
+      <label for="collision_strategy">Quadratic(y = i^2)</label> 
+      <input type="radio" id="" name="collision_strategy" value = "double"> 
+      <label for="collision_strategy">Double Hashing</label> 
+
       
       
       <div class = "line"></div>
@@ -69,7 +78,7 @@
 <script src="../../../lib/drawing.js"></script>
 <script src="../../../lib/memory_generator.js"></script>
 <script src="../dlist/dlist.js"></script>
-<script src="separate_chaining.js"></script>
+<script src="open_addressing.js"></script>
 <script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
 
@@ -92,7 +101,7 @@ $(document).ready(function(){
 
   set_canvas(1200, 800, 40, 55);
   
-  MAIN_A = new scHashAnimation(); 
+  MAIN_A = new oaHashAnimation(); 
 
 
   D_ANIMATION_TIME = 100 - $("#speed").val();
@@ -106,7 +115,7 @@ $(document).ready(function(){
     if (isNaN(size) || size <= 0 || size >= 30) {
        $("#elaboration_text").text("Table size must > 0 and <= 30");
     } else {
-      MAIN_A = new scHashAnimation(size);
+      MAIN_A = new oaHashAnimation(size);
     }
   })
   $("#init").click();

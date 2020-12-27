@@ -3,7 +3,7 @@
   All rights reserved.
   
   12/19/2020
-  Last Modified 12/19/2020
+  Last Modified 12/26/2020
 */
 
 const R_WIDTH = 100;
@@ -196,7 +196,7 @@ class queueAnimation {
       target: qnode.rect,
       text: "Get the first node {}".format_b(qnode.ref),
       prop: {fade_in:true, strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, step:true, time:1},
-    })
+    });
 
 
     if (next_node != null) {
@@ -219,7 +219,7 @@ class queueAnimation {
       text: "Move queue first " + ((queue.size != 0) ? "": "and last ") + "to {}'s next node, which is {}. Decrement the size by one".format_b(qnode.ref, next_ref),
       prop: {p: p, type:"pivot", ani:ani},
       concurrence: queue.size == 0
-    })
+    });
 
     if (queue.size == 0) {
       ani.add_sequence_ani({
@@ -236,18 +236,18 @@ class queueAnimation {
         target: queue_rect,
         prop: {text_fade_in: {text: "last = " + next_ref, index: 1}, time : 1},
         concurrence: true,
-      })
+      });
     }
 
     ani.add_sequence_ani({
       target: queue_rect,
       prop: {text_fade_in: {text: "first = " + next_ref, index: 0}, time : 1},
       concurrence: true,
-    })
-     ani.add_sequence_ani({
+    });
+    ani.add_sequence_ani({
       target: queue_rect,
       prop: {text_fade_in: {text: "size = " + queue.size, index: 2}, time : 1, step:true},
-    })
+    });
 
 
 
@@ -275,10 +275,7 @@ class queueAnimation {
       ani.add_sequence_ani({
         target: next_node.rect,
         prop: {p: new Point(0, R_OFFSET_Y)},
-        action : {params: {}, func: function(){
-          console.log(next_node.rect, l);
-        }}
-      })
+      });
     }
 
     ani.add_sequence_ani({
@@ -321,7 +318,7 @@ class queueAnimation {
         target:pre_node.rect,
         text: "Get the last node {}".format_b(pre_node.ref),
         prop: {fade_in:true, strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, step:true, time:1},
-      })
+      });
     }
 
     ani.add_sequence_ani({
@@ -329,7 +326,7 @@ class queueAnimation {
       text: "Make a new queue node {}".format_b(ref),
       prop: {fade_in:true, strokeStyle: 'red', shadowColor:"#FF0000", shadowBlur:15, step:true},
       concurrence:true,
-    })
+    });
 
     this.line_highlight(queue.size == 1, true);
 
@@ -339,7 +336,7 @@ class queueAnimation {
         text: "Set node {}'s next to {}".format_b(pre_node.ref, qnode.ref),
         target: pre_node.next_line,
         prop: {p: qnode.left_top_p, type:"pivot", ani:ani}
-      })
+      });
 
       ani.add_sequence_ani({
         target: pre_node.rect,
@@ -355,18 +352,18 @@ class queueAnimation {
       target: this.last_ptr_line,
       prop: {p:p, type: "pivot", ani:ani},
       concurrence: queue.size == 1
-    })
+    });
 
     if (queue.size == 1) {
       ani.add_sequence_ani({
         target: this.first_ptr_line,
         prop: {p:p, type: "pivot", ani:ani}
-      })
+      });
       ani.add_sequence_ani({
         target: queue_rect,
         prop: {text_fade_in: {text: "first = " + ref, index: 0}, time : 1},
         concurrence: true,
-      })
+      });
     }
 
 
@@ -376,11 +373,11 @@ class queueAnimation {
       target: queue_rect,
       prop: {text_fade_in: {text: "last = " + ref, index: 1}, time : 1},
       concurrence: true,
-    })
+    });
      ani.add_sequence_ani({
       target: queue_rect,
       prop: {text_fade_in: {text: "size = " + queue.size, index: 2}, time : 1, step:true},
-    })
+    });
 
     /* disable the shadow */
 
@@ -392,12 +389,12 @@ class queueAnimation {
         target: pre_node.rect,
         prop: {fade_in:true, strokeStyle: '#696969', shadowBlur:0, time:1},
         concurrence: true,
-      })
+      });
     }
     ani.add_sequence_ani({
       target: qnode.rect,
       prop: {fade_in:true, strokeStyle: '#696969', shadowBlur:0, time:1},
-    })    
+    });  
 
 
     ani.run_animation();

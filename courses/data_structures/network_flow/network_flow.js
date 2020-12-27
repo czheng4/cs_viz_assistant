@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/24/2020
-  last modified 12/04/2020
+  last modified 12/26/2020
 */
 const BFS_PATH = 0b1;
 const DFS_PATH = 0b11;
@@ -391,20 +391,21 @@ class networkFlowAnimation {
       find_path = this.modified_dijkstra();
     } else if (find_path_type == "manual") {
       find_path = this.manual_path(manual_path);
-      if (find_path == false) return 0;
+      // if (find_path == false) return 0;
     }
 
 
     
 
     if (find_path == false) {
-      // $("#elaboration_text").text("Done. Total Flow: {}".format(this.max_flow));
+      $("#elaboration_text").text("");
+      $("#elaboration_text").append("Can't find any path from {} to {}".format_b("S", "T"));
       // $("#min_cut").prop("disabled", false);
       return 0;
     }
 
     
-    console.log(this.path, find_path)
+    // console.log(this.path, find_path)
     path = this.path;
     flow = path[0].weight;
 
@@ -553,7 +554,7 @@ class networkFlowAnimation {
     str = str.trim();
     str = str.split(" ");
 
-    console.log(str);
+    // console.log(str);
     if (str.length < 2 || str[0] != "S" || str[str.length - 1] != "T") {
       $("#elaboration_text").text("Invalid path {}".format(path_str));
       return false;
@@ -604,7 +605,7 @@ class networkFlowAnimation {
     this.source.key =  Number.MAX_SAFE_INTEGER;
     map.push(this.source);
 
-    console.log(map);
+    // console.log(map);
     while (map.length != 0) {
 
       map.sort(function(a,b) {return a.key - b.key; });  // This's not efficient but fast enough for Animation.

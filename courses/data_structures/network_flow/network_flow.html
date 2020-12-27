@@ -8,7 +8,7 @@
 
   <title></title>
   <link rel="stylesheet" href="../../../style/style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="../../../lib/jquery.js"></script>
   <style type="text/css">
     input[type = "text"]{
       width: 100px;
@@ -124,7 +124,6 @@ function network_flow_example(ani) {
   g.get_edges_by_name([["S", "A", 10], ["S", "C", 14], ["A", "B", 5], 
                        ["A", "T", 5],  ["B", "T", 8], ["C","B",13],
                        ["C","D", 10],  ["D", "T", 12]]);
-  console.log(g.edge_map)
  
   $("#elaboration_text").text("");
   $("#elaboration_text").append("S is the SOURCE. T is the SINK");
@@ -185,12 +184,12 @@ $(document).ready(function(){
       $("#path_t").css("display", "none");
     }
 
-    console.log($(this)[0].id);
+    // console.log($(this)[0].id);
   })
 
   $("#run").click(function(){
     let val = $("input[name=search_type]:checked").val();
-    console.log($("#path_t").val());
+    // console.log($("#path_t").val());
     if (val == "manual") MAIN_A.find_augmenting_path(val, $("#path_t").val());
     else  MAIN_A.find_augmenting_path(val);
   })

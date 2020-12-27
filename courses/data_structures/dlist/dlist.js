@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/22/2020
-  Last Modified 11/27/2020
+  Last Modified 12/26/2020
 */
 /* 
   Doubly linked list.
@@ -14,8 +14,8 @@ class Dnode {
 		this.value = v;
 		this.flink = null;
 		this.blink = null;
-	}
-} 
+	};
+}
 
 class Dlist {
 	constructor() {
@@ -399,7 +399,7 @@ class dlistAnimation {
       p1 = ani.get_point(prev_obj.x, prev_obj.y +  height / 2);
       p2 = ani.get_point(next_obj.x, next_obj.y);
     } else if (node.blink == sentinel) {
-      h_scale = sentinel_flink_to_first_h
+      h_scale = sentinel_flink_to_first_h;
       w_scale = 0.5;
       p1 = ani.get_point(prev_obj.x, prev_obj.y +  height / 2);
       p2 = ani.get_point(next_obj.x, next_obj.y);
@@ -499,7 +499,7 @@ class dlistAnimation {
 
 
     dlist.erase(node);
-    dlist.print();
+    // dlist.print();
     ani.run_animation();
 
   }
@@ -607,7 +607,7 @@ class dlistAnimation {
     p4 = ani.get_point(x, y + height * 5 / 6); // blink
     rect.attach_points([p1, p2, p3, p4]);
 
-    lines = []
+    lines = [];
     // ani.add_object(rect);
 
     ani.add_sequence_ani( { prop: { time: 1},

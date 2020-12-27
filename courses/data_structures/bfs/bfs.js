@@ -3,10 +3,9 @@
   All rights reserved.
   
   12/17/2020
-  last modified 12/17/2020
+  last modified 12/26/2020
 
 */
-
 
 function update_rect_height(dict) {
   let q_rect = dict.q_rect,
@@ -52,7 +51,7 @@ class bfsAnimation {
         c.move(-d, 0);
       }
     }
-    this.ani.add_object(this.q_rect = new Rect(20, 280, 130, 0, "QUEUE_BFS_REF", [], "Queue", "bottom", "v", {lineWidth: .5}))
+    this.ani.add_object(this.q_rect = new Rect(20, 280, 130, 0, "QUEUE_BFS_REF", [], "Queue", "bottom", "v", {lineWidth: .5}));
     for (let i = 0; i < 20; i++) {
       this.q_rect.fillStyles.push("");
     }
@@ -83,7 +82,7 @@ class bfsAnimation {
       n = g.node_map[key];
       n.distance = -1;
       n.ani_circle.label = -1;
-      n.ani_circle.label_font = "12px Arial"
+      n.ani_circle.label_font = "12px Arial";
       n.ani_circle.label_padding = 5;
       // n.ani_circle.label_strokeStyle = "red";
       n.ani_circle.label_offset_x = -11;
@@ -129,22 +128,22 @@ class bfsAnimation {
       action: {params: {q_rect: q_rect, num: 1}, func: update_rect_height},
       rev_action : {params: {q_rect: q_rect, num: 0}, func: update_rect_height},
       concurrence:true,
-    })
+    });
 
     ani.add_sequence_ani({
       target: n.ani_circle,
       prop: {label: {text:0, color: "red"}, fade_in: true, fillStyle:"yellow", lineWidth:4, time:1},
-    })
+    });
 
     ani.add_sequence_ani({
       target:q_rect,
       prop: {fade_in: true, fillStyle: this.make_fillstyles(1, 0, 1), time:1}
-    })
+    });
 
     ani.add_sequence_ani({
       target: q_rect,
       prop: {text_fade_in: {index:0, text: n.id}, step: true},
-    })
+    });
 
    
     pre_n = n;
@@ -156,7 +155,7 @@ class bfsAnimation {
         ani.add_sequence_ani({
           target: pre_n.ani_circle,
           prop: {fade_in: true, fillStyle:"pink", lineWidth:1, time:1},
-        })
+        });
       }
       pre_n = n;
 
@@ -171,20 +170,20 @@ class bfsAnimation {
       ani.add_sequence_ani({
         target:q_rect,
         prop: {fade_in: true, fillStyle: this.make_fillstyles(queue.size + 1, queue.size, queue.size + 1), time:1},
-      })
+      });
 
     
       ani.add_sequence_ani({
         target: q_rect,
         prop: {text_fade_out: {index:queue.size}}
-      })
+      });
     
       ani.add_sequence_ani({
         target: q_rect,
         prop: {fade_in: true, text: dlist_to_rect_texts(queue), fillStyle: this.make_fillstyles(queue.size, 0,0), time: 1},
         action: {params: {q_rect: q_rect, num: queue.size}, func: update_rect_height},
         rev_action: {params: {q_rect: q_rect, num: queue.size + 1}, func: update_rect_height}
-      })
+      });
 
 
       ani.add_sequence_ani({prop:{step:true, time:1}});
@@ -204,22 +203,22 @@ class bfsAnimation {
         queue.push_back(n2);
         size++;
 
-         ani.add_sequence_ani({
+        ani.add_sequence_ani({
           target: e.ani_line,
           prop: {fade_in:true, strokeStyle: "red", lineWidth:3, time:1},
           concurrence: true,
-        })
+        });
         ani.add_sequence_ani({
           target: n.ani_circle,
           prop: {walk: {circle: n2.ani_circle, h_scale: 0}},
           concurrence: true,
-        })
+        });
 
         ani.add_sequence_ani({
           target: n2.ani_circle,
           prop: {fade_in: true, fillStyle: "pink", label: {color:"red", text: n2.distance}, time:1},
           concurrence: true,
-        })
+        });
       }
 
 
@@ -230,12 +229,12 @@ class bfsAnimation {
         prop: {text: dlist_to_rect_texts(queue), time: 1},
         action: {params: {q_rect: q_rect, num: queue.size}, func: update_rect_height},
         rev_action: {params: {q_rect: q_rect, num: queue.size - size}, func: update_rect_height}
-      })
+      });
 
       ani.add_sequence_ani({
         target:q_rect,
         prop: {fade_in: true, fillStyle: this.make_fillstyles(queue.size, 0, size), time:1},
-      })
+      });
 
       /* fade in effect for push back nodes */
       for (i = 0; i < size; i++) {
@@ -243,7 +242,7 @@ class bfsAnimation {
           target: q_rect,
           prop: {text_fade_in: {index:i}},
           concurrence: i != size - 1
-        })
+        });
       }
 
       text = "";
@@ -263,7 +262,7 @@ class bfsAnimation {
         pause:1,
         text: text,
         prop: {step: true}
-      })
+      });
 
       ani.add_sequence_ani({pause:1});
     }

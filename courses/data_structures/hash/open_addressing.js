@@ -10,33 +10,41 @@ const BLUE_SHADOW_PROP = {fade_in:true, strokeStyle: "blue", time:1, lineWidth:1
 const RED_SHADOW_PROP = {fade_in:true, strokeStyle: "red", time:1, lineWidth:1, shadowColor:"#FF0000", shadowBlur:15};
 const BLUE_LINE = {fade_in:true, strokeStyle:"blue", time:1};
 const RED_LINE = {fade_in:true, strokeStyle:"red", time:1};
+
+const COLLISION_LINEAR = 0b1;
+const COLLISION_QUADRATIC = 0b10; 
+const COLLISION_DOUBLE = 0b100; 
 class tableEntry {
-  constructor(key, rect, line) {
+  constructor(key, rect, index) {
     this.key = key;
     this.rect = rect;
-    this.line = line;
-    this.index = -1;
+    this.index = index;
+    this.tombstone = false;
   }
 }
 
-class scHashAnimation {
+
+class oaHashAnimation {
   constructor(size) {
     this.ani = new Animation();
     this.size = size;
     this.height = 30;
     this.width = 55;
     this.line_length = 30;
+    
+    this.collision = COLLISION_QUADRATIC;
     // this.line_width = 30;
-    this.pre_key_index = -1;
     this.rects = [];
     this.tables = [];
 
-    for (let i = 0; i < size; i++) this.tables.push([]);
-    this.ref_count = size;
     if (size != 0) {
       this.func_text = new Text("", 0, -30, 100, "13px Arial");
       this.ani.add_object(this.func_text);
+      
       this.create_rects();
+      for (let i = 0; i < size; i++) {
+        this.tables.push(new tableEntry(null, this.rects[i], i));
+      }
     }
   }
 
@@ -51,19 +59,20 @@ class scHashAnimation {
   }
 
   deep_copy() {
-    let schash = new scHashAnimation(0);
-    let entries;
-    schash.size = this.size;
-    schash.rects = this.rects;
-    schash.pre_key_index = this.pre_key_index;
-    schash.func_text = this.func_text;
+    let hash = new oaHashAnimation(0);
+    let from, entry;
+    hash.size = this.size;
+    hash.rects = this.rects;
+    hash.func_text = this.func_text;
+
+
     for (let i = 0; i < this.tables.length; i++) {
-      entries = [];
-      for (let j = 0; j < this.tables[i].length; j++) entries.push(this.tables[i][j]);
-      schash.tables.push(entries);
+      from = this.tables[i];
+      entry = new tableEntry(from.key, from.rect, from.index);
+      entry.tombstone = from.tombstone;
+      hash.tables.push(entry);
     }
-    schash.ref_count = this.ref_count + 10;
-    return schash;
+    return hash;
   }
   create_rects() {
     let i;
@@ -95,11 +104,11 @@ class scHashAnimation {
     return rv;
   }
 
-
-  find(key, run = true, find_text = "Find key {}") {
+  find(key, run = true, find_text = "Find key {}", call_from_insert = false) {
     let index, hash;
     let entries, entry, rect;
     let i;
+    let size = this.size;
     let ani = this.ani;
 
     if (run) {
@@ -107,12 +116,13 @@ class scHashAnimation {
       this.set_state();
       ani.set_function_call("find", [key]);
     }
+
     this.clear_pre_prop();
     hash = this.ascii_hash(key);
     index = hash % this.size;
     this.pre_key_index = index;
     rect = this.rects[index];
-    entries = this.tables[index];
+
 
     ani.add_sequence_ani({
       text: "Compute the {}'s hash table index. H({}) = {} % {} = {}".format_b(key, key, hash, this.size, index),
@@ -122,17 +132,27 @@ class scHashAnimation {
 
     ani.add_sequence_ani({prop:{step: true}});
 
-    for (i = 0; i < entries.length; i++) {
-      entry = entries[i];
+    for (i = 0; i < this.tables.length; i++) {
+      if (this.collision == COLLISION_LINEAR) {
+        entry = this.tables[(index + i) % size];
+      } else if(this.collision == COLLISION_QUADRATIC) {
+
+        entry = this.tables[(index + i * i) % size];
+        // if (entry.index == index && i != 0) {
+        //   ani.add_sequence_ani({
+        //     text: "Couldn't insert key {}".
+        //   })
+        // } 
+      }
+      /* insertion */
+      if (call_from_insert && entry.tombstone == true) break;
+
+      /* deletion and find. If the tomstone is true, we still need to keep looking */
+      if (entry.tombstone == false && entry.key == null) break;
+
       if (entry.key == key) {
-        entry.index = i;
         ani.add_sequence_ani({
           text: find_text.format_b(key),
-          target: entry.line,
-          prop:deep_copy(RED_LINE),
-          concurrence:true,
-        });
-        ani.add_sequence_ani({
           target: entry.rect,
           prop: deep_copy(RED_SHADOW_PROP),
           concurrence: true,
@@ -142,19 +162,16 @@ class scHashAnimation {
         return entry;
       } else {
         ani.add_sequence_ani({
-          text: "Traverse the list. Key = {}".format_b(entry.key),
-          target:entry.line,
-          prop: deep_copy(BLUE_LINE),
-          concurrence:true
-        });
-        ani.add_sequence_ani({
+          text: "Move to tabele entry {}".format_b(entry.index),
           target: entry.rect,
           prop: deep_copy(BLUE_SHADOW_PROP),
         });
-
         ani.add_sequence_ani({prop:{step:true}});
       }
     }
+
+
+   
 
     if (run) {
       ani.add_sequence_ani({
@@ -166,10 +183,7 @@ class scHashAnimation {
     }
 
     
-     
-    
-    return null;
-
+    return entry;
   }
 
 
@@ -190,51 +204,32 @@ class scHashAnimation {
     ani.set_function_call("insert", [key]);
     this.set_state();
     this.func_text.text = "Call insert({})".format(key);
-    // this.clear_pre_prop();
-    // ani.clear_animation();
+
+
     hash = this.ascii_hash(key);
     index = hash % this.size;
     // this.pre_key_index = index;
     rect = this.rects[index];
-    entries = this.tables[index];
 
-    if (this.find(key, false, "key {} is already in table. Do nothing") != null) {
+    entry = this.find(key, false, "key {} is already in table. Do nothing", true);
+    if (entry.key == key) {
       this.func_text_rev();
       ani.run_animation();
       return;
     }
-   
-    if (entries.length == 0) {
-      x = rect.x + rect.width / 2;
-      y = rect.y + rect.height / 2;
-      actual_line_length = this.line_length + rect.height / 2;
-    }
-    if (entries.length > 0) {
-      rect = entries[entries.length - 1].rect;
-      x = rect.x + rect.width / 2;
-      y = rect.y + rect.height;
-      actual_line_length = this.line_length;
-    }
-    line = new quadraticCurve(new Point(x, y), new Point(x, y + actual_line_length), 0);
-    line.angle_length = 8;
-    line.visible = false;
-    ani.add_object(line);
-
-    new_rect = new Rect(rect.x, y + actual_line_length, this.width, this.height, this.ref_count++, [key]);
-    ani.add_object(new_rect);
-    new_rect.visible = false;
-
-    entries.push(new tableEntry(key, new_rect, line));
+    
+    console.log(entry);
+    entry.key = key;
+    entry.tombstone = false;
     ani.add_sequence_ani({
-      text: "Add key {} into index {} of hash table".format_b(key, index),
-      target:line,
-      prop: {fade_in:true, visible:true, strokeStyle: "red"},
-      concurrence:true
-    });
+      text: "Add key {} into index {} of hash table".format_b(key, entry.index),
+      target: entry.rect,
+      prop: deep_copy(RED_SHADOW_PROP)
+    })
     ani.add_sequence_ani({
-      target:new_rect,
-      prop: {fade_in:true, visible:true, strokeStyle: "red", shadowColor:"#FF0000", shadowBlur:15},
-    });
+      target: entry.rect,
+      prop: {"text_fade_in": {text: key, index: 0}},
+    })
 
     this.func_text_rev();
     ani.run_animation();
@@ -259,7 +254,7 @@ class scHashAnimation {
     entries = this.tables[index];
 
     entry = this.find(key, false);
-    if (entry == null) {
+    if (entry.key == null) {
       ani.add_sequence_ani({
         text:"Couldn't find key {} to delete".format_b(key),
         pause:1,
@@ -273,52 +268,18 @@ class scHashAnimation {
     ani.add_sequence_ani({
       text: "Delete key {}".format_b(key),
       target:entry.rect,
-      prop: {fade_out:true},
-      concurrence:true
+      prop: {"text_fade_in": {index:0, text: "deleted"}, time:1},
     });
-    ani.add_sequence_ani({
-      target:entry.line,
-      prop:{fade_out: true}
-    });
-
-    let dy = -this.line_length - this.height;
+    entry.tombstone = true;
+    entry.key = null;
     
-    for (i = entry.index + 1; i < entries.length; i++) {
-
-      rect = entries[i].rect;
-      ani.add_sequence_ani({
-        target: rect,
-        prop: {p: new Point(rect.x, rect.y + dy), type : "parallel"},
-        concurrence: true
-      })
-      ani.add_sequence_ani({
-        target: entries[i].line,
-        prop: {p: new Point(0, dy), type : "parallel"},
-        concurrence: true
-      })
-      if (entry.index == 0 && i == 1){
-        ani.add_sequence_ani({
-          target: entries[i].line,
-          action: {params: entries[i].line, func: function(line) {line.p1.y -= 15; }},
-          rev_action:  {params: entries[i].line, func: function(line) {line.p1.y += 15; }},
-        });
-      }
-    }
-    entries.splice(entry.index, 1);
     this.func_text_rev();
     ani.run_animation();
   }
 
   clear_pre_prop() {
-    let entries;
-    let i;
-
-    if (this.pre_key_index == -1) return;
-    this.rects[this.pre_key_index].ctx_prop = deep_copy(DEFAULT_RECT_CTX);
-    entries = this.tables[this.pre_key_index];
-    for (i = 0; i < entries.length; i++) {
-      entries[i].rect.ctx_prop = deep_copy(DEFAULT_RECT_CTX);
-      entries[i].line.ctx_prop = deep_copy(DEFAULT_LINE_CTX);
+    for (let i = 0; i < this.tables.length; i++) {
+      this.tables[i].rect.ctx_prop = deep_copy(DEFAULT_RECT_CTX);
     }
   }
 

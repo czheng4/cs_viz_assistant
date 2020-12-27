@@ -3,7 +3,7 @@
   All rights reserved.
   
   12/20/2020
-  Last Modified 12/24/2020
+  Last Modified 12/26/2020
 */
 
 /*
@@ -119,11 +119,11 @@ const default_color = "#DDDDDD";
 
 const PIVOT_FIRST = "first";
 const PIVOT_LAST = "last";
-const PIVOT_MEDIAN = "median"
+const PIVOT_MEDIAN = "median";
 
 
-const PARTITION_LOMUTO = "lumoto";
-const PARTITION_HOARE = "hoare"
+const PARTITION_LOMUTO = "lomuto";
+const PARTITION_HOARE = "hoare";
 const PARTITION_LAB = "lab";
 
 
@@ -155,7 +155,7 @@ class quickSortAnimation {
 
     let rv = this.recursive_sort(v, 0, rect, rect.x, rect.y, 0, v.length);
     // this.ani.run_animation();
-    console.log(rv);
+    // console.log(rv);
   }
 
   generate_ref() {
@@ -185,7 +185,8 @@ class quickSortAnimation {
           text: "Swap {}{}(array[{}])</span> and {}{}(array[{}])</span>".format(
                  v[0], BLUE_SPAN, start, 
                  v[1], BLUE_SPAN, start + 1),
-          prop: {swap:{index1:0, index2:1, h_scale: 3}, time: 3 * ANIMATION_TIME, step:true}})
+          prop: {swap:{index1:0, index2:1, h_scale: 3}, time: 3 * ANIMATION_TIME, step:true}
+				});
         return [v[1], v[0]];
       }
       else return v;
@@ -209,7 +210,7 @@ class quickSortAnimation {
     }
    
 
-    console.log(rp);
+    // console.log(rp);
     // v1 = v.splice(0, rp);
     // v2 = v.splice(1);
 
@@ -342,7 +343,7 @@ class quickSortAnimation {
     }
 
     // make animation 
-    ani.add_sequence_ani({pause: ANIMATION_TIME / 4})
+    ani.add_sequence_ani({pause: ANIMATION_TIME / 4});
     e_text = "Split array{} at index {} such that we recursively sort ".format_b(
               "[{}:{}]".format(start, start + v1.length + v2.length),
               "{}".format(start + v1.length));
@@ -448,11 +449,11 @@ class quickSortAnimation {
     ani.add_sequence_ani({
       target: pivot_text,
       prop: {visible: true, time:1},
-    })
+    });
     ani.add_sequence_ani({
       text: "Choose {} as pivot".format_b(pivot),
       prop: {step:true}
-    })
+    });
 
 
     ani.add_object(rp_line);
@@ -592,6 +593,7 @@ class quickSortAnimation {
                          v[rp], rp + start,"i"));
           this.move_ptr_ani(lp_line, this.ss, "i = " + (lp + start));
           this.rect_color_ani(rect, v.length, pivot_index, lp, rp, 0, false);
+          swap(v, lp, rp);
           this.swap_ani(rect, lp, rp, true);
          
         }
@@ -762,8 +764,7 @@ class quickSortAnimation {
       target: line,
       prop: {text: line_text, time: 1},
       concurrence: true,
-      action : {params: {}, func: function(){console.log(line)}}
-    })
+    });
   }
 
   swap_ani(rect, index1, index2, step = true) {
@@ -775,7 +776,7 @@ class quickSortAnimation {
     this.ani.add_sequence_ani({ 
       target: rect,
       prop: {swap:{index1:index1, index2:index2, h_scale: h_scale}, time: 3 * ANIMATION_TIME, step:step}
-    })
+    });
     
   }
 
@@ -788,7 +789,7 @@ class quickSortAnimation {
     });
 
 
-    if (step) this.ani.add_sequence_ani({prop:{step:true, time:1}})
+    if (step) this.ani.add_sequence_ani({prop:{step:true, time:1}});
 
   }
 

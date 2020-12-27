@@ -3,7 +3,7 @@
   All rights reserved.
   
   12/18/2020
-  Last Modified 12/19/2020
+  Last Modified 12/26/2020
 */
 
 const R_WIDTH = 100;
@@ -177,7 +177,7 @@ class stackAnimation {
       target: snode.rect,
       text: "Get the top node {}".format_b(snode.ref),
       prop: {fade_in:true, strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, step:true, time:1},
-    })
+    });
 
 
     if (pre_node != null) {
@@ -191,7 +191,7 @@ class stackAnimation {
       target: this.top_ptr_line,
       text: "Move stack top to {}'s next node, which is {}. Decrement the size by one".format_b(snode.ref, pre_ref),
       prop: {p: p, type:"pivot", ani:ani},
-    })
+    });
 
 
     /* set text of stack */
@@ -199,11 +199,11 @@ class stackAnimation {
       target: stack_rect,
       prop: {text_fade_in: {text: "top = " + pre_ref, index: 0}, time : 1},
       concurrence: true,
-    })
+    });
      ani.add_sequence_ani({
       target: stack_rect,
       prop: {text_fade_in: {text: "size = " + stack.size, index: 1}, time : 1, step:true},
-    })
+    });
 
 
     /* rm the rect and its next_line */
@@ -261,14 +261,14 @@ class stackAnimation {
         target:pre_node.rect,
         text: "Get the top node {}".format_b(pre_node.ref),
         prop: {fade_in:true, strokeStyle: 'blue', shadowColor:"#0000FF", shadowBlur:15, step:true, time:1},
-      })
+      });
     }
 
     ani.add_sequence_ani({
       target:rect,
       text: "Make a new stack node {}".format_b(ref),
       prop: {fade_in:true, strokeStyle: 'red', shadowColor:"#FF0000", shadowBlur:15, step:true}
-    })
+    });
 
 
     if (pre_node != null) {
@@ -278,7 +278,7 @@ class stackAnimation {
         text: "Set added node {}'s next to {}".format_b(snode.ref, pre_node.ref),
         target: snode.next_line,
         prop: {p: pre_node.right_top_p, type:"pivot", ani:ani}
-      })
+      });
 
       ani.add_sequence_ani({
         target: snode.rect,
@@ -293,7 +293,7 @@ class stackAnimation {
       text: "Move top point to the new node {}. Increment the size by one".format_b(ref),
       target: this.top_ptr_line,
       prop: {p:p, type: "pivot", ani:ani},
-    })
+    });
 
 
 
@@ -302,11 +302,11 @@ class stackAnimation {
       target: stack_rect,
       prop: {text_fade_in: {text: "top = " + ref, index: 0}, time : 1},
       concurrence: true,
-    })
-     ani.add_sequence_ani({
+    });
+    ani.add_sequence_ani({
       target: stack_rect,
       prop: {text_fade_in: {text: "size = " + stack.size, index: 1}, time : 1, step:true},
-    })
+    });
 
     /* disable the shadow */
 
@@ -318,12 +318,12 @@ class stackAnimation {
         target: pre_node.rect,
         prop: {fade_in:true, strokeStyle: '#696969', shadowBlur:0, time:1},
         concurrence: true,
-      })
+      });
     }
     ani.add_sequence_ani({
       target: snode.rect,
       prop: {fade_in:true, strokeStyle: '#696969', shadowBlur:0, time:1},
-    })    
+    });   
 
 
     ani.run_animation();

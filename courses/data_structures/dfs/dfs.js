@@ -3,7 +3,7 @@
   All rights reserved.
   
   12/15/2020
-  last modified 12/16/2020
+  last modified 12/26/2020
 
 */
 
@@ -54,7 +54,7 @@ class dfsAnimation {
     this.ani.add_sequence_ani({
       pause:1,
       text: "Done",
-    })
+    });
     this.ani.run_animation();
   }
 
@@ -68,13 +68,13 @@ class dfsAnimation {
       ani.add_sequence_ani({
         target: from.ani_circle,
         prop: {fade_in: true, fillStyle: "yellow", time : 1, lineWidth:1},
-      })
+      });
     }
     if (to != null) {
       ani.add_sequence_ani({
         target: to.ani_circle,
         prop: {fade_in: true, fillStyle: "yellow", time : 1, lineWidth:4},
-      })
+      });
     }
   }
 
@@ -92,7 +92,7 @@ class dfsAnimation {
       ani.add_sequence_ani({
         prop: {step: true, time: 1},
         text: "Node {} has been visited before. Do nothing".format_b(n.id),
-      })
+      });
     }
 
     rv = false;
@@ -103,7 +103,7 @@ class dfsAnimation {
         target: n.ani_circle,
         text: "Mark node {} visited".format_b(n.id),
         prop: {step:true},
-      })
+      });
 
       n.visited = 1;
       if (n == this.ending_node) {
@@ -181,7 +181,7 @@ class dfsAnimation {
       else text += to.id;
       if (i != adj.length - 1) text += ", ";
     }
-    text += "}"
+    text += "}";
     return text;
   }
 
