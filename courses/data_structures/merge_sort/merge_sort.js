@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/22/2020
-  Last Modified 11/24/2020
+  Last Modified 12/26/2020
 */
 
 function add_objs_to_ani(dict) {
@@ -56,16 +56,14 @@ class mergeSortAnimation {
 	constructor(v) {
     this.v = v;
     this.ani = new Animation();
-    this.ss = 50; //square_size
+    this.ss = 45; //square_size
     this.ms = new memorySimulator();
-    this.width = 900;
     this.margin = 75;
-
 
     let x,y;
     let rect,p;
 
-    x = (this.width - this.ss * v.length) / 2;
+    x = this.margin * 2.5;
     y = 0;
     rect = new Rect(x, y, v.length * this.ss, this.ss, this.ms.get_reference(v), deep_copy(v), "", "bottom", "h");
     p = this.ani.get_point((rect.x + rect.width) / 2, rect.y + rect.height);
@@ -108,7 +106,8 @@ class mergeSortAnimation {
           text: "Swap {}{}(array[{}])</span> and {}{}(array[{}])</span>".format(
                  v[0], BLUE_SPAN, start, 
                  v[1], BLUE_SPAN, start + 1),
-          prop: {swap:{index1:0, index2:1, h_scale: 3}, time: 3 * ANIMATION_TIME, step:true}})
+          prop: {swap:{index1:0, index2:1, h_scale: 3}, time: 3 * ANIMATION_TIME, step:true}
+        });
         return [v[1], v[0]];
       }
       else return v;
@@ -149,11 +148,11 @@ class mergeSortAnimation {
       ani.add_sequence_ani( {pause: 1, prop: {step: true}});
     }
 
-    ani.add_sequence_ani({pause: ANIMATION_TIME / 4})
+    ani.add_sequence_ani({pause: ANIMATION_TIME / 4});
     e_text = "Split the array{}[{}:{}]</span> into half where each of them sorts interval {}[{}:{}]</span> and {}[{}:{}]</span> respectively".format(
               BLUE_SPAN, start, start + size - 1,
               BLUE_SPAN, start, start + parseInt(size / 2) - 1,
-              BLUE_SPAN, start + parseInt(size / 2), start + size - 1)
+              BLUE_SPAN, start + parseInt(size / 2), start + size - 1);
    
     ani.add_sequence_ani({ pause: 1,  
                            text: e_text,  
@@ -174,7 +173,7 @@ class mergeSortAnimation {
     v2 = this.recursive_sort(v2, level + 1, rect2, rect2.x + this.margin * Math.pow(0.5, level), rect2.y + this.ss + this.margin, start + parseInt(size / 2), size - parseInt(size / 2));
 
 
-    rv = []
+    rv = [];
 
     if (!ani.is_last_sequence_ani_step()) {
       ani.add_sequence_ani( {pause: 1, prop: {step: true}});
@@ -188,13 +187,13 @@ class mergeSortAnimation {
     ani.add_sequence_ani( {pause: 1, 
                            action: { params: { obj:rect1, fillStyle: make_single_color(lp, rect1.text.length, left_color, default_color) }, func: update_color },
                            rev_action: {params: {obj: rect1, fillStyle: make_same_color(v1.length,default_color)}, func:update_color },
-                           concurrence: true} )
+                           concurrence: true} );
     
 
     ani.add_sequence_ani( {pause: 1, 
                            action: { params: { obj:rect2, fillStyle: make_single_color(rp, rect2.text.length, right_color, default_color) }, func: update_color },
                            rev_action: {params: {obj: rect2, fillStyle: make_same_color(v2.length, default_color)}, func:update_color },
-                           concurrence: false} )
+                           concurrence: false} );
     
 
     e_text = "Merge array{}[{}:{}]</span> and array{}[{}:{}]</span>".format(
@@ -212,23 +211,23 @@ class mergeSortAnimation {
         fill_styles[i] = left_color;
         ani.add_sequence_ani( {target: rect1,
                                text: "Merge value {}{}(array[{}])</span>".format(v1[lp], BLUE_SPAN, start + lp),
-                               prop: {copy:{index1:lp, rect: prev_rect, index2:i, h_scale: 0}}})
+                               prop: {copy:{index1:lp, rect: prev_rect, index2:i, h_scale: 0}}});
 
 
         ani.add_sequence_ani( {pause: 1, 
                                action: { params: {obj:prev_rect, fillStyle: deep_copy(fill_styles)}, func: update_color },
                                rev_action: {params: {obj: prev_rect, fillStyle: tmp_fill_styles}, func:update_color },
-                               concurrence: true} )
+                               concurrence: true} );
         
       
         
         lp++;
         if (lp < v1.length)
           ani.add_sequence_ani( {pause: 1, 
-                               action: { params: { obj:rect1, fillStyle: make_single_color(lp, rect1.text.length, left_color, default_color) }, func: update_color }} )
+                               action: { params: { obj:rect1, fillStyle: make_single_color(lp, rect1.text.length, left_color, default_color) }, func: update_color }} );
         else {
           ani.add_sequence_ani( { pause: 1, 
-                            action: { params: {obj:rect1, fillStyle: make_same_color(v1.length, default_color)}, func: update_color }} )
+                            action: { params: {obj:rect1, fillStyle: make_same_color(v1.length, default_color)}, func: update_color }} );
         }
 
         ani.add_sequence_ani( {pause: ANIMATION_TIME / 4,prop: {step:true} });
@@ -238,20 +237,20 @@ class mergeSortAnimation {
         fill_styles[i] = right_color;
         ani.add_sequence_ani( {target: rect2, 
                                text: "Merge value {}{}(array[{}])</span>".format(v2[rp], BLUE_SPAN, start + parseInt(size / 2) + rp),
-                               prop: {copy:{index1:rp, rect: prev_rect, index2:i, h_scale: 0}}})
+                               prop: {copy:{index1:rp, rect: prev_rect, index2:i, h_scale: 0}}});
 
 
         ani.add_sequence_ani( {pause: 1, 
                                action: { params: {obj:prev_rect, fillStyle: deep_copy(fill_styles)}, func: update_color },
                                rev_action: {params: {obj: prev_rect, fillStyle: tmp_fill_styles}, func:update_color },
-                               concurrence: true} )
+                               concurrence: true} );
         rp++;
         if (rp < v2.length)
           ani.add_sequence_ani( { pause: 1, 
-                                  action: { params: { obj:rect2, fillStyle: make_single_color(rp, rect2.text.length, right_color, default_color) }, func: update_color }} )
+                                  action: { params: { obj:rect2, fillStyle: make_single_color(rp, rect2.text.length, right_color, default_color) }, func: update_color }} );
         else {
           ani.add_sequence_ani( { pause: 1, 
-                                  action: { params: {obj:rect2, fillStyle: make_same_color(v2.length, default_color)}, func: update_color }} )
+                                  action: { params: {obj:rect2, fillStyle: make_same_color(v2.length, default_color)}, func: update_color }} );
         }
 
         ani.add_sequence_ani( {pause: ANIMATION_TIME / 4, prop: {step:true} });
@@ -262,7 +261,7 @@ class mergeSortAnimation {
     ani.add_sequence_ani( { pause: 1, 
                             text: e_text + ". Done",
                             prop: {step: true},
-                            action: { params: {obj:prev_rect, fillStyle: make_same_color(v1.length + v2.length, default_color)}, func: update_color }})
+                            action: { params: {obj:prev_rect, fillStyle: make_same_color(v1.length + v2.length, default_color)}, func: update_color }});
  
   
     return rv;

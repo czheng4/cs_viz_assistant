@@ -1,6 +1,6 @@
 <!--
   ChaoHui Zheng
-  11/28/2020
+  12/24/2020
 -->
 <!DOCTYPE html>
 <html>
@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="../../../style/style.css">
   <script src="../../../lib/jquery.js"></script>
   <style type="text/css">
-    input[type = "number"]{
-      width: 70px;
+    input[type = "number"], input[type="text"]{
+      width: 55px;
     }
     #insert, #delete, #find {
       width: 55px;
@@ -21,19 +21,36 @@
 </head>
 <body>
    <div class = "grid-container">
-    <div class = "header">Binary Search Tree</div>
+    <div class = "header">Hash Tables - Open Addressing</div>
     <div class = "control"> 
 
-      
-      <input type = "number" id = "key" placeholder="number">
+      <input type = "number" id = "table_size" placeholder="size" min = 5 max = 20 value = 10>
+      <button type="button" id = "init" >Initialize Hash Table</button>  &emsp;&emsp;
+ 
+      <input type = "text" id = "key" placeholder="key">
+      <input type = "text" id = "hash_value" placeholder="hash" style = "display: none">
       <button type="button" id = "insert">Insert</button> 
       <button type = "button" id = "delete">Delete</button>
       <button type = "button" id = "find">Find</button> &emsp;&emsp;
 
-      <button type = "button" id = "print">Inorder Print</button> &emsp;
-      <button type = "button" id = "balance">Balance Tree</button> &emsp;
 
-      <button type="button" id = "clear_tree">Clear Tree</button>      
+      <div class = "line"></div>
+      <strong>Hash Function:</strong>
+      <input type="radio" id="" name="hash_function" value = "customer"> 
+      <label for="hash_function">Custormer</label> 
+      <input type="radio" id="" name="hash_function" value = "ASCII"> 
+      <label for="hash_function">ASCII</label> &emsp;&emsp;
+
+      <strong>Collision Strategy</strong>
+      <input type="radio" id="" name="collision_strategy" value = "linear"> 
+      <label for="collision_strategy">Linear(y = i)</label> 
+      <input type="radio" id="" name="collision_strategy" value = "quadratic"> 
+      <label for="collision_strategy">Quadratic(y = i^2)</label> 
+      <input type="radio" id="" name="collision_strategy" value = "double"> 
+      <label for="collision_strategy">Double Hashing</label> 
+
+      
+      
       <div class = "line"></div>
       
       <div class = "animation-control">
@@ -61,30 +78,14 @@
 <script src="../../../lib/drawing.js"></script>
 <script src="../../../lib/memory_generator.js"></script>
 <script src="../dlist/dlist.js"></script>
-<script src="bst.js"></script>
+<script src="open_addressing.js"></script>
 <script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
 
-function bst_test1() {
 
-  aniTester = new animationTester(100);
- 
-  aniTester.add_func("insert", [10]);
-  aniTester.add_func("insert", [4]);
-  aniTester.add_func("insert", [3]);
-  aniTester.add_func("insert", [7]);
-  aniTester.add_func("insert", [2]);
-  aniTester.add_func("insert", [2.5]);
-  aniTester.add_func("insert", [2.45]);
-  aniTester.add_func("insert", [2.55]);
-  // aniTester.add_func("insert", [3.55]);
-  // for (let i = 0; i < 10; i++) aniTester.add_func("go_forward");
-  for (let i = 0; i < 5; i++) aniTester.add_func("insert", [parseInt(Math.random() * 1000)]);
-  aniTester.run_test();
-
-}
 
 function input_check() {
+  return true;
   let val = $("#key").val();
   val = parseFloat(val);
   if (isNaN(val)) {
@@ -98,28 +99,26 @@ $(document).ready(function(){
   
 
 
-  set_canvas(1200, 800, 0, 75);
-  MAIN_G_SPEC.weight_type = T_CONSTANT;
-  MAIN_G_SPEC.enable_node_color_change = false;
-  MAIN_G_SPEC.enable_edge_color_change = false;
-  MAIN_G_SPEC.graph_type = T_DIRECTED;
-  MAIN_G_SPEC.enable_node_move = true;
-  MAIN_G_SPEC.enable_edge_create = false;
-  MAIN_G_SPEC.layout = "tree";
-  MAIN_G_SPEC.gap_x = 475;
-  MAIN_G_SPEC.center_x = 600;
-  MAIN_G_SPEC.node_radius = 20;
-
- 
+  set_canvas(1200, 800, 40, 55);
   
-  MAIN_A = new binarySearchTreeAnimation(); 
-  MAIN_G = MAIN_A.g;
+  MAIN_A = new oaHashAnimation(); 
+
 
   D_ANIMATION_TIME = 100 - $("#speed").val();
-   
-  bst_test1();
- 
-  MAIN_G.draw();  
+
+
+  MAIN_A.ani.elaboration.text("the sum of ASCII of each character of string is used as hash value");
+
+  $("#init").click(function(){
+    let size = $("#table_size").val();
+    size = parseInt(size);
+    if (isNaN(size) || size <= 0 || size >= 30) {
+       $("#elaboration_text").text("Table size must > 0 and <= 30");
+    } else {
+      MAIN_A = new oaHashAnimation(size);
+    }
+  })
+  $("#init").click();
  
   $("#insert").click(function() {
     if (input_check()) MAIN_A.insert($("#key").val());
@@ -132,21 +131,6 @@ $(document).ready(function(){
   $("#delete").click(function() {
     if (input_check()) MAIN_A.delete($("#key").val());
   })
-
-  $("#print").click(function() {
-    MAIN_A.inorder_print();
-  })
-
-  $("#balance").click(function(){
-    MAIN_A.rebalance_tree();
-  })
-
-  $("#clear_tree").click(function() {
-    MAIN_A = new binarySearchTreeAnimation(); 
-    MAIN_G = MAIN_A.g;
-    MAIN_G.draw();
-  })
-
 
 
 });

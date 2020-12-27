@@ -1,6 +1,6 @@
 <!--
   ChaoHui Zheng
-  11/22/2020
+  12/20/2020
 -->
 <!DOCTYPE html>
 <html>
@@ -12,12 +12,32 @@
 </head>
 <body>
    <div class = "grid-container">
-    <div class = "header">Merge Sort</div>
+    <div class = "header">Quick Sort</div>
     <div class = "control"> 
 
-      Array <input type="text" id="array" placeholder="Enter values separated by space" style = "width: 500px; height:25px; font-size:20px" value="21 35 12 9 4 56 3 5 10 34 21"> 
+      Array  <input type="text" id="array" placeholder="Enter values separated by space" style = "width: 500px; height:25px; font-size:20px" value="21 35 12 9 4 56 3 5 10 34 21"> 
 
       <button type="button" id = "run">run</button>
+      <div class="line"></div>
+
+      <strong>Pivot Choice:</strong>
+      <input type="radio" id="" name="pivot_type" value = "first"> 
+      <label for="pivot_type">First</label> 
+      <input type="radio" id="" name="pivot_type" value = "last"> 
+      <label for="pivot_type">Last</label> 
+      <input type="radio" id="" name="pivot_type" value = "median" checked> 
+      <label for="pivot_type">Median-of-three</label> 
+      
+      &emsp;&emsp;&emsp;
+      <strong>Partition scheme:</strong>
+      <input type="radio" id="" name="partition_type" value = "lomuto"> 
+      <label for="partition_type">Lomuto partition</label> 
+      <input type="radio" id="" name="partition_type" value = "hoare"> 
+      <label for="partition_type">Hoare partition</label> 
+      <input type="radio" id="" name="partition_type" value = "lab" checked> 
+      <label for="partition_type">Hoare's modified partition</label> 
+      
+
       <div class="line"></div>
 
       <div class = "animation-control">
@@ -45,7 +65,7 @@
 
 <script src="../../../lib/drawing.js"></script>
 <script src="../../../lib/memory_generator.js"></script>
-<script src="merge_sort.js"></script>
+<script src="quick_sort.js"></script>
 <script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
 
@@ -55,14 +75,21 @@ $(document).ready(function(){
   set_canvas(1200, 800, 0, 50);
 
   var v = [21,35,12,9,4,56,3,5,10,34,21];
-  MAIN_A = new mergeSortAnimation(deep_copy(v)); //must use name MAIN_A
+  // for (let i = 0; i < 10; i++) v.push(i);
+  MAIN_A = new quickSortAnimation(deep_copy(v)); //must use name MAIN_A
+  ENABLE_IDS = ["input[name=pivot_type]", "input[name=partition_type]"];
+  // MAIN_A.ani.step_by_step = true;
 
-
+  // $("#run").click();
   $("#run").click(function() {
 
     let str = $("#array").val();
     let d;
     let v1 = v;
+    let pivot_type = $("input[name=pivot_type]:checked").val();
+    let partition_type = $("input[name=partition_type]:checked").val();
+
+
     str = str.split(/[ ,]+/);
    
     v = [];
@@ -80,7 +107,11 @@ $(document).ready(function(){
     }
 
     if (v.length != 0) {
-      MAIN_A = new mergeSortAnimation(deep_copy(v));
+      MAIN_A = new quickSortAnimation(deep_copy(v), pivot_type, partition_type);
+
+      // MAIN_A.pivot_type = pivot_type;
+      // MAIN_A.partition_type = partition_type;
+
       MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
       MAIN_A.run_animation();
     }

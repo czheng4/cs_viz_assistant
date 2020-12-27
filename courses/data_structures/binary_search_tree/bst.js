@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/28/2020
-  last modified 12/13/2020
+  last modified 12/14/2020
 */
 
 // for node type
@@ -833,9 +833,9 @@ class binarySearchTreeAnimation {
 
       cmp_key = n.ani_node.ani_circle.text;
       if (key == null) text = "Find the rightmost node";
-      else if (key < cmp_key) text = "Key {}  <  {}. Go left".format(key, cmp_key);
-      else if (key > cmp_key) text = "Key {}  >  {}. Go right".format(key, cmp_key);
-      else text = "Key {}  =  {}.".format(key, cmp_key);
+      else if (key < cmp_key) text = "Key {}  <  {}. Go left".format_b(key, cmp_key);
+      else if (key > cmp_key) text = "Key {}  >  {}. Go right".format_b(key, cmp_key);
+      else text = "Key {}  =  {}.".format_b(key, cmp_key);
 
       if (i != path.length - 1) {
         n2 = path[i + 1];
@@ -962,7 +962,7 @@ class binarySearchTreeAnimation {
     /* otherwise, we already have it in the tree */
     } else {
       ani.add_sequence_ani({
-        text: "Key {} is already in the tree. Insert({}) = False".format(key, key)
+        text: "Key {} is already in the tree. Insert({}) = False".format_b(key, key)
       });
     }
 

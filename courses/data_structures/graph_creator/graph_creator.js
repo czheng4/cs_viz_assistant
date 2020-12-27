@@ -359,7 +359,7 @@ $(document).ready(function(){
       $("#go_forward").prop("disabled", true);
 
 
-      if (MAIN_G.graph_type == "direct") $("#directed").attr("checked", true);
+      if (MAIN_G.graph_type == "direct" || MAIN_G.graph_type == "directed") $("#directed").attr("checked", true);
       else $("#undirected").attr("checked", true);
       
       console.log(MAIN_G);

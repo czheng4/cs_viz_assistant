@@ -8,7 +8,7 @@
 
   <title></title>
   <link rel="stylesheet" href="../../../style/style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="../../../lib/jquery.js"></script>
 </head>
 <style>
   input[type = "text"]{
@@ -85,7 +85,7 @@ $(document).ready(function(){
   MAIN_A = new dlistAnimation(); // must use name a for every animation
   D_ANIMATION_TIME = 100 - $("#speed").val();
 
-  // dlist_test1();
+  dlist_test1();
   $("#push_back").click(function(){
     MAIN_A.push_back($("#push_back_t").val());
   });

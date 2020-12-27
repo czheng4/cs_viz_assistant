@@ -3,18 +3,27 @@
   All rights reserved.
   
   11/30/2020
-  last modified 12/04/2020
+  last modified 12/18/2020
 */
 
-
-
-function set_color(dict) {
-  if (dict.reverse) dict.q_rect.text_color = dict.q_rect.tmp_text_color;
-  else {
-    dict.q_rect.tmp_text_color = dict.q_rect.text_color;
-    dict.q_rect.text_color = {};
+function make_fillstyles(size, start, end) {
+  let i;
+  let fillStyle = [];
+  for (i = 0; i < size; i++) {
+    if (i >= start && i < end) fillStyle.push("lightblue");
+    else fillStyle.push(BACKGROUND_COLOR);
   }
+  return fillStyle;
 }
+
+function update_rect_height(dict) {
+  let q_rect = dict.q_rect,
+      num = dict.num;
+
+  q_rect.height = num * 26;
+  q_rect.y = 280 - q_rect.height;
+}
+
 
 function table_td(id, content) {
   return "<td id = " + id + " >" + content + "</td>";
@@ -51,15 +60,6 @@ function html_table(g) {
   }
 }
 
-function update_rect_text(dict) {
-  let q_rect = dict.q_rect,
-      texts = dict.texts;
-
-  q_rect.text = deep_copy(texts);
-  q_rect.height = texts.length * 26;
-  q_rect.y = 280 - q_rect.height;
-  
-}
 
 function update_html_table(dict) {
   
@@ -142,13 +142,7 @@ class toplogicalSortAnimation {
    
   }
 
-  reset_text_color() {
-    this.ani.add_sequence_ani({
-      pause:1,
-      action: {params: {q_rect:this.q_rect, reverse: false}, func: set_color},
-      rev_action: {params: {q_rect:this.q_rect, reverse: true}, func: set_color},
-    })
-  }
+
 
   make_queue_rect() {
     let g = this.g;
@@ -194,7 +188,7 @@ class toplogicalSortAnimation {
     let e, n, n2, tmp_n, tmp_n1, starting_node;
     let i, d;
     let queue = new Dlist();
-    let e_text, l_text, pre_l_text;
+    let e_text;
     let q_rect;
 
     starting_node_id = starting_node_id.trim();
@@ -258,20 +252,20 @@ class toplogicalSortAnimation {
       concurrence: true,
     })
 
-    pre_l_text = [];
-    l_text = dlist_to_rect_texts(queue);
+   
     ani.add_sequence_ani({
-      pause:1,
-      action: {params: {q_rect: q_rect, texts: l_text}, func: update_rect_text},
-      rev_action: {params: {q_rect: q_rect, texts: pre_l_text}, func: update_rect_text},
+      target: q_rect,
+      prop: {fade_in:true, text: dlist_to_rect_texts(queue), fillStyle: make_fillstyles(queue.size, 0, queue.size), time: 1},
+      action: {params: {q_rect: q_rect, num: queue.size}, func: update_rect_height},
+      rev_action: {params: {q_rect: q_rect, num: 0}, func: update_rect_height}
     })
-    pre_l_text = deep_copy(l_text);
 
-    for (i = 0; i < l_text.length; i++) {
+
+    for (i = 0; i < queue.size; i++) {
       ani.add_sequence_ani({
         target: q_rect,
-        prop: {"text_fade_in": {index: i, color: "red"}},
-        concurrence: (i < l_text.length - 1)
+        prop: {"text_fade_in": {index: i}},
+        concurrence: (i < queue.size - 1)
       })
     }
     ani.add_sequence_ani({pause: 1, prop:{step: true}});
@@ -305,31 +299,32 @@ class toplogicalSortAnimation {
       }
       e_text += " }</span>";
       
-      this.reset_text_color();
       ani.add_sequence_ani({
         pause:1,
+        text: "Remove the first node {} {} {}from the front of the list and process its adjacent edges ".format(BLUE_SPAN, n.id, "</span>") + e_text,
         action: {params: {nodes: [node_copy(n)]}, func: update_html_table },
         concurrence:true,
       })
+     
       ani.add_sequence_ani({
-        target: q_rect,
-        text: "Remove the first node {} {} {}from list and process its adjacent edges ".format(BLUE_SPAN, n.id, "</span>") + e_text,
-        prop: {"text_fade_out": {index: queue.size, color: "red"}, step: true},
-      })
-      ani.add_sequence_ani({
-        pause:1,
-        rev_action: {params: {nodes: [node_copy(n)]}, func: update_html_table },
-        concurrence:true,
+        target:q_rect,
+        prop: {fade_in: true, fillStyle: make_fillstyles(queue.size + 1, queue.size, queue.size + 1), time:1},
       })
 
-      l_text = dlist_to_rect_texts(queue);
-      pre_l_text[queue.size] = "";
+    
       ani.add_sequence_ani({
-        pause:1,
-        action: {params: {q_rect: q_rect, texts: l_text}, func: update_rect_text},
-        rev_action: {params: {q_rect: q_rect, texts: pre_l_text}, func: update_rect_text},
+        target: q_rect,
+        prop: {text_fade_out: {index:queue.size}}
       })
-      pre_l_text = deep_copy(l_text);
+    
+      ani.add_sequence_ani({
+        target: q_rect,
+        prop: {fade_in: true, text: dlist_to_rect_texts(queue), fillStyle: make_fillstyles(queue.size, 0,0), time: 1},
+        action: {params: {q_rect: q_rect, num: queue.size}, func: update_rect_height},
+        rev_action: {params: {q_rect: q_rect, num: queue.size + 1}, func: update_rect_height}
+      })
+
+      ani.add_sequence_ani({prop:{step:true, time:1}});
 
       for (i = 0; i < n.adj.length; i++) {
         e = n.adj[i];
@@ -341,8 +336,8 @@ class toplogicalSortAnimation {
         n2.num_path += n.num_path;
         n2.num_in--;
 
-        tmp_n.to_num_path = n.num_path;
-        tmp_n.to_num_in = n.num_in;
+        tmp_n.to_num_path = n2.num_path;
+        tmp_n.to_num_in = n2.num_in;
 
         if (n2.num_in == 0) {
           queue.push_back(n2);
@@ -372,19 +367,31 @@ class toplogicalSortAnimation {
 
 
         if (n2.num_in == 0) {
-          l_text = dlist_to_rect_texts(queue);
+
           ani.add_sequence_ani({
             pause:1,
             text: "Node {}{}</span> has 0 incoming edges. Append it to the list".format(BLUE_SPAN, n2.id),
-            action: {params: {q_rect: q_rect, texts: l_text}, func: update_rect_text},
-            rev_action: {params: {q_rect: q_rect, texts: pre_l_text}, func: update_rect_text},
-          })
-          pre_l_text = deep_copy(l_text);
+            concurrence:true
+          });
+          
+          ani.add_sequence_ani({
+            target: q_rect,
+            prop: {text: dlist_to_rect_texts(queue), time: 1},
+            action: {params: {q_rect: q_rect, num: queue.size}, func: update_rect_height},
+            rev_action: {params: {q_rect: q_rect, num: queue.size - 1}, func: update_rect_height}
+          });
+
+          ani.add_sequence_ani({
+            target:q_rect,
+            prop: {fade_in: true, fillStyle: make_fillstyles(queue.size, 0, 1), time:1},
+          });          
+
 
           ani.add_sequence_ani({
             target: q_rect,
-            prop: {text_fade_in: {color: "red", index: 0}, step: true, time: ANIMATION_TIME},
+            prop: {text_fade_in: {index: 0}, step: true, time: ANIMATION_TIME},
           })
+
         }
 
         ani.add_sequence_ani({

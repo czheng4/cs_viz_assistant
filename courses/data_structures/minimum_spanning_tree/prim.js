@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/27/2020
-  last modified 12/03/2020
+  last modified 12/18/2020
 */
 
 const HIGHLIGHT_LINE = {lineWidth: 3, strokeStyle: "red"};
@@ -135,7 +135,10 @@ class primAnimation {
   }
  
   multimap_init() {
-    this.ani.add_object(this.map_rect = new Rect(-230, -20, 130, 26, "SORTED_EDGES_REF", [""], "Multimap (weight, edge)", "top", "v", {lineWidth: .5}));
+    this.ani.add_object(this.map_rect = new Rect(-230, -20, 130, 26, "SORTED_EDGES_REF", [], "Multimap (weight, edge)", "top", "v", {lineWidth: .5}));
+    for (let i = 0; i < 50; i++) {
+      this.map_rect.fillStyles.push("#DDDDDD");
+    }
   }
 
 
@@ -259,7 +262,7 @@ class primAnimation {
         prop: {text_fade_out: {color: "red", index: 0}, step: true, time : ANIMATION_TIME * 3},
       })
 
-      e_text = "Process Edge: {}".format(highlight(edge.pretty_edge())) + NEW_LINE;
+      e_text = "Process element: {}".format("{} ".format_b(key+ ":") + highlight(edge.pretty_edge())) + NEW_LINE;
 
       // update the multimap texts.
       texts = dlist_to_rect_texts(multimap);
