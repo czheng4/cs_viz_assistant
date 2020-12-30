@@ -209,11 +209,12 @@ class queueAnimation {
 
     
     /* 
-      I add additional 1 time here. 
+      I add additional 2 time here. 
       Here's the interesting fact: when the disconnect_object get called. it change the number of connections.
       Since both first and last line will are pointing to the same object and belong to the same object when queue.size is 0
       after pop(), one of animation property will skip one time frame because the l_or_c.length get changed.
     */
+    ani.add_sequence_ani({pause:2});
     ani.add_sequence_ani({
       target: this.first_ptr_line,
       text: "Move queue first " + ((queue.size != 0) ? "": "and last ") + "to {}'s next node, which is {}. Decrement the size by one".format_b(qnode.ref, next_ref),
@@ -226,7 +227,7 @@ class queueAnimation {
         target: this.last_ptr_line,
         prop: {p: this.last_ptr_line.p1, type:"pivot", ani:ani},
       });
-      ani.add_sequence_ani({pause:1});
+      ani.add_sequence_ani({pause:2});
     }
 
 
@@ -321,6 +322,9 @@ class queueAnimation {
       });
     }
 
+
+
+
     ani.add_sequence_ani({
       target:rect,
       text: "Make a new queue node {}".format_b(ref),
@@ -328,8 +332,8 @@ class queueAnimation {
       concurrence:true,
     });
 
+   
     this.line_highlight(queue.size == 1, true);
-
     if (pre_node != null) {
      
       ani.add_sequence_ani({
@@ -337,7 +341,7 @@ class queueAnimation {
         target: pre_node.next_line,
         prop: {p: qnode.left_top_p, type:"pivot", ani:ani}
       });
-
+      
       ani.add_sequence_ani({
         target: pre_node.rect,
         prop: {text_fade_in: {text: "next = " + qnode.ref, index:1}, time : 1, step: true}
@@ -347,6 +351,7 @@ class queueAnimation {
     }
 
     p = qnode.right_top_p;
+    ani.add_sequence_ani({pause:2});
     ani.add_sequence_ani({
       text: "Move last" + ((queue.size == 1) ? " and first": "") + " point to the new node {}. Increment the size by one".format_b(ref),
       target: this.last_ptr_line,
@@ -354,17 +359,21 @@ class queueAnimation {
       concurrence: queue.size == 1
     });
 
+
+
     if (queue.size == 1) {
       ani.add_sequence_ani({
         target: this.first_ptr_line,
         prop: {p:p, type: "pivot", ani:ani}
       });
+      ani.add_sequence_ani({pause:2});
       ani.add_sequence_ani({
         target: queue_rect,
         prop: {text_fade_in: {text: "first = " + ref, index: 0}, time : 1},
         concurrence: true,
       });
-    }
+    } 
+
 
 
 

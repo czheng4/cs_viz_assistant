@@ -3,13 +3,19 @@
   All rights reserved.
   
   12/24/2020
-  last modified 12/26/2020
+  last modified 12/28/2020
 */
 
 const BLUE_SHADOW_PROP = {fade_in:true, strokeStyle: "blue", time:1, lineWidth:1, shadowColor:"#0000FF", shadowBlur:15};
 const RED_SHADOW_PROP = {fade_in:true, strokeStyle: "red", time:1, lineWidth:1, shadowColor:"#FF0000", shadowBlur:15};
 const BLUE_LINE = {fade_in:true, strokeStyle:"blue", time:1};
 const RED_LINE = {fade_in:true, strokeStyle:"red", time:1};
+
+
+const ASCII_HASH = "ASCII";
+const DJB_HASH = "DJB";
+const MANUAL_HASH = "MANUAL";
+
 class tableEntry {
   constructor(key, rect, line) {
     this.key = key;
@@ -20,7 +26,7 @@ class tableEntry {
 }
 
 class scHashAnimation {
-  constructor(size) {
+  constructor(size, hash_func) {
     this.ani = new Animation();
     this.size = size;
     this.height = 30;
@@ -30,14 +36,18 @@ class scHashAnimation {
     this.pre_key_index = -1;
     this.rects = [];
     this.tables = [];
+    this.hash_func = hash_func;
 
     for (let i = 0; i < size; i++) this.tables.push([]);
     this.ref_count = size;
     if (size != 0) {
-      this.func_text = new Text("", 0, -30, 100, "13px Arial");
+      this.func_text = new Text("", 0, -15, 100, "13px Arial");
+      this.func_text.text_align = "left";
+      this.func_text.ctx_prop.fillStyle = "red";
       this.ani.add_object(this.func_text);
       this.create_rects();
     }
+    this.manual_hash_tables = {};
   }
 
 
@@ -51,7 +61,7 @@ class scHashAnimation {
   }
 
   deep_copy() {
-    let schash = new scHashAnimation(0);
+    let schash = new scHashAnimation(0, this.hash_func);
     let entries;
     schash.size = this.size;
     schash.rects = this.rects;
@@ -63,6 +73,8 @@ class scHashAnimation {
       schash.tables.push(entries);
     }
     schash.ref_count = this.ref_count + 10;
+    schash.manual_hash_tables = deep_copy(this.manual_hash_tables);
+
     return schash;
   }
   create_rects() {
@@ -72,7 +84,7 @@ class scHashAnimation {
     let ani = this.ani;
     let line_width = 1;
 
-    y = 10;
+    y = 30;
     for (i = 0; i < this.size; i++) {
       x = i * (this.width + line_width);
       rect = new Rect(x, y, this.width, this.height, i, [""]);
@@ -87,6 +99,16 @@ class scHashAnimation {
     ani.draw();
   }
 
+  /* please refer to http://www.cse.yorku.ca/~oz/hash.html */
+  djb_hash(str) {
+    let i;
+    let h = 5381;
+    for (i = 0; i < str.length; i++) {
+      h = (h << 5) + h + str.charCodeAt(i);
+    }
+    return h >>> 0;
+  }
+
   ascii_hash(str) {
     let rv = 0;
     for (let i = 0; i < str.length; i++) {
@@ -95,27 +117,56 @@ class scHashAnimation {
     return rv;
   }
 
-
+  get_hash(str, hash = null) {
+ 
+    if (this.hash_func == ASCII_HASH) return this.ascii_hash(str);
+    else if(this.hash_func == DJB_HASH) return this.djb_hash(str);
+    else if (this.hash_func == MANUAL_HASH) {
+    
+      if (hash != null && str in this.manual_hash_tables && hash != this.manual_hash_tables[str]) {
+       
+        $("#elaboration_text").text("");
+        $("#elaboration_text").append(
+          "Hash value {} does not match the value {} you previously enter for the same key".format_b(hash, this.manual_hash_tables[str])
+        );
+        return -1;
+      } else {
+        if (hash != null) this.manual_hash_tables[str] = parseInt(hash);
+        if (str in this.manual_hash_tables) return this.manual_hash_tables[str];
+        else return -1;
+      }
+    }
+  }
+  /* when run is true we are acutally calling find otherwise we may call find from insert and delete function
+     This is usually not how we implement hash function, but it's easy for us to do animation.
+  */
   find(key, run = true, find_text = "Find key {}") {
     let index, hash;
     let entries, entry, rect;
     let i;
     let ani = this.ani;
 
+    hash = this.get_hash(key);
+    if (hash == -1) {
+      $("#elaboration_text").text("For munally entering hash value, the key must be what you have entered before");
+      return;
+    }
     if (run) {
       this.func_text.text = "Call find({})".format(key);
       this.set_state();
       ani.set_function_call("find", [key]);
     }
+
     this.clear_pre_prop();
-    hash = this.ascii_hash(key);
+
     index = hash % this.size;
     this.pre_key_index = index;
     rect = this.rects[index];
     entries = this.tables[index];
 
+    this.func_text.text += "  H({}) = {} % {} = {}".format(key, hash, this.size, index);
     ani.add_sequence_ani({
-      text: "Compute the {}'s hash table index. H({}) = {} % {} = {}".format_b(key, key, hash, this.size, index),
+      text: "Compute the {}'s hash table index to insert. H({}) = {} % {} = {}".format_b(key, key, hash, this.size, index),
       target: rect,
       prop: deep_copy(BLUE_SHADOW_PROP)
     });
@@ -180,21 +231,21 @@ class scHashAnimation {
     });
   }
 
-  insert(key) {
+  insert(key, hash_val = null) {
     let index, hash;
     let rect,line, entries, entry, new_rect;
     let actual_line_length, i;
     let x,y;
     let ani = this.ani;
 
-    ani.set_function_call("insert", [key]);
+    hash = this.get_hash(key, hash_val);
+    if (hash == -1) return;
+
+    ani.set_function_call("insert", [key, hash_val]);
     this.set_state();
     this.func_text.text = "Call insert({})".format(key);
-    // this.clear_pre_prop();
-    // ani.clear_animation();
-    hash = this.ascii_hash(key);
+    
     index = hash % this.size;
-    // this.pre_key_index = index;
     rect = this.rects[index];
     entries = this.tables[index];
 
@@ -249,11 +300,19 @@ class scHashAnimation {
     let x,y;
     let ani = this.ani;
 
+
+
+    hash = this.get_hash(key);
+    if (hash == -1) {
+      $("#elaboration_text").text("For munally entering hash value, the key must be what you have entered before");
+      return;
+    }
+
     ani.set_function_call("delete", [key]);
     this.set_state();
     this.func_text.text = "Call delete({})".format(key);
 
-    hash = this.ascii_hash(key);
+    
     index = hash % this.size;
     rect = this.rects[index];
     entries = this.tables[index];

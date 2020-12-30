@@ -16,6 +16,11 @@
     #insert, #delete, #find {
       width: 55px;
     }  
+    sup {
+     vertical-align: top;
+     position: relative; 
+     top: -0.5em;
+    }
   </style>
   
 </head>
@@ -29,24 +34,30 @@
  
       <input type = "text" id = "key" placeholder="key">
       <input type = "text" id = "hash_value" placeholder="hash" style = "display: none">
+      <input type = "text" id = "hash_value2" placeholder="hash" style = "display: none">
       <button type="button" id = "insert">Insert</button> 
+
+      <input type= "text" id = "key_2" placeholder="key" style = "display: none; margin-left: 20px">
       <button type = "button" id = "delete">Delete</button>
       <button type = "button" id = "find">Find</button> &emsp;&emsp;
 
 
       <div class = "line"></div>
       <strong>Hash Function:</strong>
-      <input type="radio" id="" name="hash_function" value = "customer"> 
-      <label for="hash_function">Custormer</label> 
-      <input type="radio" id="" name="hash_function" value = "ASCII"> 
-      <label for="hash_function">ASCII</label> &emsp;&emsp;
+      <input type="radio" name="hash_function" value = "DJB" checked> 
+      <label for="hash_function">DJB2</label> 
+      <input type="radio" name="hash_function" value = "ASCII"> 
+      <label for="hash_function">ASCII</label> 
+      <input type="radio" name="hash_function" value = "MANUAL"> 
+      <label for="hash_function">Manually Enter</label>  &emsp;&emsp;
+      
 
       <strong>Collision Strategy</strong>
-      <input type="radio" id="" name="collision_strategy" value = "linear"> 
-      <label for="collision_strategy">Linear(y = i)</label> 
-      <input type="radio" id="" name="collision_strategy" value = "quadratic"> 
-      <label for="collision_strategy">Quadratic(y = i^2)</label> 
-      <input type="radio" id="" name="collision_strategy" value = "double"> 
+      <input type="radio" name="collision_strategy" value = "linear" checked> 
+      <label for="collision_strategy">Linear (y = i)</label> 
+      <input type="radio" name="collision_strategy" value = "quadratic"> 
+      <label for="collision_strategy">Quadratic (y = i<sup>2</sup>)</label> 
+      <input type="radio" name="collision_strategy" value = "double"> 
       <label for="collision_strategy">Double Hashing</label> 
 
       
@@ -84,15 +95,19 @@
 
 
 
-function input_check() {
-  return true;
-  let val = $("#key").val();
-  val = parseFloat(val);
-  if (isNaN(val)) {
-    $("#elaboration_text").text("Input is not a valid number");
-    return false;
-  }
-  return true;
+function test() {
+
+  aniTester = new animationTester(100);
+
+  aniTester.add_func("insert", ["Luther"]);
+  aniTester.add_func("insert", ["Rosalita"]);
+  aniTester.add_func("insert", ["Princess"]); 
+  aniTester.add_func("insert", ["Thor"]); 
+  aniTester.add_func("insert", ["Waluigi"]); 
+  aniTester.add_func("insert", ["Dave"]);
+
+
+  aniTester.run_test();
 }
 
 $(document).ready(function(){
@@ -101,35 +116,149 @@ $(document).ready(function(){
 
   set_canvas(1200, 800, 40, 55);
   
-  MAIN_A = new oaHashAnimation(); 
+  MAIN_A = new oaHashAnimation(0); 
 
 
   D_ANIMATION_TIME = 100 - $("#speed").val();
 
 
-  MAIN_A.ani.elaboration.text("the sum of ASCII of each character of string is used as hash value");
+  
+  $("input[name=hash_function]").click(function(){
+    let collision = $("input[name=collision_strategy]:checked").val();
+    let val = $(this)[0].value;
+    $("#elaboration_text").text("")
+    if (val == MANUAL_HASH) {
+      $("#elaboration_text").append("Please enter the hash value corresponding to the key when inserting" + NEW_LINE + BLUE_SPAN + "Note: this is not how hash function works.</span>" + NEW_LINE + 
+        "It's there to help you flexibly insert keys without knowing the internal hash function");
 
+      $("#key_2").css("display", "inline-block");
+      $("#hash_value").css("display", "inline-block");
+      if (collision == COLLISION_DOUBLE) $("#hash_value2").css("display","inline-block");
+
+    } else if(val == DJB_HASH) {
+      if (collision == COLLISION_DOUBLE) {
+        $("#elaboration_text").append('First hash function: <a href="http://www.cse.yorku.ca/~oz/hash.html">{}</a>. Second hash function: {}'.format_b("DJB2","ASCII."));
+      } else {
+        $("#elaboration_text").append('For DJB2 hash function, please refer <a href="http://www.cse.yorku.ca/~oz/hash.html">here</a>');
+      }
+    } else if (val == ASCII_HASH) {
+      if (collision == COLLISION_DOUBLE) {
+        $("#elaboration_text").append('First hash function: {}. Second hash function: <a href="http://www.cse.yorku.ca/~oz/hash.html">{}</a>'.format_b("ASCII","DJB2."));
+      } else {
+        $("#elaboration_text").append('For ASCII hash function, it returns the sum of ASCII values of the characters');
+      }
+    }
+    
+    if (val != MANUAL_HASH) {
+      $("#key_2").css("display", "none");
+      $("#hash_value").css("display", "none");
+      $("#hash_value2").css("display", "none");
+    }
+    MAIN_A.hash_func = val;
+  })
+  
+
+  $("input[name=collision_strategy]").click(function(){
+    let hash_func = $("input[name=hash_function]:checked").val();
+    let val = $(this)[0].value;
+    $("#elaboration_text").text("");
+    if (val == COLLISION_DOUBLE) {
+      if (hash_func == DJB_HASH) {
+        $("#elaboration_text").append('Use {} as the second hash function'.format_b("ASCII"));
+      } else if (hash_func == ASCII_HASH) {
+        $("#elaboration_text").append('Use  <a href="http://www.cse.yorku.ca/~oz/hash.html">{}</a> as the second hash function'.format_b("DJB2"));
+      } else if (hash_func == MANUAL_HASH){
+        $("#hash_value2").css("display", "inline-block");
+        $("#elaboration_text").append("Please enter the hash value corresponding to the key when inserting" + NEW_LINE + BLUE_SPAN + "Note: this is not how hash function works.</span>" + NEW_LINE + 
+          "It's there to help you flexibly insert keys without knowing the internal hash function");
+      }
+    } else {
+      $("#hash_value2").css("display", "none");
+    }
+    MAIN_A.collision = val;
+    console.log(val);
+  })
+  
   $("#init").click(function(){
     let size = $("#table_size").val();
     size = parseInt(size);
     if (isNaN(size) || size <= 0 || size >= 30) {
        $("#elaboration_text").text("Table size must > 0 and <= 30");
     } else {
-      MAIN_A = new oaHashAnimation(size);
+      MAIN_A = new oaHashAnimation(size, 
+                                   $("input[name=hash_function]:checked").val(), 
+                                   $("input[name=collision_strategy]:checked").val());
     }
+
   })
-  $("#init").click();
+  // $("input[value=MANUAL]").click();
+  // $("input[value=quadratic]").click();
+  // $("#init").click();
+  // test();
+  
  
   $("#insert").click(function() {
-    if (input_check()) MAIN_A.insert($("#key").val());
+    
+    let error;
+    if (MAIN_A.size == 0) {
+      $("#elaboration_text").text("Hash table is empty");
+      return;
+    }
+    
+    error = MAIN_A.input_check($("#key").val(), $("#hash_value").val(), $("#hash_value2").val(), insert = true);
+
+    if (error != "") {
+      $("#elaboration_text").text("");
+      $("#elaboration_text").append(error);
+    }
+    else MAIN_A.insert($("#key").val(), $("#hash_value").val(), $("#hash_value2").val());
+
   })
 
   $("#find").click(function() {
-    if (input_check()) MAIN_A.find($("#key").val());
+    let error;
+    let hash_func = $("input[name=hash_function]:checked").val();
+    let key;
+
+    if (MAIN_A.size == 0) {
+      $("#elaboration_text").text("Hash table is empty");
+      return;
+    }
+    if (hash_func == MANUAL_HASH) {
+      key = $("#key_2").val();
+    } else {
+      key = $("#key").val();
+    }
+    error = MAIN_A.input_check(key);
+    console.log(key);
+    if (error != "") {
+      $("#elaboration_text").text("");
+      $("#elaboration_text").append(error);
+    }
+    else MAIN_A.find(key);
   })
 
   $("#delete").click(function() {
-    if (input_check()) MAIN_A.delete($("#key").val());
+    let error;
+    let hash_func = $("input[name=hash_function]:checked").val();
+    let key;
+
+    if (MAIN_A.size == 0) {
+      $("#elaboration_text").text("Hash table is empty");
+      return;
+    }
+    if (hash_func == MANUAL_HASH) {
+      key = $("#key_2").val();
+    } else {
+      key = $("#key").val();
+    }
+    error = MAIN_A.input_check(key);
+    if (error != "") {
+      $("#elaboration_text").text("");
+      $("#elaboration_text").append(error);
+    }
+    else MAIN_A.delete(key);
+
   })
 
 
