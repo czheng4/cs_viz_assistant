@@ -1,6 +1,6 @@
 <!--
   ChaoHui Zheng
-  11/28/2020
+  12/14/2020
 -->
 <!DOCTYPE html>
 <html>
@@ -21,7 +21,7 @@
 </head>
 <body>
    <div class = "grid-container">
-    <div class = "header">Binary Search Tree</div>
+    <div class = "header">AVL Tree</div>
     <div class = "control"> 
 
       
@@ -31,7 +31,6 @@
       <button type = "button" id = "find">Find</button> &emsp;&emsp;
 
       <button type = "button" id = "print">Inorder Print</button> &emsp;
-      <button type = "button" id = "balance">Balance Tree</button> &emsp;
 
       <button type="button" id = "clear_tree">Clear Tree</button>      
       <div class = "line"></div>
@@ -40,7 +39,7 @@
         <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
         <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
         Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
-        Animation Speed&emsp;<input type="range" min="0" max="100" value="0" id="speed"> 
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="50" id="speed"> 
       </div>
 
       <div class = "elaboration">
@@ -61,37 +60,34 @@
 <script src="../../../lib/drawing.js"></script>
 <script src="../../../lib/memory_generator.js"></script>
 <script src="../dlist/dlist.js"></script>
-<script src="bst.js"></script>
+<script src="avl.js"></script>
 <script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
 
 function bst_test1() {
 
+  let a = [];
   aniTester = new animationTester(100);
  
   aniTester.add_func("insert", [10]);
-  aniTester.add_func("insert", [4]);
+  aniTester.add_func("insert", [5]);
   aniTester.add_func("insert", [3]);
   aniTester.add_func("insert", [7]);
   aniTester.add_func("insert", [2]);
-  aniTester.add_func("insert", [2.5]);
-  aniTester.add_func("insert", [2.45]);
-  aniTester.add_func("insert", [2.55]);
-  aniTester.add_func("delete", [10]);
-  aniTester.add_func("go_back");
-  aniTester.add_func("go_back");
-  aniTester.add_func("go_back");
-  aniTester.add_func("go_back");
+  aniTester.add_func("insert", [32]);
+  aniTester.add_func("insert", [66]);
+  // aniTester.add_func("insert", [38]);
+  // aniTester.add_func("insert", [648]);
+  // aniTester.add_func("insert", [808]);
+  // aniTester.add_func("insert", [608]);
+  // aniTester.add_func("insert", [67]);
+  // aniTester.add_func("insert", [33]);
 
-  // aniTester.add_func("insert", [3.55]);
   // for (let i = 0; i < 10; i++) aniTester.add_func("go_forward");
-  for (let i = 0; i < 5; i++) aniTester.add_func("insert", [parseInt(Math.random() * 1000)]);
-  aniTester.add_func("go_back");
-  aniTester.add_func("go_back");
-  aniTester.add_func("go_back");
-  aniTester.add_func("insert", [2.45]);
-  aniTester.add_func("insert", [2.55]);
-  aniTester.add_func("delete", [10]);
+  for (let i = 0; i < 10; i++) a.push(parseInt(Math.random() * 1000));
+  // a = [999, 323, 525, 442, 547, 119, 804, 444, 387, 507, 934, 483, 410, 320, 811, 791, 996, 690, 68, 133, 132];
+  for (let i = 0; i < a.length; i++) aniTester.add_func("insert", [a[i]]);
+  // for (let i = 0; i < a.length; i++) aniTester.add_func("delete", [a[i]]);
   aniTester.run_test();
 
 }
@@ -149,9 +145,7 @@ $(document).ready(function(){
     MAIN_A.inorder_print();
   })
 
-  $("#balance").click(function(){
-    MAIN_A.rebalance_tree();
-  })
+
 
   $("#clear_tree").click(function() {
     MAIN_A = new binarySearchTreeAnimation(); 

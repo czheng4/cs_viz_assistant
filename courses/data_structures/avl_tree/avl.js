@@ -2,8 +2,12 @@
   Copyright (C) 2020, ChaoHui Zheng
   All rights reserved.
   
-  11/28/2020
+  12/14/2020
   last modified 01/03/2021
+
+  Since the AVL tree works just like bst with balancing operation,
+  most AVL tree codes are copied from binary Search Tree.
+
 */
 
 // for node type
@@ -18,9 +22,20 @@ const T_NO_RIGHT = 0b10;
 const T_NO_BOTH = 0b100;
 const T_BOTH = 0b1000;
 
+// for rotation type
+const ZIG_ZIG_LEFT = 0b1;
+const ZIG_ZIG_RIGHT = 0b10;
+const ZIG_ZAG_LEFT = 0b100;
+const ZIG_ZAG_RIGHT = 0b1000;
+const NO_ROTATION = 0b10000;
 
 const GAP_X = 30;
 const GAP_Y = 50;
+
+function update_circle_text(dict) {
+  console.log(dict.circle);
+  dict.circle.text = dict.text;
+}
 
 
 function traverse_to_root(n) {
@@ -32,12 +47,26 @@ function traverse_to_root(n) {
   return path;
 }
 
+function edge_prop(dict) {
+  let g = dict.g,
+      n1 = dict.n1,
+      n2 = dict.n2;
+  if (g.is_edge(n1,n2)) {
+    g.get_edge(n1,n2).ani_line.ctx_prop = deep_copy(dict.ctx);
+
+  }
+}
+
 function color_path(dict) {
-  let n, e;
+  let n, e, default_color;
   let path = dict.path,
       last_node_color = dict.last_node_color,
       first_node_color = dict.first_node_color,
       g = dict.g;
+
+
+  if ("default" in dict) default_color = dict.default;
+  else default_color = false;
 
   for (i = 0; i < path.length; i++) {
     n = path[i];
@@ -45,19 +74,47 @@ function color_path(dict) {
     if (i != path.length - 1) {
       n2 = path[i + 1];
       e = g.get_edge_by_name(n.ani_node.id, n2.ani_node.id);
-      e.ani_line.ctx_prop.strokeStyle = 'red';
+      if (default_color) e.ani_line.ctx_prop = deep_copy(DEFAULT_LINE_CTX);
+      else e.ani_line.ctx_prop.strokeStyle = 'red';
     }
     
-    n.ani_node.ani_circle.ctx_prop.fillStyle = "yellow";
+    if (default_color) n.ani_node.ani_circle.ctx_prop = deep_copy(DEFAULT_CIRCLE_CTX);
+    else n.ani_node.ani_circle.ctx_prop.fillStyle = "yellow";
+
     if (i == 0 && first_node_color != null) {
       n.ani_node.ani_circle.ctx_prop.fillStyle = first_node_color;
     } else if (i == path.length - 1 && last_node_color != null) {
       n.ani_node.ani_circle.ctx_prop.fillStyle = last_node_color;
-    } else {
-      n.ani_node.ani_circle.ctx_prop.fillStyle = "yellow";
     }
+    
   }
 
+}
+
+/* create the edge */
+function c_edge(dict) {
+  let n1 = dict.n1,
+      n2 = dict.n2,
+      g = dict.g;
+  let e, l;
+
+  l = dict.line;
+  console.log("create, ", dict.n1, dict.n2, g.edge_map);
+  e = g.get_edge(n1, n2, 0, true, l);
+  e.ani_line.ctx_prop.strokeStyle = "red";
+  e.ani_line.ctx_prop.lineWidth = 3;
+  e.ani_line.h_scale = 0;
+
+
+}
+
+function d_edge(dict) {
+  console.log("delete ", dict.n1, dict.n2);
+  dict.g.remove_edge(dict.n1, dict.n2);
+}
+
+function update_type(dict) {
+  dict.n.type = dict.type;
 }
 
 function change_alpha(dict) {
@@ -78,6 +135,8 @@ function reposition_node (dict) {
   for (i = 0; i < dict.path.length; i++) {
     n = dict.path[i];
     if (i != dict.path.length - 1) parent = dict.path[i+1];
+
+    console.log(n.type, type);
     if (n.type == T_LEFT_NODE && type == T_RIGHT_NODE) {
       type = T_LEFT_NODE;
       n.ani_node.ani_circle.propagation = true;
@@ -104,6 +163,7 @@ class BSTnode {
     this.key = key;
     this.ani_node = ani_node;
     this.type = T_UNKNOWN;
+    this.height = 1;
   }
 }
 
@@ -114,32 +174,27 @@ class BSTree {
     this.g = g;
   }
 
-  /* return new binarySearchTreeAnimation */
-  rebalance_tree() {
-
-    let bst_ani = new binarySearchTreeAnimation();
-    let bst = bst_ani.bst_tree;
-    let keys = this.make_key();
-    this.recursive_rebalance_tree(keys, 0, keys.length, bst);
-    console.log(bst.make_key());
-
-    return bst_ani;
+  is_avl() {
+    return this.recursive_is_avl(this.root);
   }
+  recursive_is_avl(n) {
+    let rv;
 
-  recursive_rebalance_tree(sorted_keys, starting_index, num_indices, bst) {
-    let n, left, right, m_index;
-    let dict;
-    if (num_indices == 0) return null;
-  
-    m_index = parseInt(starting_index + num_indices / 2);
+    if (n == null) return true;
+    if (Math.abs(this.get_height(n.left) - this.get_height(n.right)) > 1) {
+      console.log(this.get_height(n.left), this.get_height(n.right), n);
+      return false;
+    } 
 
-    /* we actually call the insert such that i can reposition the node */
-    dict = bst.insert(sorted_keys[m_index]);
-  
-    reposition_node({type:dict.node.type, path:traverse_to_root(dict.node)});
-    left = this.recursive_rebalance_tree(sorted_keys, starting_index, m_index - starting_index, bst);
-    right = this.recursive_rebalance_tree(sorted_keys, m_index + 1, starting_index + num_indices - m_index - 1, bst);
-
+    if (this.get_height(n) <= this.get_height(n.right)) return false;
+    if (this.get_height(n) <= this.get_height(n.left)) return false;
+ 
+    rv = this.recursive_is_avl(n.left);
+    if (rv == false) return false;
+    rv = this.recursive_is_avl(n.right);
+    
+    if (rv == false) return false;
+    else return true;
   }
 
   make_key() {
@@ -151,6 +206,7 @@ class BSTree {
   recursive_make_key(node, keys) {
 
     if (node == null) return;
+    console.log(node);
     this.recursive_make_key(node.left, keys);
     keys.push(node.key);
     this.recursive_make_key(node.right, keys);
@@ -172,6 +228,7 @@ class BSTree {
 
     new_n = new BSTnode(node.key, node.ani_node);
     new_n.type = node.type;
+    new_n.height = node.height;
     left = this.recursive_copy(node.left);
     right = this.recursive_copy(node.right);
 
@@ -188,15 +245,23 @@ class BSTree {
     return new_n;
   }
 
-  
+
+  get_height(n) {
+    if (n == null) return 0;
+    else return n.height;
+  }
+
+
   insert(key) {
     key = parseFloat(key);
     let g = this.g;
     let ani_node, p_ani_node;
     let new_node;
     let e, n = this.root;
-    let parent;
+    let parent, left, right;
     let x,y;
+    let i;
+    let rotate;
     let path = [];
     
     parent = null;
@@ -238,11 +303,16 @@ class BSTree {
       e.ani_line.visible = false;
     }
 
+    ani_node.ani_circle.label = new_node.height;
     ani_node.ani_circle.visible = false;
     new_node.ani_node = ani_node;
+    ani_node.ani_circle.label_font = "bold 11px Arial";
+    ani_node.ani_circle.label_padding = 6;
+    ani_node.ani_circle.label_offset_x = 0;
+   
 
     this.size++;
-    
+   
     return {node: new_node, path: path, edge: e};
   } 
 
@@ -258,7 +328,6 @@ class BSTree {
 
     return {find: false, path: path};
   }
-
 
   delete(key) {
     let g = this.g;
@@ -362,98 +431,6 @@ class binarySearchTreeAnimation {
     this.ani.add_object(this.func_text);
 
     this.is_rebalance = false;
-  }
-
-
-  rebalance_tree() {
-    let bst_ani = this.bst_tree.rebalance_tree();
-    bst_ani.ani.step_by_step = this.ani.step_by_step;
-
-    this.ani = bst_ani.ani;
-    this.g = bst_ani.g;
-    this.bst_tree = bst_ani.bst_tree;
-    this.key_rect = bst_ani.key_rect;
-    this.func_text = bst_ani.func_text;
-    this.is_rebalance = true;
-
-    let keys = this.bst_tree.make_key();
-    this.func_text.text = "Call balance tree".format(key);
-    this.recursive_rebalance_tree(keys, 0, keys.length);
-    this.show_sorted_keys_rect();
-    this.key_rect.text = keys;
-    this.ani.add_sequence_ani({
-      pause:1,
-      text: "Done",
-    })
-    this.ani.run_animation();
-  }
-
-  recursive_rebalance_tree(sorted_keys, starting_index, num_indices) {
-    let n, left, right, m_index, c, e;
-    let key1, key2;
-    let dict;
-    let g = this.g,
-        ani = this.ani;
-
-    if (num_indices == 0) return null;
-    
-
-    m_index = parseInt(starting_index + num_indices / 2);
-
-    n = g.get_node(sorted_keys[m_index]);
-    c = n.ani_circle;
-    ani.add_sequence_ani({
-      target:c,
-      text: "Recursivly balance tree with sorted keys {}. Make a new node with the middle key Sorted_keys{} = {}".format_b("[{}:{}]".format(starting_index, starting_index + num_indices), "[" + m_index + "]", c.text),
-      prop: {fade_in: true, fillStyle: "yellow", visible:true, step: true},
-      concurrence:true
-    })
-
-    ani.add_sequence_ani({
-      target: this.key_rect,
-      prop: {text_fade_in: {index: m_index, fillStyle:"lightblue" }, time:1 }
-    })
-    
-
-    left = this.recursive_rebalance_tree(sorted_keys, starting_index, m_index - starting_index);
-    if (left != null) {
-      e = g.get_edge(n, left);
-      key1 = n.ani_circle.text;
-      key2 = left.ani_circle.text;
-      ani.add_sequence_ani({
-        text: "Set node {}'s left to node {}. Set node {}'s parent to node {}".format_b(key1, key2, key2, key1),
-        target: e.ani_line,
-        prop: {fade_in: true, strokeStyle: "red", visible: true, step: true},
-      })
-    }
-
-
-    right = this.recursive_rebalance_tree(sorted_keys, m_index + 1, starting_index + num_indices - m_index - 1);
-    if (right != null) {
-      e = g.get_edge(n, right);
-      key1 = n.ani_circle.text;
-      key2 = right.ani_circle.text;
-      ani.add_sequence_ani({
-        text: "Set node {}'s right to node {}. Set node {}'s parent to node {}".format_b(key1, key2, key2, key1),
-        target: e.ani_line,
-        prop: {fade_in: true, strokeStyle: "red", visible: true, step: true},
-      })
-    }
-
-
-    if (c.from.length != 0) {
-      ani.add_sequence_ani({
-        target: c,
-        prop: {"walk" : {circle: c.from[0], h_scale: 0}}
-      })
-    }
-
-    ani.add_sequence_ani({
-      target: c,
-      prop: {fade_in: true, fillStyle: "#DDDDDD", time : 1, lineWidth:1},
-    })
-   
-    return n;
   }
 
 
@@ -753,6 +730,8 @@ class binarySearchTreeAnimation {
       })
     }
 
+    ani.add_sequence_ani({prop:{step:true, time:1}});
+    if (rv.path.length >= 2 && rv.delete == true) this.avl_tree_balance(rv.path[rv.path.length - 2], rv.path, false);
     this.clear_after_func_ani(false);
 
     ani.run_animation();
@@ -910,7 +889,6 @@ class binarySearchTreeAnimation {
         node = rv.node;
 
     
-    
 
     this.reset_graph();
     this.find_path_animation(path, key);
@@ -920,6 +898,7 @@ class binarySearchTreeAnimation {
     if (node != null) {
 
       path = traverse_to_root(node);
+      console.log(node.type);
       ani.add_sequence_ani({
         pause:1,
         action: {params: {type:node.type, path: path}, func: reposition_node},
@@ -959,13 +938,453 @@ class binarySearchTreeAnimation {
 
 
     ani.add_sequence_ani({
-      pause:1,
+      prop: {step:true, time:1},
       rev_action: {params: {g:g, path:rv.path}, func: color_path},
-      concurrence:true
     });
+
+    
+    if (rv.node != null) this.avl_tree_balance(rv.node, rv.path);
     this.clear_after_func_ani(false);
     
     ani.run_animation();
   }
+
+  avl_tree_balance(node, path, after_insert = true) {
+    let i;
+    let ani = this.ani;
+    let g = this.g;
+    let new_path = [];
+
+    if (node.parent == null) return;
+
+    console.log(node, path);
+
+    for (i = 0; i < path.length; i++) new_path.push(path[i]);
+    if (after_insert) new_path.push(node);
+    // else new_path.splice(new_path.length - 1, 1);
+
+    ani.add_sequence_ani({
+      text: "Traverse from node {} to the root node. Update the height and(or) fix the imbalance along the way".format_b((after_insert)?node.parent.key:node.key),
+      action: {params: {g:g, path:new_path, "default": true, last_node_color:"pink"}, func: color_path},
+      prop: {step: true, time:1}
+    })
+
+    if (after_insert) this.fix_imbalance(node.parent, node, after_insert);
+    else this.fix_imbalance(node, null, after_insert);
+  }
+
+  imbalance(n) {
+    let left_hegiht, right_height;
+    let left, right;
+    
+    left = n.left;
+    right = n.right;
+
+    if (this.get_height(left) - this.get_height(right) == 2) {
+      if (this.get_height(left.left) + 1 == this.get_height(left)) return ZIG_ZIG_LEFT;
+      else return ZIG_ZAG_LEFT;
+    }
+
+    if (this.get_height(right) - this.get_height(left) == 2) {
+      if (this.get_height(right.right) + 1 == this.get_height(right)) return ZIG_ZIG_RIGHT;
+      else return ZIG_ZAG_RIGHT;
+    }
+
+    return NO_ROTATION;
+  }
+
+  rotate(n) {
+    let ani = this.ani;
+    let parent, grandparent, left, right;
+    let anode, p_anode, gp_anode, c_anode, tmp_c_anode;
+    let new_x, new_y, c;
+    let dx, dy;
+
+    dx = GAP_X;
+    dy = GAP_Y;
+
+    parent = n.parent;
+   
+    console.log("rotate", n);
+    if (parent == null) return;
+
+    grandparent = parent.parent;
+    left = n.left;
+    right = n.right;
+
+    anode = n.ani_node;
+    p_anode = parent.ani_node;
+    if (grandparent != null) {
+      gp_anode = grandparent.ani_node; 
+
+      if (grandparent.left == parent) grandparent.left = n;
+      else grandparent.right = n;
+    }
+
+    if (parent != this.bst_tree.root) {
+      dx = 0;
+    } else {
+      dx = Math.abs(p_anode.ani_circle.x - anode.ani_circle.x);
+    }
+
+    c_anode = null;
+    tmp_c_anode = null;
+
+    if (parent.right == n) { // right subtree
+
+
+      /* color the edges and nodes that are involved with rotation */
+      // this.color_edge(p_anode, anode);
+      // if (grandparent != null) this.color_edge(gp_anode, p_anode);
+      if (left != null) {
+        tmp_c_anode = left.ani_node;
+      }
+      this.color_edges([p_anode, gp_anode, anode], [anode, p_anode, tmp_c_anode]);
+      this.color_nodes([anode, p_anode, gp_anode, tmp_c_anode]);
+      ani.add_sequence_ani({prop: {step:true, time:2}});
+
+      if (left != null) {
+        if (parent != this.bst_tree.root) c_anode = left.ani_node;
+        else {
+          this.rotate_animation(left.ani_node, [anode], 0, dy, true);
+        }
+      }
+      
+
+
+      this.rotate_animation(anode, [p_anode, c_anode], -dx, -dy, true);
+      this.rotate_animation(p_anode, [gp_anode, anode], -dx, +dy, false);
+      this.delete_edge(p_anode, anode);
+      this.create_edge(anode, p_anode);
+      if (grandparent != null) {
+        this.delete_edge(gp_anode, p_anode);
+        this.create_edge(gp_anode, anode);
+      }
+      if (left != null) {
+        this.delete_edge(anode, left.ani_node);
+        this.create_edge(p_anode, left.ani_node);
+      }
+      this.update_node_type(n, parent.type);
+      this.update_node_type(parent, T_LEFT_NODE);
+
+      n.parent = grandparent;
+      n.left = parent;
+      parent.parent = n;
+
+      parent.right = left;
+      if (left != null) {
+        this.update_node_type(left, T_RIGHT_NODE);
+        left.parent = parent;
+      }
+
+    } else { // left subtree
+      console.log("rotate left", n.left);
+
+      if (right != null) {
+        if (parent != this.bst_tree.root) c_anode = right.ani_node;
+        else {
+          this.rotate_animation(right.ani_node, [anode], 0, dy, true);
+        }
+      }
+      // this.color_edge(p_anode, anode);
+      // if (grandparent != null) this.color_edge(gp_anode, p_anode);
+      if (right != null) {
+        tmp_c_anode = right.ani_node;
+        // this.color_edge(anode, right.ani_node);
+      }
+      this.color_edges([p_anode, gp_anode, anode], [anode, p_anode, tmp_c_anode]);
+      this.color_nodes([anode, p_anode, gp_anode, tmp_c_anode]);
+      ani.add_sequence_ani({prop: {step:true, time:2}});
+
+
+      this.rotate_animation(anode, [p_anode, c_anode], dx, -dy, true);
+      this.rotate_animation(p_anode, [gp_anode, anode], dx, dy, false);
+      this.delete_edge(p_anode, anode);
+      this.create_edge(anode, p_anode);
+      
+      if (grandparent != null) {
+        this.delete_edge(gp_anode, p_anode);
+        this.create_edge(gp_anode, anode);
+      }
+      if (right != null) {
+        this.delete_edge(anode, right.ani_node);
+        this.create_edge(p_anode, right.ani_node);
+      }
+      this.update_node_type(n, parent.type);
+      this.update_node_type(parent, T_RIGHT_NODE);
+
+      n.parent = grandparent;
+
+      n.right = parent;
+      parent.parent = n;
+
+      parent.left = right;
+      if (right != null) {
+        this.update_node_type(right, T_LEFT_NODE);
+        right.parent = parent;
+      }
+      console.log("rotate left", n.left);
+    }
+    if (this.bst_tree.root == parent) {
+      this.bst_tree.root = n;
+      dx = anode.ani_circle.x - p_anode.ani_circle.x;
+      // this.rotate_animation(anode, [], -dx, 0, false);
+    }
+
+    
+    ani.add_sequence_ani({
+      text: "Done with rotation. Fix the height of rotated node {} and its child {}".format_b(parent.parent.key, parent.key),
+      prop: {time:1, step:true},
+    })
+    
+    // n = parent;
+    // while (n != null) {
+    //   this.fix_height(n);
+    //   n = n.parent;
+    // }
+    this.fix_height(parent, false);
+    this.fix_height(parent.parent, false);
+
+    this.color_nodes([anode, p_anode, gp_anode, tmp_c_anode], "#DDDDDD");
+    this.color_edges([anode, gp_anode, p_anode], [p_anode, anode, tmp_c_anode], true);
+  }
+
+  fix_height(n, check_height = true) {
+    let left_height, right_height, height;
+    let ani = this.ani;
+
+    left_height = this.get_height(n.left);
+    right_height = this.get_height(n.right);
+    height = left_height > right_height ? left_height : right_height;
+    height++;
+
+    if (n.height != height) {
+      n.height = height;
+      ani.add_sequence_ani({
+        target: n.ani_node.ani_circle,
+        text: "Update node {}'s height to {}".format_b(n.key, n.height),
+        prop: {"label": {color: "red", text: n.height}, time:1, step:true },
+      });
+      ani.add_sequence_ani({
+        target: n.ani_node.ani_circle,
+        prop: {"label": {color: "black"}, time:1 },
+      });
+      
+      
+      return true;
+    } else {
+      if (check_height) {
+        ani.add_sequence_ani({
+          text: "Node {} has not changed its height. We are done.".format_b(n.key),
+          prop: {step:true, time:1},
+        });
+      } else {
+        ani.add_sequence_ani({
+          target: n.ani_node.ani_circle,
+          text: "Node {} has not changed its height.".format_b(n.key),
+          prop: {"label": {color: "red"}, time:1, step:true },
+        });
+        ani.add_sequence_ani({
+          target: n.ani_node.ani_circle,
+          prop: {"label": {color: "black"}, time:1 },
+        });
+      }
+      return false;
+    }
+
+  }
+
+  text_ani(text) {
+    this.ani.add_sequence_ani({
+      text:text,
+      pause:1,
+    });
+  }
+
+  walk_ani(from, to) {
+    this.ani.add_sequence_ani({
+      target: from.ani_node.ani_circle,
+      prop: { "walk": {circle: to.ani_node.ani_circle, h_scale: 0}},
+    })
+  }
+  fix_imbalance(n, from, after_insert = true) {
+    let ani = this.ani;
+    let is_imbalance;
+    let tmp_n;
+    let s_from;
+
+    s_from = null;
+    while (n != null) {
+
+      if (from != null) {
+        if (s_from != null) {
+          this.walk_ani(from, s_from);
+          this.walk_ani(s_from, n);
+        } else {
+          this.walk_ani(from, n);
+        }
+
+        ani.add_sequence_ani({
+          target: from.ani_node.ani_circle,
+          prop: {fade_in:true, fillStyle:"#DDDDDD",lineWidth:1, time:1},
+        });
+      }
+      ani.add_sequence_ani({
+        text: "Check node {}".format_b(n.key),
+        target: n.ani_node.ani_circle,
+        prop: {fade_in:true, fillStyle: "yellow", lineWidth:4, time:1},
+      })
+      ani.add_sequence_ani({prop:{step:true}})
+      
+      is_imbalance = this.imbalance(n);
+      
+      console.log(is_imbalance); 
+      if (is_imbalance == NO_ROTATION) {
+        if (!this.fix_height(n)) break;
+      } else if (is_imbalance == ZIG_ZIG_RIGHT) {
+        this.text_ani("Node {} children's heights differ by two. Perform Zig-Zig left rotation at node {}".format_b(n.key, n.right.key));
+        this.rotate(n.right);
+        if (after_insert) break;
+      } else if (is_imbalance == ZIG_ZIG_LEFT) {
+        this.text_ani("Node {} children's heights differ by two. Zig-Zig right rotation at node {}".format_b(n.key, n.left.key));
+        this.rotate(n.left);
+        if(after_insert) break;
+      } else if (is_imbalance == ZIG_ZAG_RIGHT) {
+       
+        tmp_n = n.right.left;
+        this.text_ani("Node {} children's heights differ by two. Perform Zig-Zag first rotation at node {}".format_b(n.key, tmp_n.key));
+        this.rotate(tmp_n);
+        this.text_ani("Perform Zig-Zag second rotation at node {}".format_b(tmp_n.key));
+        this.rotate(tmp_n);
+        if (after_insert) break;
+      } else if (is_imbalance == ZIG_ZAG_LEFT) {
+       
+        tmp_n = n.left.right;
+        this.text_ani("Node {} children's heights differ by two. Perform Zig-Zag first rotation at node {}".format_b(n.key, tmp_n.key));
+        this.rotate(tmp_n);
+        this.text_ani("Perform Zig-Zag second rotation at node {}".format_b(tmp_n.key));
+        this.rotate(tmp_n);
+        if(after_insert) break;
+      }
+     
+      s_from = null;
+      from = n;
+      if (after_insert == false && n.parent != null && is_imbalance != NO_ROTATION) {
+        s_from = n.parent;
+        n = n.parent.parent;
+      } else n = n.parent;
+    }
+
+    if (after_insert && is_imbalance != NO_ROTATION) {
+      this.text_ani("We are done with insertion");
+    }
+
+
+    // console.log(this.bst_tree.is_avl())
+    // this.text_ani("Done with balancing tree");
+   
+  }
+
+  rotate_animation(n, stops, dx, dy, concurrence = true) {
+    let c;
+    let i;
+    let stop_propagation = {};
+    let ani = this.ani;
+    c = n.ani_circle;
+    c.propagation = true;
+    for (let i = 0; i < stops.length; i++) {
+      if (stops[i] != null) stop_propagation[stops[i].ani_circle.ref] = true;
+    }
+    console.log(stop_propagation, n.id, dx, dy);
+    ani.add_sequence_ani({
+      target: c,
+      prop: {p : new Point(dx, dy), type: "relative", stop_propagation: stop_propagation},
+      concurrence: concurrence
+    })
+  }
+
+  delete_edge(n1, n2, concurrence = true) {
+    let ani = this.ani,
+        g = this.g;
+
+    let line;
+
+    if (n1 == null || n2 == null) return;
+    if (g.is_edge(n1, n2)) {
+      line = g.get_edge(n1, n2).ani_line;
+    } else {
+      line = null;
+    }
+    ani.add_sequence_ani({
+      pause:1,  
+      action: {params: {n1: n1, n2: n2, g:g}, func: d_edge},
+      rev_action: {params: {n1: n1, n2:n2, g:g, line:line}, func: c_edge},
+    })
+  }
+  create_edge(n1, n2, concurrence = true) {
+    let ani = this.ani,
+        g = this.g;
+    if (n1 == null || n2 == null) return;
+    ani.add_sequence_ani({
+      pause:1,  
+      action: {params: {n1: n1, n2: n2, g:g}, func: c_edge},
+      rev_action: {params: {n1: n1, n2:n2, g:g}, func: d_edge}
+    })
+  }
+
+  color_edges(from, to, reverse = false) {
+    let ani = this.ani,
+        g = this.g;
+    let i, n1, n2;
+    let ctx1 = {lineWidth:3, strokeStyle: "red"};
+    let ctx2 = {lineWidth:2, strokeStyle: "black"};
+
+    if (reverse == true) {
+      let tmp = ctx1;
+      ctx1 = ctx2;
+      ctx2 = tmp;
+    }
+    for (i = 0; i < from.length; i++) {
+      if (from[i] != null && to[i] != null) {
+        n1 = from[i]; n2 = to[i];
+        ani.add_sequence_ani({
+          pause:1,
+          action: {params: {g:g, n1:n1, n2:n2, ctx: ctx1}, func: edge_prop},
+          rev_action: {params: {g:g, n1:n1, n2:n2, ctx: ctx2}, func:edge_prop},
+          concurrence:true
+        })
+      }
+    }
+  }
+
+  color_nodes(nodes, color = "pink") {
+    let ani = this.ani;
+    let g = this.g;
+    let c;
+    for (let i = 0; i < nodes.length; i++) {
+      if (i == 0 && color != "#DDDDDD") c = "lightblue";
+      else c = color;
+      if (nodes[i] != null) {
+        ani.add_sequence_ani({
+          target: nodes[i].ani_circle,
+          prop: {fade_in: true, fillStyle: c, time:1},
+        });
+      }
+    }
+  }
+
+  get_height(n) {
+    if (n == null) return 0;
+    else return n.height;
+  }
+  update_node_type(n, type) {
+    this.ani.add_sequence_ani({
+      pause:1,
+      action: {params: {n:n, type:type}, func: update_type},
+      rev_action: {params: {n:n, type:n.type}, func: update_type},
+      concurrence: true,
+    });
+
+  } 
 
 }
