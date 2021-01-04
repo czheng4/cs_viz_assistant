@@ -5,27 +5,18 @@
   12/16/2020
   Last Modified 12/25/2020
 */
-function change_color(dict) {
-  let target = dict.target;
-  
-  for(let j = 0; j < target.fillStyles.length; j++){ target.fillStyles[j] = "pink"; }
-}
 
-const left_color = "#ADD8E6";
-const right_color = "#FFD300";
-const merge_color = "red";
-const default_color = "#DDDDDD";
+
 class bubbleSortAnimation {
 	constructor(v) {
     this.v = v;
     this.ani = new Animation();
     this.ss = 50; //square_size
-    this.ms = new memorySimulator();
     this.width = 900;
     this.margin = 75;
 
     let rect;
-    let x = this.margin * 2.5;
+    let x = this.margin * 1.5;
     let y = 0;
     //constructor(x, y, width, height, ref = "", text = [], label = "", label_position = "top", text_direction = 'v', ctx_prop = {})
     rect = new Rect(x, y, v.length * this.ss, this.ss, 0, v, "array", "bottom", "h");

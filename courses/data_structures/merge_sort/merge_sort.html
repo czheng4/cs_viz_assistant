@@ -56,6 +56,7 @@ $(document).ready(function(){
     if (e.key >= '0' && e.key <= '9') {
       return true;
     }
+    if (e.key == '-' || e.key == '+') return true;
     if (e.key == ' ' || e.key == '.') return true;
     return false;
   });
