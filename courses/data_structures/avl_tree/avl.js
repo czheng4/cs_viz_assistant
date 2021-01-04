@@ -430,7 +430,6 @@ class binarySearchTreeAnimation {
     this.ani.add_object(this.key_rect);
     this.ani.add_object(this.func_text);
 
-    this.is_rebalance = false;
   }
 
 
@@ -555,7 +554,6 @@ class binarySearchTreeAnimation {
   delete(key) {
     
     key = parseFloat(key);
-    this.is_rebalanced_tree();
     this.ani.set_function_call("delete", [key]);
     this.set_state();
     
@@ -838,7 +836,6 @@ class binarySearchTreeAnimation {
   find (key) {
     
     key = parseFloat(key);
-    this.is_rebalanced_tree();
     this.ani.set_function_call("find", [key]);
     this.set_state();
     
@@ -862,18 +859,9 @@ class binarySearchTreeAnimation {
 
   }
 
-
-  is_rebalanced_tree() {
-    if (this.is_rebalance) {
-      this.is_rebalance = false;
-      this.ani.clear_animation();
-    }
-  }
-
   insert(key) {
 
     key = parseFloat(key);
-    this.is_rebalanced_tree();
     this.ani.set_function_call("insert", [key]);
     this.set_state();
     
