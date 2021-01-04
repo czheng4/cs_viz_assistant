@@ -86,7 +86,14 @@ $(document).ready(function(){
   ENABLE_IDS = ["input[name=pivot_type]", "input[name=partition_type]"];
   // MAIN_A.ani.step_by_step = true;
 
-  // $("#run").click();
+  $("input[name=partition_type]").click(function(){
+    if ($(this)[0].value == "lab") {
+      $("#elaboration_text").text("");
+      $("#elaboration_text").append('Please refer <a href = "http://web.eecs.utk.edu/~jplank/plank/classes/cs302/Notes/Sorting/">here</a> for Hoare\'s modified partition');
+    }
+  })
+  $("input[value=lab]").click();
+
   $("#run").click(function() {
 
     let str = $("#array").val();

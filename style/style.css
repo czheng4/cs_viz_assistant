@@ -3,7 +3,20 @@ body {
   margin: 0;
 }
 
+.animation_hyperlinks {
+  margin-top: -10px;
+}
 
+.animation_hyperlinks li {
+  margin-left: -5px;
+  margin-top: 3px;
+}
+
+.animation_hyperlinks li a{
+  margin-left: 5px;
+ /* text-decoration: none; */
+ /* color: blue;*/
+}
 
 #go_back, #go_forward {
   width: 90px;
