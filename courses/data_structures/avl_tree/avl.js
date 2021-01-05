@@ -9,7 +9,7 @@
   most AVL tree codes are copied from binary Search Tree.
 
 */
-
+"use strict";
 // for node type
 const T_ROOT_NODE = 0b1
 const T_LEFT_NODE = 0b10;
@@ -58,7 +58,8 @@ function edge_prop(dict) {
 }
 
 function color_path(dict) {
-  let n, e, default_color;
+  let n,n2, e, default_color;
+  let i;
   let path = dict.path,
       last_node_color = dict.last_node_color,
       first_node_color = dict.first_node_color,

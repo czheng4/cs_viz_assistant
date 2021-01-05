@@ -1,0 +1,128 @@
+<!--
+  ChaoHui Zheng
+  01/04/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="../../../lib/jquery.js"></script>
+</head>
+<style>
+  input[type = "text"]{
+    width: 50px;
+  }
+  #push_back, #pop_back {
+    width: 60px;
+  }
+</style>
+
+<body>
+  <div class = "grid-container">
+    <div class = "header">Binary Heap</div>
+    <div class = "control"> 
+
+      <input type="text" id="push_back_t">
+      <button type="button" id = "push_back">Push</button>
+      <button type="button" id = "pop_back">Pop</button>&emsp;&emsp;
+
+      <button type="button" id = "clear">Clear Heap</button>
+
+      <div class="line"></div>
+
+     
+     
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="50" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
+      </div>
+    </div>
+
+    <div class = "canvas"> 
+       <canvas id = "draw"></canvas>
+    </div>
+
+    <div class = "bottom-nav">
+      <button id = "script">Script</button>
+    </div>
+  </div>
+  
+  
+ 
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="binary_heap.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+function test1() {
+  aniTester = new animationTester(100);
+  
+  for (let i = 100; i > 70; i--) {
+    aniTester.add_func("push", [i]);
+  }
+  // aniTester.add_func("push", [12]);
+  // aniTester.add_func("push", [32]);
+  // aniTester.add_func("push", [31]);
+  // aniTester.add_func("push", [43]);
+  // aniTester.add_func("push", [2]);
+  // aniTester.add_func("push", [32]);
+  // aniTester.add_func("push", [66]);
+
+  aniTester.run_test();
+}
+
+
+$(document).ready(function(){
+ 
+
+  set_canvas(1200, 700, 0, 0);
+  MAIN_G_SPEC.weight_type = T_CONSTANT;
+  MAIN_G_SPEC.enable_node_color_change = false;
+  MAIN_G_SPEC.enable_edge_color_change = false;
+  MAIN_G_SPEC.graph_type = T_DIRECTED;
+  MAIN_G_SPEC.enable_node_move = false;
+  MAIN_G_SPEC.enable_edge_create = false;
+  MAIN_G_SPEC.center_x = 600;
+  MAIN_G_SPEC.gap_x = 500;
+  MAIN_G_SPEC.gap_y = 70;
+  MAIN_G_SPEC.offset_y = 100; 
+  MAIN_G_SPEC.layout = "tree";
+  MAIN_G_SPEC.create_reverse_edge = false;
+
+  MAIN_A = new binaryHeapAnimation(); // must use name a for every animation
+
+  D_ANIMATION_TIME = 100 - $("#speed").val();
+
+  // test1();
+  $("#push_back").click(function(){
+    MAIN_A.push($("#push_back_t").val());
+  });
+  
+
+  $("#pop_back").click(function() {
+    MAIN_A.pop();
+  })
+
+  $("#clear").click(function() {
+    MAIN_A = new binaryHeapAnimation();
+    MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
+
+  });
+});
+
+</script>
+<script src="../graph_creator/graph_creator.js"></script>
+<script src="../../../lib/control.js"></script>
+
+
+</html>

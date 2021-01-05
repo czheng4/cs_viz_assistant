@@ -6,11 +6,10 @@
   last modified 12/26/2020
 
 */
-
+"use strict";
 function update_rect_height(dict) {
   let q_rect = dict.q_rect,
       num = dict.num;
-
   q_rect.height = num * 26;
   q_rect.y = 280 - q_rect.height;
 }
