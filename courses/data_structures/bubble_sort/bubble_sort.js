@@ -5,30 +5,22 @@
   12/16/2020
   Last Modified 12/25/2020
 */
-function change_color(dict) {
-  let target = dict.target;
-  
-  for(let j = 0; j < target.fillStyles.length; j++){ target.fillStyles[j] = "pink"; }
-}
 
-const left_color = "#ADD8E6";
-const right_color = "#FFD300";
-const merge_color = "red";
-const default_color = "#DDDDDD";
+
 class bubbleSortAnimation {
 	constructor(v) {
     this.v = v;
     this.ani = new Animation();
     this.ss = 50; //square_size
-    this.ms = new memorySimulator();
     this.width = 900;
     this.margin = 75;
 
     let rect;
-
+    let x = this.margin * 1.5;
+    let y = 0;
     //constructor(x, y, width, height, ref = "", text = [], label = "", label_position = "top", text_direction = 'v', ctx_prop = {})
-    rect = new Rect(0, 100, 800, 75, 0, v, "array", "bottom", "h");
-
+    rect = new Rect(x, y, v.length * this.ss, this.ss, 0, v, "array", "bottom", "h");
+    rect.font = "20px Arial"
     this.ani.add_object(rect);
     this.ani.draw();
 
@@ -64,32 +56,27 @@ class bubbleSortAnimation {
     //console.log(v_c);
     for(i = 0; i < v.length - 1; i++){
       for(j = 0; j < v.length - i - 1; j++){
-        ani.add_sequence_ani( {pause: 1, prop: {step:true}});
-        if(v_c[j] > v_c[j + 1]){
-          tmp = v_c[j];
-          v_c[j] = v_c[j + 1];
-          v_c[j + 1] = tmp;
+        if(v_c[j] > v_c[j + 1]){     
           fill_styles[j] = "pink";
           fill_styles[j + 1] = "lightblue";
-          ani.add_sequence_ani({
+          ani.add_sequence_ani({ 
             target: prev_rect,
+            text: "Swap {} {} (array[{}])</span> and {} {} (array[{}])</span> because {} {}</span> > {} {}</span>".format(
+                  RED_SPAN, v_c[j], j, 
+                  BLUE_SPAN, v_c[j + 1], j + 1, RED_SPAN, v_c[j], BLUE_SPAN, v_c[j + 1]),
             prop: {
               fade_in: true,
               fillStyle: deep_copy(fill_styles),
               step: true,
-              time: 0.5 * ANIMATION_TIME
+              time: 1
             }
           });
           ani.add_sequence_ani({ 
             target: prev_rect,
-            text: "Swap {} {} (array[{}])</span> and {} {} (array[{}])</span> because {} {}</span> > {} {}</span>".format(
-                  RED_SPAN, v[j], j, 
-                  BLUE_SPAN, v[j + 1], j + 1, RED_SPAN, v[j], BLUE_SPAN, v[j + 1]),
             prop: {
               swap:{index1:j, index2:(j + 1), h_scale: 3},
               fillStyle: deep_copy(fill_styles),
-              time: 3 * ANIMATION_TIME,
-              step:true
+              time: 3 * ANIMATION_TIME
             }
           });
           fill_styles[j + 1] = "pink";
@@ -100,11 +87,15 @@ class bubbleSortAnimation {
               fade_in: true,
               fillStyle: deep_copy(fill_styles),
               step: true,
-              time: 0.5 * ANIMATION_TIME
+              time: 1
             }
           });
           fill_styles[j] = "#DDDDDD";
           fill_styles[j + 1] = "#DDDDDD";
+
+          tmp = v_c[j];
+          v_c[j] = v_c[j + 1];
+          v_c[j + 1] = tmp;
         }
         else{
           fill_styles[j] = "lightblue";
@@ -112,12 +103,18 @@ class bubbleSortAnimation {
           ani.add_sequence_ani({ 
             target: prev_rect,
             text: "Do not swap {} {} (array[{}])</span> and {} {} (array[{}])</span> because {} {}</span> < {} {}</span>".format(
-                  BLUE_SPAN, v[j], j, 
-                  RED_SPAN, v[j + 1], j + 1, BLUE_SPAN, v[j], RED_SPAN, v[j + 1]),
+                  BLUE_SPAN, v_c[j], j, 
+                  RED_SPAN, v_c[j + 1], j + 1, BLUE_SPAN, v_c[j], RED_SPAN, v_c[j + 1]),
             prop: {
+              fade_in: true,
               fillStyle: deep_copy(fill_styles),
-              time: 2 * ANIMATION_TIME,
-              step:true
+              time: 1
+            }
+          });
+          ani.add_sequence_ani({
+            prop: {
+              step: true,
+              time: ANIMATION_TIME,
             }
           });
           fill_styles[j] = "#DDDDDD";
@@ -128,12 +125,22 @@ class bubbleSortAnimation {
       ani.add_sequence_ani({
         target: prev_rect,
         prop: {
-          text_fade_in: {fillStyle: deep_copy(fill_styles)},
+          fade_in: true,
+          fillStyle: deep_copy(fill_styles),
           time: 1
         }
       });
     }
     //for(j = 0; j < v.length; j++){ fill_styles[j] = "pink"; }
+    fill_styles[0] = "pink";
+    ani.add_sequence_ani({
+        target: prev_rect,
+        prop: {
+          fade_in: true,
+          fillStyle: deep_copy(fill_styles),
+          time: 1
+        }
+    });
     ani.add_sequence_ani({
       target: prev_rect,
       text: "{}Bubble sort on array complete.</span>".format(RED_SPAN)
