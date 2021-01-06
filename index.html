@@ -4,61 +4,88 @@
 
   <title></title>
   <link rel="stylesheet" href="./style/style.css">
-  
+  <style type="text/css">
+    .tabs {
+      margin-right:10px;
+      font-size: 17px;
+      transform: translate(0px, 35%);
+      float: right;
+    }
+    .header .tabs a {
+      text-decoration: none; 
+      color: blue;
+      margin-right: 25px;
+    }
+    .header .tabs a:hover {
+      color:red;
+    }
+
+  </style>
 </head>
 <body>
 
 <div class = "grid-container">
-  <div class = "header" style="font-weight: bold">Algorithm Animation</div>
+  <div class = "header">
+    Algorithm Animations
+    <span class = "tabs">
+      <a href = "#">Tutorial</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="#thanks">Thanks</a>
+    </span>
+  </div>
+  <div style="clear: both;"></div>
   <div class = "control" style="padding-top: 0px; padding-bottom: 100px"> 
+
+    <p>Currently, we support following algorithms. We plan on adding more.</p>
     <h3>Linked Data Structures</h3>
     <ul class = "animation_hyperlinks">
-      <li><a href="./courses/data_structures/stack/stack.html">Stack</a></li>
-      <li><a href="./courses/data_structures/queue/queue.html">Queue</a></li>
-      <li><a href="./courses/data_structures/dlist/dlist.html">Doubly Linked List</a></li>
+      <li><a href="./animations/linked_data_structures/stack/stack.html">Stack</a></li>
+      <li><a href="./animations/linked_data_structures/queue/queue.html">Queue</a></li>
+      <li><a href="./animations/linked_data_structures/dlist/dlist.html">Doubly Linked List</a></li>
     </ul>
 
     <h3>Sorting Algorithms</h3>
     <ul class = "animation_hyperlinks">
-      <li><a href="./courses/data_structures/merge_sort/merge_sort.html">Merge Sort</a></li>
-      <li><a href="./courses/data_structures/quick_sort/quick_sort.html">Quick Sort</a></li>
-      <li><a href="./courses/data_structures/bubble_sort/bubble_sort.html">Bubble Sort</a></li>
+      <li><a href="./animations/sorting/merge_sort/merge_sort.html">Merge Sort</a></li>
+      <li><a href="./animations/sorting/quick_sort/quick_sort.html">Quick Sort</a></li>
+      <li><a href="./animations/sorting/bubble_sort/bubble_sort.html">Bubble Sort</a></li>
     </ul>
     <h3>Heaps</h3>
     <ul class = "animation_hyperlinks">
-      <li><a href="./courses/data_structures/heaps/binary_heap.html">Binary Heap</a></li>
+      <li><a href="./animations/heaps/binary_heap/binary_heap.html">Binary Heap</a></li>
     </ul>
 
     <h3> Tree Stuctures </h3>
     <ul class = "animation_hyperlinks">
-      <li><a href="./courses/data_structures/binary_search_tree/bst.html">Binary Search Tree</a></li>
-      <li><a href="./courses/data_structures/avl_tree/avl.html">AVL Tree</a></li>
+      <li><a href="./animations/tree_structures/binary_search_tree/bst.html">Binary Search Tree</a></li>
+      <li><a href="./animations/tree_structures/avl_tree/avl.html">AVL Tree</a></li>
     </ul>
 
     <h3> Hash Tables </h3>
     <ul class = "animation_hyperlinks">
-      <li><a href="./courses/data_structures/hash/separate_chaining.html">Hash Tables - Separate Chaining</a></li>
-      <li><a href="./courses/data_structures/hash/open_addressing.html">Hash Tables - Open Addressing</a></li>
+      <li><a href="./animations/hash_tables/separate_chaining/separate_chaining.html">Hash Tables - Separate Chaining</a></li>
+      <li><a href="./animations/hash_tables/open_addressing/open_addressing.html">Hash Tables - Open Addressing</a></li>
     </ul>
     
     <h3>Graph Algorithms</h3>
     <ul class = "animation_hyperlinks">
-      <li><a href="./courses/data_structures/dfs/dfs.html">Depth-First Search</a></li>
-      <li><a href="./courses/data_structures/bfs/bfs.html">Breadth-First Search</a></li>
-      <li><a href="./courses/data_structures/dijkstra/dijkstra.html">Dijkstra</a></li>
+      <li><a href="./animations/graph/dfs/dfs.html">Depth-First Search</a></li>
+      <li><a href="./animations/graph/bfs/bfs.html">Breadth-First Search</a></li>
+      <li><a href="./animations/graph/dijkstra/dijkstra.html">Dijkstra</a></li>
       
-      <li><a href="./courses/data_structures/network_flow/network_flow.html">Network Flow</a></li>
-      <li><a href="./courses/data_structures/minimum_spanning_tree/kruskal.html">Minimum Spanning Tree -- Kruskal's Algorithm</a></li>
-      <li><a href="./courses/data_structures/minimum_spanning_tree/prim.html">Minimum Spanning Tree -- Prim's Algorithm</a></li>
-      <li><a href="./courses/data_structures/toplogical_sort/toplogical_sort.html">Topological Sort</a></li>
+      <li><a href="./animations/graph/network_flow/network_flow.html">Network Flow</a></li>
+      <li><a href="./animations/graph/minimum_spanning_tree/kruskal.html">Minimum Spanning Tree -- Kruskal's Algorithm</a></li>
+      <li><a href="./animations/graph/minimum_spanning_tree/prim.html">Minimum Spanning Tree -- Prim's Algorithm</a></li>
+      <li><a href="./animations/graph/toplogical_sort/toplogical_sort.html">Topological Sort</a></li>
     </ul>
     
     
     <h3>Others</h3>
     <ul class = "animation_hyperlinks">
-      <li><a href="./courses/data_structures/disjoint_set/disjoint_set.html">Disjoint Set</a></li>
-      <li><a href="./courses/data_structures/fast_modular_exponentiation/fme.html">Fast Modular Exponentiation</a></li>
-      <li><a href="./courses/data_structures/graph_creator/graph_creator.html">Graph Creator</a></li>
+      <li><a href="./animations/others/disjoint_set/disjoint_set.html">Disjoint Set</a></li>
+      <li><a href="./animations/others/fast_modular_exponentiation/fme.html">Fast Modular Exponentiation</a></li>
+      <li><a href="./animations/others/graph_creator/graph_creator.html">Graph Creator</a></li>
     </ul>
    
 
@@ -68,21 +95,23 @@
     <h2>to-do Animations</h2>
 
     
-    <a href="./courses/data_structures/dummy/dummy.html">Selection Sort</a><br>
-    <a href="./courses/data_structures/dummy/dummy.html">Insertion Sort</a><br>
+    <a href="./animations//dummy/dummy.html">Selection Sort</a><br>
+    <a href="./animations//dummy/dummy.html">Insertion Sort</a><br>
     
 
-    <a href="./courses/data_structures/dummy/dummy.html">Priority Queues</a><br>
+    <a href="./animations//dummy/dummy.html">Priority Queues</a><br>
 
     
-    <a href="./courses/data_structures/dummy/dummy.html">Sudoku</a><br>
+    <a href="./animations//dummy/dummy.html">Sudoku</a><br>
 
    
     <h2>Examples to learn lib</h2>
     <a href="./example/example.html">Example</a><br>
-    <h2> Contact </h2>
+    <h2 id = "about"> About </h2>
+    TO DO
+    <h2 id ="contact"> Contact </h2>
     If you have any questions or find any bugs regarding to the animation, we would like you to contact <a href="mailto:czheng4@vols.utk.edu">ChaoHui Zheng</a> (czheng4@vols.utk.edu). Please describe the bug, problem, and improvement, as detailed as possible. We would also like you to give us feedback and suggest any new alogorithm animations that are helpful for algorithm learners.
-    <h2> Thanks </h2>
+    <h2 id = "thanks"> Thanks </h2>
     I am deeply thankful for the help of the following people.
     <ul>
       <li><a href="mailto:2124883576@qq.com">ZhiJie Zhang</a></li>

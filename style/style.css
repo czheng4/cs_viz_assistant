@@ -12,10 +12,14 @@ body {
   margin-top: 3px;
 }
 
-.animation_hyperlinks li a{
+.animation_hyperlinks li a {
   margin-left: 5px;
- /* text-decoration: none; */
- /* color: blue;*/
+  text-decoration: none; 
+  color: blue;
+}
+.animation_hyperlinks li a:hover {
+  color: red;
+  /*font-size: 17px;*/
 }
 
 #go_back, #go_forward {
@@ -92,6 +96,7 @@ body {
   background-color: lightblue;
   font-size: 30px;
   padding: 5px 5px 5px 10px;
+  font-weight: bold;
 }
 
 .control {

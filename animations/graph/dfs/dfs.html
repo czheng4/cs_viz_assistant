@@ -1,0 +1,127 @@
+<!--
+  ChaoHui Zheng
+  12/15/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="../../../lib/jquery.js"></script>
+  <style type="text/css">
+    input[type = "text"]{
+      width: 82px;
+    }
+   
+  </style>
+  
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header">Depth-First Search</div>
+    <div class = "control"> 
+
+      <input type="text" id="node_t" placeholder="node id"> 
+      <button type="button" id = "add_node">Add Node</button> 
+      <button type="button" id = "remove_node">Remove Node</button> &emsp;&emsp;
+
+      <input type="text" id="edge_t" placeholder="id1 id2"> 
+      <button type="button" id = "add_edge">Add Edge</button>
+      <button type="button" id = "remove_edge">Remove Edge</button> &emsp;&emsp;
+      
+      
+      <input type="radio" id="undirected" name="graph_type" value = "undirect"> 
+      <label for="graph_type">Undirected Graph</label> 
+      <input type="radio" id="directed" name="graph_type" value = "direct" checked>
+      <label for="graph_type">Directed Graph</label>
+      
+      <div class = "line"></div>
+
+      <input type = "text" id = "start_node_id" placeholder="starting node">
+      <input type = "text" id = "end_node_id" placeholder="ending node(optional)">
+      <button type = "button" id = "run_dfs">Run DFS</button> &emsp;
+      <button type="button" id = "clear_graph">Clear Graph</button>      
+      <div class = "line"></div>
+      
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="50" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
+      </div>
+    </div>
+
+    <div class = "canvas"> 
+       <canvas id = "draw"></canvas>
+    </div>
+    <div class = "bottom-nav">
+      <button id = "import_graph">Import Graph</button>
+      <input type="file" name ="Import Graph" style="display: none" id = "import_input">
+
+      <button id = "download_graph">Download Graph</button>
+      <a id = "download" download></a>
+      <button id = "script">Script</button>
+    </div>
+  </div>
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="dfs.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+
+function example(ani) {
+  let g = new Graph(ani, "directed");
+
+  for (let i = 0; i < 12; i++) {
+    g.get_node(i);
+  }
+  g.get_edges_by_name([[0, 1], [0, 4], [1, 2], [2, 3], 
+                       [3, 7], [1, 5], [5, 8], [8, 9],
+                       [9, 4], [9, 6], [6, 7], [6, 11],
+                       [7, 9], [6, 10]]);
+  return g;
+}
+
+$(document).ready(function(){
+  
+
+
+  set_canvas(1200, 800, 0, 75);
+  MAIN_G_SPEC.weight_type = T_CONSTANT;
+  MAIN_G_SPEC.enable_node_color_change = false;
+  MAIN_G_SPEC.enable_edge_color_change = false;
+  MAIN_G_SPEC.graph_type = T_DIRECTED_UNDIRECTED;
+  MAIN_G_SPEC.offset_x = 100;
+  MAIN_G_SPEC.node_radius = 20;
+
+ 
+  MAIN_A = new dfsAnimation(); 
+  MAIN_G = example(MAIN_A.ani);
+  MAIN_A.g = MAIN_G;
+
+  D_ANIMATION_TIME = 100 - $("#speed").val();
+  MAIN_G.draw();  
+
+  $("#run_dfs").click(function() {
+    if (MAIN_A.g == null) {
+      $("#elaboration_text").text("Graph is empty");
+      return;
+    }
+    MAIN_A.run_dfs($("#start_node_id").val().trim(), $("#end_node_id").val().trim());
+  })
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+<script src="../../others/graph_creator/graph_creator.js"></script>
+</html>

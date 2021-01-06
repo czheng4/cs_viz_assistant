@@ -1,0 +1,226 @@
+<!--
+  ChaoHui Zheng
+  11/22/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="../../../lib/jquery.js"></script>
+  <style type="text/css">
+    input[type = "text"]{
+      width: 100px;
+    }  
+  </style>
+  
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header">Network Flow</div>
+    <div class = "control"> 
+
+     
+      <input type="text" id="node_t" placeholder="node id"> 
+      <button type="button" id = "add_node">Add Node</button> 
+      <button type="button" id = "remove_node">Remove Node</button> &emsp;&emsp;
+
+      <input type="text" id="edge_t" placeholder="id1 id2 weight"> 
+      <button type="button" id = "add_edge">Add Edge</button>
+      <button type="button" id = "remove_edge">Remove Edge</button> &emsp;&emsp;
+      
+      <button type="button" id = "clear_network">Clear Graph</button>
+     
+      
+      <div class = "line"></div>
+      
+
+
+      <input type="text" id="path_t" placeholder="Enter path (i.e. S A T)" style = "width: 200px; display: none"> 
+      <button type="button" id = "run">Run Augmenting Path</button>
+      <button type="button" id = "min_cut" disabled>Find Minimum Cut</button>
+
+
+      <input type="radio" id="manual" name="search_type" value = "manual"> 
+      <label for="search_type">Manually Enter</label> 
+      <input type="radio" id="bfs" name="search_type" value = "bfs"> 
+      <label for="search_type">BFS</label> 
+      <input type="radio" id="greedy_dfs" name="search_type" value = "greedy_dfs"> 
+      <label for="search_type">Greedy-DFS</label> 
+      <input type="radio" id="dfs" name="search_type" value = "dfs" checked> 
+      <label for="search_type">DFS</label> 
+      <input type="radio" id="dijkstra" name="search_type" value = "dijkstra"> 
+      <label for="search_type">Dijkstra</label> 
+      
+     
+     
+
+      <!-- make the display none and check directed because network flow problem works on directed graph -->
+      <div style="display: none">
+        <input type="radio" id="undirected" name="graph_type" value = "undirect"> 
+        <label for="graph_type">Undirected Graph</label> 
+        <input type="radio" id="directed" name="graph_type" value = "direct" checked>
+        <label for="graph_type">Directed Graph</label>
+      </div>
+      <div class = "line"></div>
+      
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="50" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text">S is the SOURCE. T is the SINK</span></div>
+      </div>
+    </div>
+
+    <div class = "canvas"> 
+       <canvas id = "draw"></canvas>
+    </div>
+  </div>
+
+ <!--  This is general import and export doesn't do error check for specific animation to do!!!!! -->
+  <div class = "bottom-nav">
+    <button id = "import_graph">Import Graph</button>
+    <input type="file" name ="Import Graph" style="display: none" id = "import_input">
+
+    <button id = "download_graph">Download Graph</button>
+    <a id = "download" download></a>
+    <button id = "script">Script</button>
+  </div>
+
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="network_flow.js"></script>
+<script src="network_flow_test.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+function default_graph(ani) {
+  let g = new Graph(ani, "direct", ["S","T"]);
+  g.get_node("S", -120, 120);
+  g.get_node("T", 220, 120);
+
+  return g;
+}
+
+function network_flow_example(ani) {
+  let g = new Graph(ani, "direct", ["S", "T"]);
+  
+  g.get_node("S", -120, 120);  
+  g.get_node("A", 0, 0);
+  g.get_node("B", 0, 120);
+  g.get_node("C", -40, 240);
+  g.get_node("T", 220, 120);
+  g.get_node("D", 120, 240);
+ 
+  g.get_edges_by_name([["S", "A", 10], ["S", "C", 14], ["A", "B", 5], 
+                       ["A", "T", 5],  ["B", "T", 8], ["C","B",13],
+                       ["C","D", 10],  ["D", "T", 12]]);
+ 
+  $("#elaboration_text").text("");
+  $("#elaboration_text").append("S is the SOURCE. T is the SINK");
+  return g;
+}
+function network_flow_example2(ani) {
+  let g = new Graph(ani, "direct", ["S", "T"]);
+  
+  g.get_node("S", -120, 120);  
+  g.get_node("T", 240, 120);
+
+  g.get_node("A", 50, 0);  
+  g.get_node("B", 50, 240);
+ 
+  g.get_edges_by_name([["S", "A", 500], ["A", "B", 1], ["S", "B", 500], ["A", "T", 500], 
+                       ["B", "T", 500] ]);
+ 
+ 
+  $("#elaboration_text").text("S is the SOURCE. T is the SINK");
+  return g;
+}
+$(document).ready(function(){
+  
+
+
+  set_canvas(1200, 800, 200, 75);
+  MAIN_G_SPEC.weight_type = T_NON_NEGATIVE_NUMBER;
+  MAIN_G_SPEC.enable_node_color_change = false;
+  MAIN_G_SPEC.enable_edge_color_change = false;
+  MAIN_G_SPEC.graph_type = T_DIRECTED;
+  MAIN_G_SPEC.num_cols = 2;
+
+  // By default all the radio buttons are disabled after each animation.
+  // By default all the input and regular buttons are enabled after each animation.
+  // we can enabled or disable specific buttons/inputs by specifying ENABLE_IDS and DISABLE_IDS list.
+
+  ENABLE_IDS = ["input[name=search_type]"];
+  DISABLE_IDS = ["#min_cut", "[id*=node]", "[id*=edge]", "#download_graph"];
+  ENABLE_STEP_IDS = ["#clear_network"];
+
+  
+  MAIN_A = new networkFlowAnimation(); // must be name ani 
+  MAIN_G = network_flow_example(MAIN_A.ani);
+  MAIN_A.g = MAIN_G;
+
+  D_ANIMATION_TIME = 100 - $("#speed").val();
+ 
+  MAIN_G.draw();
+
+  // network_flow_test1();
+  
+  
+  $("input[name=search_type]").click(function(){
+    let id = $(this)[0].id;
+    if (id == "manual") {
+      $("#path_t").css("display", "inline-block");
+    } else {
+      $("#path_t").css("display", "none");
+    }
+
+    // console.log($(this)[0].id);
+  })
+
+  $("#run").click(function(){
+    let val = $("input[name=search_type]:checked").val();
+    // console.log($("#path_t").val());
+    if (val == "manual") MAIN_A.find_augmenting_path(val, $("#path_t").val());
+    else  MAIN_A.find_augmenting_path(val);
+  })
+
+  $("#min_cut").click(function() {
+    MAIN_A.find_min_cut();
+  })
+
+  $("#clear_network").click(function(){
+    let ani;
+    $("input[name=graph_type]").prop("disabled", false);
+    $("[id*=node]").prop("disabled", false);
+    $("[id*=edge]").prop("disabled", false);
+    $("#min_cut").prop("disabled", true);
+    $("#run").prop("disabled", false);
+    $("#import_graph").prop("disabled", false);
+    $("#download_graph").prop("disabled", false);
+
+    MAIN_A = new networkFlowAnimation()
+    MAIN_G = default_graph(MAIN_A.ani);
+    MAIN_A.g = MAIN_G;
+    MAIN_G.draw();
+
+    $("#elaboration_text").text("S is the SOURCE. T is the SINK")
+  })
+
+
+
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+<script src="../../others/graph_creator/graph_creator.js"></script>
+</html>
