@@ -1,6 +1,37 @@
 
+
+input[type="range"] {
+  -webkit-appearance: none;
+  background: linear-gradient(to right, green 0%, green 50%, #fff 50%, #fff 100%);
+  border: solid 1px #00b300;
+  border-radius: 8px;
+  height: 7px;
+  outline: none; 
+  padding: 0px;
+  transition: background 450ms ease-in;
+}
 body {
   margin: 0;
+}
+
+input {
+  border-radius: 2px;
+  border-width: 1px;
+  padding: 1px;
+}
+input[type="text"], input[type="number"] {
+  padding-left: 2px;
+  font-size: 13px;
+  border-radius: 2px;
+  height: 17px;
+  border: 1px solid grey;
+}
+button {
+  font-size: 13.3px;
+  padding: 1px 6px 1px 6px;
+  margin: 0px;
+  text-align: center;
+  height: 21px;
 }
 
 .animation_hyperlinks {
@@ -23,7 +54,7 @@ body {
 }
 
 #go_back, #go_forward {
-  width: 90px;
+  width: 98px;
 }
 
 .script-table {
@@ -117,3 +148,5 @@ body {
     'control'
     'canvas'
 }
+
+

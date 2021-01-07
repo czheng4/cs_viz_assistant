@@ -7,6 +7,7 @@
 <head>
 
   <title></title>
+  <meta charset="UTF-8"> 
   <link rel="stylesheet" href="../../../style/style.css">
   <script src="../../../lib/jquery.js"></script>
   <style type="text/css">
@@ -14,7 +15,7 @@
       width: 70px;
     }
     #insert, #delete, #find {
-      width: 55px;
+      width: 65px;
     }  
   </style>
   
@@ -67,13 +68,13 @@ function bst_test1() {
   let a = [];
   aniTester = new animationTester(100);
  
-  aniTester.add_func("insert", [10]);
-  aniTester.add_func("insert", [5]);
-  aniTester.add_func("insert", [3]);
-  aniTester.add_func("insert", [7]);
-  aniTester.add_func("insert", [2]);
-  aniTester.add_func("insert", [32]);
-  aniTester.add_func("insert", [66]);
+  // aniTester.add_func("insert", [10]);
+  // aniTester.add_func("insert", [5]);
+  // aniTester.add_func("insert", [3]);
+  // aniTester.add_func("insert", [7]);
+  // aniTester.add_func("insert", [2]);
+  // aniTester.add_func("insert", [32]);
+  // aniTester.add_func("insert", [66]);
   // aniTester.add_func("insert", [38]);
   // aniTester.add_func("insert", [648]);
   // aniTester.add_func("insert", [808]);
@@ -82,7 +83,7 @@ function bst_test1() {
   // aniTester.add_func("insert", [33]);
 
   // for (let i = 0; i < 10; i++) aniTester.add_func("go_forward");
-  for (let i = 0; i < 10; i++) a.push(parseInt(Math.random() * 1000));
+  for (let i = 0; i < 15; i++) a.push(parseInt(Math.random() * 1000));
   // a = [999, 323, 525, 442, 547, 119, 804, 444, 387, 507, 934, 483, 410, 320, 811, 791, 996, 690, 68, 133, 132];
   for (let i = 0; i < a.length; i++) aniTester.add_func("insert", [a[i]]);
   // for (let i = 0; i < a.length; i++) aniTester.add_func("delete", [a[i]]);

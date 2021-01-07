@@ -1,6 +1,7 @@
 /*
   ChaoHui Zheng
   11/22/2020
+  last modified 01/03/2020
 */
 
 function change_color(dict) {
@@ -113,3 +114,47 @@ function example1() {
 
   ani.run_animation();
 }
+
+
+/* a example of swaping two circles. I use this for binary heap */
+function example2() {
+  MAIN_A = {ani: new Animation()};
+  MAIN_A.g = new Graph(MAIN_A.ani);
+
+  let ani = MAIN_A.ani, 
+      g = MAIN_A.g;
+
+  let A = g.get_node("A");
+  let B = g.get_node("B");
+
+  ani.add_sequence_ani({
+    target: A.ani_circle,
+    prop: {swap: {circle: B.ani_circle, h_scale:1.2, w_scale:0.4}},
+  })
+  ani.run_animation();
+
+}
+
+/* a example of laying out nodes as a tree */
+function example3() {
+  MAIN_A = {ani: new Animation()};
+
+  MAIN_G_SPEC.layout = "tree";
+  MAIN_G_SPEC.center_x = 600;
+  MAIN_G_SPEC.gap_x = 500;
+  MAIN_G_SPEC.gap_y = 70;
+  MAIN_A.g = new Graph(MAIN_A.ani);
+ 
+
+  let ani = MAIN_A.ani, 
+      g = MAIN_A.g;
+
+  for (let i = 0; i < Math.pow(2,5); i++) {
+    g.get_node(i);
+  }
+
+  ani.draw();
+
+}
+
+
