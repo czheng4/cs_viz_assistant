@@ -1,0 +1,132 @@
+<!--
+  ChaoHui Zheng
+  01/06/2021
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <meta charset="UTF-8"> 
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="../../../lib/jquery.js"></script>
+  <style type="text/css">
+    input[type = "text"]{
+      width: 82px;
+    }
+
+    #sudoku_table {
+      border: 3px solid black;
+    }
+    #sudoku_table td{
+      /*padding: 5px 5px 5px 5px;*/
+      text-align: center;
+      width: 37px;
+      height: 37px;
+      font-size: 25px;
+      background-color: #DFDFDF;
+    }
+
+    #sudoku_table tr:nth-child(3n) td {
+      border-bottom: 3px solid black;
+    }
+
+    #sudoku_table tr td:nth-child(3n){
+      border-right: 3px solid black;
+    }
+    
+    button {
+      width: 220px;
+    }
+
+    #compute {
+      height: 26px;
+    }
+   
+  </style>
+  
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header">Sudoku - Brute Force</div>
+    <div class = "control"> 
+
+     
+      <button id = "generate">Generate New Sudoku Board</button> &emsp;
+      <button id = "solve">Solve Sudoku</button>
+      <div class = "line"></div>
+      
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="50" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
+      </div>
+    </div>
+
+
+    <div class = "canvas"> 
+      <canvas id = "draw" style="position: fixed;"></canvas>
+      <div id ="board"  style="margin-left: 120px; margin-bottom: 60px; margin-top: 28px">
+    
+          <table id = "sudoku_table" border = 1 style= "border-collapse: collapse;">
+            <tr>
+              <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+          </table>
+      </div>
+    </div>
+    
+    
+    <!-- Script size is too big for this -->
+    <!-- <div class = "bottom-nav">
+      <button id = "script">Script</button>
+    </div> -->
+  </div>
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="sudoku.js"></script>
+<script src="sudoku_boards.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+
+
+$(document).ready(function(){
+  
+  
+  // set_canvas(270,250,0,0);
+  D_ANIMATION_TIME = 100 - $("#speed").val();
+  var index = 0;
+  ENABLE_STEP_IDS = ["#generate"];
+
+  MAIN_A = new sudokuAnimation();
+
+  $("#generate").click(function(){
+    
+    MAIN_A.show_board(examples[index % examples.length]);
+    $("#go_forward").prop("disabled", true);
+    $("#go_back").prop("disabled", true);
+    $("#solve").prop("disabled", false);
+    index++;
+  })
+
+  $("#solve").click(function(){
+    MAIN_A.solve();
+  })
+  $("#generate").click();
+
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+
+</html>
