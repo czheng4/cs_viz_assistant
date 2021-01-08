@@ -41,6 +41,7 @@ class selectionSortAnimation {
     let e_text;
     let v_size = v.length;
     let j, tmp, minindex;
+    let h_scale;
     let v_c = deep_copy(v);
 
     for(i = 0; i < v_size; i++){
@@ -60,6 +61,7 @@ class selectionSortAnimation {
           time: 1
         }
       });
+      ani.add_sequence_ani({pause:ANIMATION_TIME * 1});
       for(j = i + 1; j < v_size; j++){
         if(v_c[j] < v_c[minindex]){
           if(minindex === i){ fill_styles[minindex] = "pink"; }
@@ -75,6 +77,7 @@ class selectionSortAnimation {
               time: 1
             }
           });
+          ani.add_sequence_ani({pause:ANIMATION_TIME * 1});
           fill_styles[j] = "#DDDDDD";
           minindex = j;
         }
@@ -91,6 +94,7 @@ class selectionSortAnimation {
               time: 1
             }
           });
+          ani.add_sequence_ani({pause:ANIMATION_TIME * 1});
           fill_styles[j] = "#DDDDDD";
         }
       }
@@ -107,10 +111,12 @@ class selectionSortAnimation {
         }
       });
 
+      h_scale = 2.8 * 1 / Math.abs(minindex - i);
+      if (minindex == i) h_scale = 10;
       ani.add_sequence_ani({ 
         target: prev_rect,
         prop: {
-          swap:{index1: minindex, index2: i, h_scale: 2.8 * 1 / Math.abs(minindex - i)},
+          swap:{index1: minindex, index2: i, h_scale: h_scale},
           fillStyle: deep_copy(fill_styles),
           time: 3 * ANIMATION_TIME
         }
@@ -119,7 +125,7 @@ class selectionSortAnimation {
       v_c[i] = v_c[minindex];
       v_c[minindex] = tmp;
       fill_styles[i] = "lightblue";
-      fill_styles[minindex] = "#DDDDDD";
+      if (i != minindex) fill_styles[minindex] = "#DDDDDD";
     }
     fill_styles[v_size - 1] = "lightblue";
     ani.add_sequence_ani({ 
