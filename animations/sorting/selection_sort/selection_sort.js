@@ -106,10 +106,11 @@ class selectionSortAnimation {
           time: 1
         }
       });
+
       ani.add_sequence_ani({ 
         target: prev_rect,
         prop: {
-          swap:{index1: minindex, index2: i, h_scale: 2},
+          swap:{index1: minindex, index2: i, h_scale: 2.8 * 1 / Math.abs(minindex - i)},
           fillStyle: deep_copy(fill_styles),
           time: 3 * ANIMATION_TIME
         }
