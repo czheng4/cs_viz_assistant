@@ -20,6 +20,9 @@
     input[type = "text"]{
       width: 100px;
     }
+    input[type="number"] {
+      width: 45px;
+    }
 
     td {
     
@@ -44,7 +47,7 @@
       <label for="node_color">Node Color: </label>
       <input id="node_color"> &emsp;&emsp;&emsp;
       <label for="node_radius">Radius: </label>
-      <input id="node_radius" type="number" min=10 max=99 value=20 style="height: 22px">
+      <input id="node_radius" type="number" min=10 max=50 value=20 style="height: 22px">
     
 
       <div class = "line"></div>
@@ -122,6 +125,12 @@ function example(ani) {
 
 $(document).ready(function(){
   
+  $(document).on('keypress', 'input[type=number]', function (e) {
+    if (e.key >= '0' && e.key <= '9') {
+      return true;
+    }
+    return false;
+  });
   var ani;  
   set_canvas(1200, 800, 150, 50);
 

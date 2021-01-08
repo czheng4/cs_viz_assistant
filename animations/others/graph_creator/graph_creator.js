@@ -17,6 +17,8 @@ function generate_graph_file_content(g) {
   let str = "";
   let circle, line, e;
 
+
+  str = "#### Please do not change this file. Any unexpected content changes may cause error when importing\n";
   if (g.original_graph != null) g = g.original_graph;
   if (g.graph_type == "undirect" || g.graph_type == "undirected") str += "TYPE UNDIRECTED\n";
   else str += "TYPE DIRECTED\n";
@@ -111,16 +113,35 @@ $(document).ready(function(){
 
   $("#node_radius").change(function() {
     let g = MAIN_G;
-    MAIN_G_SPEC.node_radius = $(this).val();
+    let val = parseInt($(this).val());
+
+    if (val > 50) {
+      elaboration_append("Radius must be <= 50");
+      val = 50;
+    } else if (val < 15) {
+      elaboration_append("Radius must be >= 15");
+      val = 15;
+    }
+    $(this).val(val);
+    MAIN_G_SPEC.node_radius = val;
     if (g != null) g.node_radius = MAIN_G_SPEC.node_radius;
   })
 
   $("#edge_width").change(function() {
     let g = MAIN_G;
-    MAIN_G_SPEC.edge_width = $(this).val();
+    let val = parseInt($(this).val());
+    if (val > 5) {
+      elaboration_append("Line width must be <= 5");
+      val = 5;
+    } else if (val < 1) {
+      elaboration_append("Line width must be >= 1");
+      val = 1;
+    }
+    $(this).val(val);
+    MAIN_G_SPEC.edge_width = val;
     if (g != null) g.edge_width = MAIN_G_SPEC.edge_width;
+    MAIN_A.ani.draw();
   })
-
  
   $("#download_graph").click(function() {
     download("graph.txt", generate_graph_file_content(MAIN_G));
@@ -156,186 +177,192 @@ $(document).ready(function(){
       tmp_g = new Graph(tmp_ani);
       translate_x = 0;
       translate_y = 0;
-    
-      for (i = 0; i < data.length; i++) {
-        str = data[i]
-        if (str == "") continue;
+      
+      try {
+        for (i = 0; i < data.length; i++) {
+          str = data[i]
+          if (str == "") continue;
 
-        weight = "";
-        str = str.trim();
-        str = str.split(/[ ]+/);
-        specifier = str[0].toUpperCase();
-        size = str.length;
-       
-        if (specifier == "NODE") {
-          if (graph_type == "") {
-            $("#elaboration_text").text("graph type must be specified before Node/Edge");
-            return;
-          }
-          j = 1;
-          sub_specifier = "NODE"
-          while (1) {
-            if (j == size) {
-              break;
-            } else if (sub_specifier == "NODE") {
-              if (size < j + 1) {
-                $("#elaboration_text").text("\"{}\" is not a valid node. Importing graph failed".format(data[i]));
-                return;
-              }
-              node = tmp_g.get_node(str[j]);
-              j++;
-              sub_specifier = "";
-            } else if (sub_specifier.indexOf("COL") != -1) {
-              node.ani_circle.ctx_prop.fillStyle = str[j];
-              j++;
-              sub_specifier = "";
-            } else if (sub_specifier.indexOf("POS") != -1) {
-              if (size < j + 2) {
-                $("#elaboration_text").text("\"{}\". Position spec is not valid. Importing graph failed".format(data[i]));
-                return;
-              }
-              circle = node.ani_circle;
-              x = parseFloat(str[j]); j++;
-              y = parseFloat(str[j]); j++;
-              if (isNaN(x) || isNaN(y)) {
-                $("#elaboration_text").text("\"{}\". Position spec is not valid. Importing graph failed".format(data[i]));
-                return;
-              }
-              console.log(node, circle);
-              circle.move(x - circle.x, y - circle.y)
-              sub_specifier = "";
-            } else if (sub_specifier.indexOf("RADIUS") != -1) {
-              circle.r = parseFloat(str[j]);
-              j++;
-              sub_specifier = "";
-
-            } else {
-              sub_specifier = str[j].toUpperCase();
-              j++;
-            }
-
-
-          }
-         
-        } else if (specifier == "EDGE") {
-          j = 1;
-          sub_specifier = "EDGE";
-          if (graph_type == "") {
-            $("#elaboration_text").text("graph type must be specified before Node/Edge");
-            return;
-          }
-          while(1) {
-
-             console.log(sub_specifier, size, j);
-            if (j == size) {
-              break;
-            } else if (sub_specifier == "EDGE") {
-              if (size < j + 2) {
-                $("#elaboration_text").text("\"{}\". Edge spec is not valid. Importing graph failed".format(data[i]));
-                return;
-              }
-              from = tmp_g.get_node(str[j]); j++;
-              to = tmp_g.get_node(str[j]); j++;
-              weight = "";
-              for (j; j < size; j++) {
-                if(str[j].toUpperCase().indexOf("COL") != -1 || 
-                   str[j].toUpperCase().indexOf("WIDTH") != -1 ||
-                   str[j].toUpperCase().indexOf("TEXT_T") != -1 ||
-                   str[j].toUpperCase().indexOf("TEXT_DIR") != -1) break;
-                weight += str[j];
-              }
-
-              edge = tmp_g.get_edge(from, to, weight.trim());
-              if (edge == null) {
-                $("#elaboration_text").text("Weight \"{}\" is not valid. Importing graph failed".format(weight));
-                return;
-              }
-              console.log(from, to, edge, weight.trim());
-              
-              sub_specifier = "";
-            } else if (sub_specifier.indexOf("COL") != -1) {
-              edge.ani_line.ctx_prop.strokeStyle = str[j];
-              j++;
-              sub_specifier = "";
-            } else if (sub_specifier.indexOf("WIDTH") != -1) { 
-              edge.ani_line.ctx_prop.lineWidth = parseFloat(str[j]);
-              j++;
-              sub_specifier = "";
-            } else if (sub_specifier.indexOf("TEXT_T") != -1){
-              edge.ani_line.text_t = parseFloat(str[j]);
-              j++;
-              sub_specifier = "";
-            } else if (sub_specifier.indexOf("TEXT_DIR") != -1) {
-              edge.ani_line.text_direction = str[j];
-              j++;
-            } else {
-              sub_specifier = str[j].toUpperCase();
-              j++;
-            }
+          weight = "";
+          str = str.trim();
+          str = str.split(/[ ]+/);
+          specifier = str[0].toUpperCase();
+          size = str.length;
           
-          }
-
-
-        } else if (specifier == "TYPE") {
-          if (size == 1) {
-            $("#elaboration_text").text("Graph type is not specified. Importing graph failed");
-            return;
-          } else if (str[1].toUpperCase().indexOf("UNDIRECT") != -1) {
-            graph_type = "undirected";
-            if (!(MAIN_G_SPEC.graph_type & T_UNDIRECTED)) {
-              $("#elaboration_text").text("Undirected graph type is not allowed");
+          if (specifier.indexOf("#") != -1) continue;
+          if (specifier == "NODE") {
+            if (graph_type == "") {
+              $("#elaboration_text").text("graph type must be specified before Node/Edge");
               return;
             }
-          } else if (str[1].toUpperCase().indexOf("DIRECT") != -1) {
-            graph_type = "directed";
-            if (!(MAIN_G_SPEC.graph_type & T_DIRECTED)) {
-              $("#elaboration_text").text("Directed graph type is not allowed");
+            j = 1;
+            sub_specifier = "NODE"
+            while (1) {
+              if (j == size) {
+                break;
+              } else if (sub_specifier == "NODE") {
+                if (size < j + 1) {
+                  elaboration_append("\"{}\" is not a valid node. Importing graph failed".format_n(data[i]));
+                  return;
+                }
+                node = tmp_g.get_node(str[j]);
+                j++;
+                sub_specifier = "";
+              } else if (sub_specifier.indexOf("COL") != -1) {
+                node.ani_circle.ctx_prop.fillStyle = str[j];
+                j++;
+                sub_specifier = "";
+              } else if (sub_specifier.indexOf("POS") != -1) {
+                if (size < j + 2) {
+                  elaboration_append("\"{}\". Position spec is not valid. Importing graph failed".format_b(data[i]));
+                  return;
+                }
+                circle = node.ani_circle;
+                x = parseFloat(str[j]); j++;
+                y = parseFloat(str[j]); j++;
+                if (isNaN(x) || isNaN(y)) {
+                  elaboration_append("\"{}\". Position spec is not valid. Importing graph failed".format_b(data[i]));
+                  return;
+                }
+                console.log(node, circle);
+                circle.move(x - circle.x, y - circle.y)
+                sub_specifier = "";
+              } else if (sub_specifier.indexOf("RADIUS") != -1) {
+                circle.r = parseFloat(str[j]);
+                j++;
+                sub_specifier = "";
+
+              } else {
+                sub_specifier = str[j].toUpperCase();
+                j++;
+              }
+
+
+            }
+           
+          } else if (specifier == "EDGE") {
+            j = 1;
+            sub_specifier = "EDGE";
+            if (graph_type == "") {
+              $("#elaboration_text").text("graph type must be specified before Node/Edge");
               return;
             }
-          } else {
-            $("#elaboration_text").text("\"{}\" is not a graph type. Importing graph failed".format(data[i]));
-            return;
-          }
+            while(1) {
 
-          tmp_g.graph_type = graph_type;
+               console.log(sub_specifier, size, j);
+              if (j == size) {
+                break;
+              } else if (sub_specifier == "EDGE") {
+                if (size < j + 2) {
+                  elaboration_append("\"{}\". Edge spec is not valid. Importing graph failed".format_b(data[i]));
+                  return;
+                }
+                from = tmp_g.get_node(str[j]); j++;
+                to = tmp_g.get_node(str[j]); j++;
+                weight = "";
+                for (j; j < size; j++) {
+                  if(str[j].toUpperCase().indexOf("COL") != -1 || 
+                     str[j].toUpperCase().indexOf("WIDTH") != -1 ||
+                     str[j].toUpperCase().indexOf("TEXT_T") != -1 ||
+                     str[j].toUpperCase().indexOf("TEXT_DIR") != -1) break;
+                  weight += str[j];
+                }
 
-        } else if (specifier == "LAYOUT") {
+                edge = tmp_g.get_edge(from, to, weight.trim());
+                if (edge == null) {
+                  elaboration_append("Weight \"{}\" is not valid. Importing graph failed".format_b(weight));
+                  return;
+                }
+                console.log(from, to, edge, weight.trim());
+                
+                sub_specifier = "";
+              } else if (sub_specifier.indexOf("COL") != -1) {
+                edge.ani_line.ctx_prop.strokeStyle = str[j];
+                j++;
+                sub_specifier = "";
+              } else if (sub_specifier.indexOf("WIDTH") != -1) { 
+                edge.ani_line.ctx_prop.lineWidth = parseFloat(str[j]);
+                j++;
+                sub_specifier = "";
+              } else if (sub_specifier.indexOf("TEXT_T") != -1){
+                edge.ani_line.text_t = parseFloat(str[j]);
+                j++;
+                sub_specifier = "";
+              } else if (sub_specifier.indexOf("TEXT_DIR") != -1) {
+                edge.ani_line.text_direction = str[j];
+                j++;
+              } else {
+                sub_specifier = str[j].toUpperCase();
+                j++;
+              }
+            
+            }
 
-          if (size == 1) {
-            $("#elaboration_text").text("Layout is not specified. Importing graph failed");
-            return;
-          } else if (str[1].toUpperCase().indexOf("TREE") != -1) {
-            layout = "tree";
-          } else if (str[1].toUpperCase().indexOf("GRID") != -1) {
-            layout = "grid"
-          } else {
-            $("#elaboration_text").text("\"{}\" is not a layout. Importing graph failed".format(data[i]));
-            return;
-          }
-          tmp_g.layout = layout;
 
-        } else if (specifier == "TRANSLATE_X") {
-          if (size != 2) {
-            $("#elaboration_text").text("TRANSLATE_X NUMBER. Importing graph failed");
-            return;
+          } else if (specifier == "TYPE") {
+            if (size == 1) {
+              $("#elaboration_text").text("Graph type is not specified. Importing graph failed");
+              return;
+            } else if (str[1].toUpperCase().indexOf("UNDIRECT") != -1) {
+              graph_type = "undirected";
+              if (!(MAIN_G_SPEC.graph_type & T_UNDIRECTED)) {
+                $("#elaboration_text").text("Undirected graph type is not allowed");
+                return;
+              }
+            } else if (str[1].toUpperCase().indexOf("DIRECT") != -1) {
+              graph_type = "directed";
+              if (!(MAIN_G_SPEC.graph_type & T_DIRECTED)) {
+                $("#elaboration_text").text("Directed graph type is not allowed");
+                return;
+              }
+            } else {
+              elaboration_append("\"{}\" is not a graph type. Importing graph failed".format_b(data[i]));
+              return;
+            }
+
+            tmp_g.graph_type = graph_type;
+
+          } else if (specifier == "LAYOUT") {
+
+            if (size == 1) {
+              $("#elaboration_text").text("Layout is not specified. Importing graph failed");
+              return;
+            } else if (str[1].toUpperCase().indexOf("TREE") != -1) {
+              layout = "tree";
+            } else if (str[1].toUpperCase().indexOf("GRID") != -1) {
+              layout = "grid"
+            } else {
+              elaboration_append("\"{}\" is not a layout. Importing graph failed".format_b(data[i]));
+              return;
+            }
+            tmp_g.layout = layout;
+
+          } else if (specifier == "TRANSLATE_X") {
+            if (size != 2) {
+              $("#elaboration_text").text("TRANSLATE_X NUMBER. Importing graph failed");
+              return;
+            }
+            translate_x = parseInt(str[1]);
+            if (isNaN(translate_x)) {
+              $("#elaboration_text").text("TRANSLATE_X NUMBER. Importing graph failed");
+              return;
+            }
+          } else if (specifier == "TRANSLATE_Y") {
+            if (size != 2) {
+              $("#elaboration_text").text("TRANSLATE_Y NUMBER. Importing graph failed");
+              return;
+            }
+            translate_y = parseInt(str[1]);
+            if (isNaN(translate_y)) {
+              $("#elaboration_text").text("TRANSLATE_Y NUMBER. Importing graph failed");
+              return;
+            }
           }
-          translate_x = parseInt(str[1]);
-          if (isNaN(translate_x)) {
-            $("#elaboration_text").text("TRANSLATE_X NUMBER. Importing graph failed");
-            return;
-          }
-        } else if (specifier == "TRANSLATE_Y") {
-          if (size != 2) {
-            $("#elaboration_text").text("TRANSLATE_Y NUMBER. Importing graph failed");
-            return;
-          }
-          translate_y = parseInt(str[1]);
-          if (isNaN(translate_y)) {
-            $("#elaboration_text").text("TRANSLATE_Y NUMBER. Importing graph failed");
-            return;
-          }
+          
         }
-        
+      } catch(err) {
+        $("#elaboration_text").text("Unknown error when importing graph");
+        return;
       }
 
       dx = translate_x - TRANSLATE_X;
@@ -435,9 +462,9 @@ $(document).ready(function(){
     if (id == "") {
       $("#elaboration_text").text("node id is empty");
     } else if (g.is_node(id)) {
-      $("#elaboration_text").text(id + " exists");
+      elaboration_append("{} exists".format_b(id));
     } else {
-      $("#elaboration_text").text("Add node {} successfully".format(id));
+      elaboration_append("Add node {} successfully".format_b(id));
       g.get_node(id);
       g.draw();
     }
@@ -457,9 +484,9 @@ $(document).ready(function(){
     if (id == "") {
       $("#elaboration_text").text("node id is empty");
     } else if (!g.is_node(id)) {
-      $("#elaboration_text").text(id + " doesn't exist");
+      elaboration_append("Node {} doesn't exist".format_b(id));
     } else {
-      $("#elaboration_text").text("Remove node {} successfully".format(id));
+      elaboration_append("Remove node {} successfully".format_b(id));
       g.remove_node(id);
       g.draw();
     }
@@ -487,18 +514,19 @@ $(document).ready(function(){
       id2 = str[1];
      
       if (!g.is_node(id1)) {
-        $("#elaboration_text").text("node " + id1 + " doesn't exist");
+        elaboration_append("Node {} does not exist".format_b(id1));
       } else if (!g.is_node(id2)) {
-        $("#elaboration_text").text("node " + id2 + " doesn't exist");
+        elaboration_append("Node {} does not exist".format_b(id2));
 
       } else {
         n1 = g.get_node(id1);
         n2 = g.get_node(id2);
         
         if (!g.is_edge(n1, n2)) {
-          $("#elaboration_text").text("Edge " + n1.id + "->" + n2.id + " doesn't exist");
+          elaboration_append("Edge {} does not exist".format_b(pretty_edge(n1, n2)));
+
         } else {
-          $("#elaboration_text").text("Remove Edge {} -> {} successfully".format(n1.id, n2.id));
+          elaboration_append("Remove Edge {} successfully".format_b(pretty_edge(n1, n2)));
           g.remove_edge(n1, n2);
           g.draw();
         }
@@ -538,15 +566,15 @@ $(document).ready(function(){
       if (g.weight_type != T_STRING && g.weight_type != T_CONSTANT && isNaN(parseFloat(weight))) {
         $("#elaboration_text").text("add_edge: weight is not valid");
       } else if (!g.is_node(id1)) {
-        $("#elaboration_text").text("node " + id1 + " doesn't exist");
+        elaboration_append("Node {} does not exist".format_b(id1));
       } else if (!g.is_node(id2)) {
-        $("#elaboration_text").text("node " + id2 + " doesn't exist");
+        elaboration_append("Node {} does not exist".format_b(id2));
 
       } else {
         n1 = g.get_node(id1);
         n2 = g.get_node(id2);
         
-        $("#elaboration_text").text("Add/Update edge {} -> {} successfully".format(n1.id, n2.id));
+        elaboration_append("Add/Update edge {} successfully".format_b(pretty_edge(n1, n2)));
         g.get_edge(n1, n2, weight);
         g.draw();
         
