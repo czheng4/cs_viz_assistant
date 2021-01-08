@@ -17,7 +17,8 @@ function generate_graph_file_content(g) {
   let str = "";
   let circle, line, e;
 
-  if (g.graph_type == "undirect") str += "TYPE UNDIRECTED\n";
+  if (g.original_graph != null) g = g.original_graph;
+  if (g.graph_type == "undirect" || g.graph_type == "undirected") str += "TYPE UNDIRECTED\n";
   else str += "TYPE DIRECTED\n";
 
   str += "TRANSLATE_X " + TRANSLATE_X + "\n";
@@ -239,7 +240,8 @@ $(document).ready(function(){
               for (j; j < size; j++) {
                 if(str[j].toUpperCase().indexOf("COL") != -1 || 
                    str[j].toUpperCase().indexOf("WIDTH") != -1 ||
-                   str[j].toUpperCase().indexOf("TEXT_T") != -1) break;
+                   str[j].toUpperCase().indexOf("TEXT_T") != -1 ||
+                   str[j].toUpperCase().indexOf("TEXT_DIR") != -1) break;
                 weight += str[j];
               }
 
@@ -345,11 +347,7 @@ $(document).ready(function(){
 
       tmp_g.draw();
 
-      if ("make_new" in MAIN_A) MAIN_A = MAIN_A.make_new();
-      MAIN_G = tmp_g;
-      MAIN_A.ani = tmp_ani;
-      MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
-      if ("g" in MAIN_A) MAIN_A.g = MAIN_G;
+
       
       // console.log(g.graph_type);
       $(":button").prop("disabled", false);
@@ -362,6 +360,13 @@ $(document).ready(function(){
       if (MAIN_G.graph_type == "direct" || MAIN_G.graph_type == "directed") $("#directed").attr("checked", true);
       else $("#undirected").attr("checked", true);
       
+
+      if ("make_new" in MAIN_A) MAIN_A = MAIN_A.make_new();
+      MAIN_G = tmp_g;
+      MAIN_A.ani = tmp_ani;
+      MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
+      if ("g" in MAIN_A) MAIN_A.g = MAIN_G;
+
       console.log(MAIN_G);
      
       
@@ -373,7 +378,13 @@ $(document).ready(function(){
 
   $("#clear_graph").click(function(){
     let ani;
-    $("input[name=graph_type]").prop("disabled", false);
+
+    $(":button").prop("disabled", false);
+    $(":input").prop("disabled", false);
+
+    $("#go_back").prop("disabled", true);
+    $("#go_forward").prop("disabled", true);
+
     if ("make_new" in MAIN_A) MAIN_A = MAIN_A.make_new();
     else {
       ani = new Animation();
@@ -382,12 +393,25 @@ $(document).ready(function(){
     MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
     MAIN_G = null;
     MAIN_A.ani.draw();
+  })
+
+  $("#modify_original_graph").click(function(){
+    if (MAIN_A == null || MAIN_G == null || MAIN_G.original_graph == null) return;
 
     $(":button").prop("disabled", false);
     $(":input").prop("disabled", false);
 
     $("#go_back").prop("disabled", true);
     $("#go_forward").prop("disabled", true);
+    $("input[name=graph_type]").prop("disabled", true);
+
+    if ("make_new" in MAIN_A) MAIN_A = MAIN_A.make_new();
+    MAIN_G = MAIN_G.original_graph;
+    MAIN_A.ani = MAIN_G.ani;
+    MAIN_A.g = MAIN_G;
+    MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
+
+    MAIN_A.ani.draw();
   })
 
 

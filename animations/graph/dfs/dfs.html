@@ -35,14 +35,15 @@
       <input type="radio" id="undirected" name="graph_type" value = "undirect"> 
       <label for="graph_type">Undirected Graph</label> 
       <input type="radio" id="directed" name="graph_type" value = "direct" checked>
-      <label for="graph_type">Directed Graph</label>
+      <label for="graph_type">Directed Graph</label> 
       
       <div class = "line"></div>
 
       <input type = "text" id = "start_node_id" placeholder="starting node">
       <input type = "text" id = "end_node_id" placeholder="ending node(optional)">
       <button type = "button" id = "run_dfs">Run DFS</button> &emsp;
-      <button type="button" id = "clear_graph">Clear Graph</button>      
+      <button type="button" id = "clear_graph">Clear Graph</button> &emsp;
+      <button type="button" id = "modify_original_graph">Modify Graph</button>   
       <div class = "line"></div>
       
       <div class = "animation-control">
@@ -111,6 +112,7 @@ $(document).ready(function(){
   D_ANIMATION_TIME = 100 - $("#speed").val();
   MAIN_G.draw();  
 
+  $("input[name=graph_type]").prop("disabled", true);
   $("#run_dfs").click(function() {
     if (MAIN_A.g == null) {
       $("#elaboration_text").text("Graph is empty");

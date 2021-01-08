@@ -35,13 +35,14 @@
       <button type="button" id = "add_edge">Add Edge</button>
       <button type="button" id = "remove_edge">Remove Edge</button> &emsp;&emsp;
       
-      <button type="button" id = "clear_graph">Clear Graph</button>
+      
      
       
       <div class = "line"></div>
       <input type = "text" placeholder="node id" id = "run_node_id">
-      <button type="button" id = "run" style="width: 182px">Run Toplogical Sort</button>&emsp;
-
+      <button type="button" id = "run" style="width: 182px">Run Toplogical Sort</button>&emsp; &emsp;
+      <button type="button" id = "clear_graph">Clear Graph</button> &emsp;
+      <button type="button" id = "modify_original_graph">Modify Graph</button>
       
 
       <!-- make the display none and check directed because network flow problem works on directed graph -->
@@ -143,9 +144,6 @@ $(document).ready(function(){
   MAIN_G_SPEC.offset_y = 50;
 
   D_ANIMATION_TIME = 100 - $("#speed").val();
-  DISABLE_IDS = ["[id*=node]", "[id*=edge]", "#download_graph"];
-  ENABLE_STEP_IDS = ["#clear_graph"];
-  START_IDS = ["#run_node_id"];
 
   MAIN_A = new toplogicalSortAnimation(); // must be name ani 
   MAIN_G = graph_example(MAIN_A.ani);

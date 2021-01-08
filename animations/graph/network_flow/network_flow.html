@@ -31,7 +31,8 @@
       <button type="button" id = "add_edge">Add Edge</button>
       <button type="button" id = "remove_edge">Remove Edge</button> &emsp;&emsp;
       
-      <button type="button" id = "clear_network">Clear Graph</button>
+      <button type="button" id = "clear_network">Clear Graph</button> &emsp;
+      <button type="button" id = "modify_original_graph">Modify Graph</button>
      
       
       <div class = "line"></div>
@@ -97,6 +98,8 @@
 </body>
 
 <script src="../../../lib/drawing.js"></script>
+<script src="../../../lib/memory_generator.js"></script>
+<script src="../../linked_data_structures/dlist/dlist.js"></script>
 <script src="network_flow.js"></script>
 <script src="network_flow_test.js"></script>
 <script src="../../../lib/canvas_helper.js"></script>
@@ -160,7 +163,7 @@ $(document).ready(function(){
   // we can enabled or disable specific buttons/inputs by specifying ENABLE_IDS and DISABLE_IDS list.
 
   ENABLE_IDS = ["input[name=search_type]"];
-  DISABLE_IDS = ["#min_cut", "[id*=node]", "[id*=edge]", "#download_graph"];
+  DISABLE_IDS = ["#min_cut", "[id*=node]", "[id*=edge]"];
   ENABLE_STEP_IDS = ["#clear_network"];
 
   
@@ -197,15 +200,17 @@ $(document).ready(function(){
     MAIN_A.find_min_cut();
   })
 
+
   $("#clear_network").click(function(){
     let ani;
-    $("input[name=graph_type]").prop("disabled", false);
-    $("[id*=node]").prop("disabled", false);
-    $("[id*=edge]").prop("disabled", false);
+    
+    $(":button").prop("disabled", false);
+    $(":input").prop("disabled", false);
+
+    $("#go_back").prop("disabled", true);
+    $("#go_forward").prop("disabled", true);
     $("#min_cut").prop("disabled", true);
-    $("#run").prop("disabled", false);
-    $("#import_graph").prop("disabled", false);
-    $("#download_graph").prop("disabled", false);
+   
 
     MAIN_A = new networkFlowAnimation()
     MAIN_G = default_graph(MAIN_A.ani);

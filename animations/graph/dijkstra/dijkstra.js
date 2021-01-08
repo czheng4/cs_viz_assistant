@@ -130,6 +130,7 @@ class dijkstraAnimation {
     this.ani = new Animation();
     this.graph = null;
     this.starting_node = null;
+    this.run = false;
   }
 
 
@@ -151,7 +152,10 @@ class dijkstraAnimation {
       }
     }
 
-
+    if (this.run == false) {
+      $("#elaboration_text").text("Must run Dijkstra on a node first");
+      return;
+    }
 
     ani.clear_animation();
     pre_n = n.shallow_copy();
@@ -238,6 +242,7 @@ class dijkstraAnimation {
     let pre_multimap_text;
     let multimap_text;
 
+    this.run = true;
     ani.clear_animation();
     this.starting_node = starting_node;
     pre_multimap_text = "";
@@ -260,6 +265,7 @@ class dijkstraAnimation {
       }
     }
 
+    g.save_original_graph();
     // set up the table.
     html_table(g);
 

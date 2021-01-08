@@ -90,7 +90,7 @@ class primAnimation {
     let g = this.g;
     let ani = this.ani;
     let x1, x2, y1, y2;
-    let n, d, nodes;
+    let n, d, nodes, dy;
     let c;
     let margin = 60;
     let origin;
@@ -101,12 +101,12 @@ class primAnimation {
     y2 = -1;
 
     nodes = [];
-
+    g.save_original_graph();
     for (let key in g.node_map) {
       n = g.node_map[key].ani_circle;
       nodes.push(n);
       
-      ;
+      
 
       if (n.x < x1) x1 = n.x;
       if (n.x > x2) x2 = n.x;
@@ -117,18 +117,19 @@ class primAnimation {
 
     origin = -x1;
     d = x2 - x1 + margin * 2;
+    dy = -y1;
     if (2 * d + 50 > canvas.width - 250) set_canvas(2 * d + 300, 800, 250, 75);
     d += origin;
     
-    ani.add_object(new Text("Original Graph", x1 + origin, y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
-    ani.add_object(new Text("Spanning Tree", x1 + d , y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
-    ani.add_object(new quadraticCurve(new Point(x1 + d - margin, y1 - 50), new Point(x1 + d - margin, y2 + 50), 0, 0, false));
+    ani.add_object(new Text("Original Graph", x1 + origin, -45, x2 - x1, "19px Times New Roman"));
+    ani.add_object(new Text("Spanning Tree", x1 + d , -45, x2 - x1, "19px Times New Roman"));
+    ani.add_object(new quadraticCurve(new Point(x1 + d - margin, - 50), new Point(x1 + d - margin, y2 + 50 + dy), 0, 0, false));
 
     //console.log(ani.obj_map);
     for (let i = 0; i < nodes.length; i++) {
       n = nodes[i];
-      g.get_node(init_graph_node(n.ref), n.x + d, n.y, n.ref);
-      n.move(origin, 0);
+      g.get_node(init_graph_node(n.ref), n.x + d, n.y + dy, n.ref);
+      n.move(origin, dy);
     }
 
     this.ani.draw();

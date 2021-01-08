@@ -46,8 +46,9 @@
       <input type="text" id="ending_node" placeholder="ending node"> 
       <button type="button" id = "get_path">Get Path</button> &emsp;&emsp;
 
-      <button type="button" id = "clear_graph">Clear Graph</button> &emsp;&emsp;
-
+      <button type="button" id = "clear_graph">Clear Graph</button> &emsp;
+      <button type="button" id = "modify_original_graph">Modify Graph</button>   
+      &emsp; &emsp;
       <input type="radio" id="undirected" name="graph_type" value = "undirect" checked> 
       <label for="graph_type">Undirected Graph</label> 
       <input type="radio" id="directed" name="graph_type" value = "direct">
@@ -130,7 +131,8 @@ $(document).ready(function(){
   MAIN_G_SPEC.weight_type = T_POSITIVE_NUMBER;
   MAIN_G_SPEC.enable_node_color_change = false;
   MAIN_G_SPEC.enable_edge_color_change = false;
-  ENABLE_STEP_IDS = ["#clear_graph"];
+  MAIN_G_SPEC.graph_type = T_DIRECTED_UNDIRECTED;
+
   D_ANIMATION_TIME = 100 - $("#speed").val();
   MAIN_A = new dijkstraAnimation(); // must be name ani
   MAIN_G = dijkstra_example(MAIN_A.ani);

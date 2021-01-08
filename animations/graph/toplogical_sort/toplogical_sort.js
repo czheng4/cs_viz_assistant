@@ -204,12 +204,23 @@ class toplogicalSortAnimation {
       $("#elaboration_text").text("It must be directed acyclic graph");
       return;
     }
+    this.reset_graph();
     if (this.init == false) {
+      g.save_original_graph();
       this.make_queue_rect();
       this.init = true;
-    } else this.reset_graph();
+    }
     
     ani.clear_animation();
+
+    // for (let key in g.node_map) {
+    //   g.node_map[key].ani_circle.ctx_prop = deep_copy(DEFAULT_CIRCLE_CTX);
+    // }
+    // for (let key in g.edge_map) {
+    //   g.edge_map[key].ani_line.ctx_prop = deep_copy(DEFAULT_LINE_CTX);
+    // }
+
+
     q_rect = this.q_rect;
     starting_node = g.get_node(starting_node_id);
 

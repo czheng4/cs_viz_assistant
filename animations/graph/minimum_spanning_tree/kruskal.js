@@ -83,11 +83,13 @@ class kruskalAnimation {
     let g = this.g;
     let ani = this.ani;
     let x1, x2, y1, y2;
+    let dy;
     let n, d, nodes;
     let c;
     let margin = 60;
     let origin;
-      
+    
+    g.save_original_graph();
     x1 = 100000;
     x2 = -1;
     y1 = 100000;
@@ -114,20 +116,20 @@ class kruskalAnimation {
 
     origin = -x1;
     d = x2 - x1 + margin * 2;
-
+    dy = -y1;
     // the 250 width is used for sorted edges. 
     if (2 * d + 50 > canvas.width - 250) set_canvas(2 * d + 300, 800, 250, 75);
     d += origin;
     
-    ani.add_object(new Text("Spanning Tree", x1 + origin, y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
-    ani.add_object(new Text("Original Graph", x1 + d , y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
-    ani.add_object(new quadraticCurve(new Point(x1 + d - margin, y1 - 50), new Point(x1 + d - margin, y2 + 50), 0, 0, false));
+    ani.add_object(new Text("Spanning Tree", x1 + origin, -45, x2 - x1, "19px Times New Roman"));
+    ani.add_object(new Text("Original Graph", x1 + d , -45, x2 - x1, "19px Times New Roman"));
+    ani.add_object(new quadraticCurve(new Point(x1 + d - margin, -50), new Point(x1 + d - margin, y2 + 50 + dy), 0, 0, false));
 
     //console.log(ani.obj_map);
     for (let i = 0; i < nodes.length; i++) {
       n = nodes[i];
-      g.get_node(init_graph_node(n.ref), n.x + origin, n.y, n.ref);
-      n.move(d, 0);
+      g.get_node(init_graph_node(n.ref), n.x + origin, n.y + dy, n.ref);
+      n.move(d, dy);
     }
 
     this.ani.draw();

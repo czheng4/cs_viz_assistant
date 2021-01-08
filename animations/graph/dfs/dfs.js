@@ -3,7 +3,7 @@
   All rights reserved.
   
   12/15/2020
-  last modified 12/26/2020
+  last modified 01/07/2020
 
 */
 
@@ -31,6 +31,7 @@ class dfsAnimation {
       return;
     }
 
+
     n = g.get_node(node_id);
 
     this.ending_node = null;
@@ -47,6 +48,7 @@ class dfsAnimation {
     for (let key in g.edge_map) {
       g.edge_map[key].ani_line.ctx_prop = deep_copy(DEFAULT_LINE_CTX);
     }
+    g.save_original_graph();
 
     this.path = [];
     this.dfs(g.get_node(node_id), null);

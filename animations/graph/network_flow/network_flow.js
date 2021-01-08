@@ -179,7 +179,7 @@ class networkFlowAnimation {
   make_new() {
     $("#run").prop("disabled", false);
     $("#min_cut").prop("disabled", true);
-    
+
     return new networkFlowAnimation();
   }
 
@@ -187,7 +187,8 @@ class networkFlowAnimation {
   create_init_graph() {
     let g = this.g;
     let ani = this.ani;
-    let d, n, e, n2;
+    let n, e, n2;
+    let dx, dy;
     let x1, x2, y1, y2, y;
     let text, line;
     let margin = 60;
@@ -197,6 +198,7 @@ class networkFlowAnimation {
       throw new Error("graph is not created. Error");
     }
 
+    g.save_original_graph();
 
     x1 = 100000;
     x2 = -1;
@@ -214,25 +216,26 @@ class networkFlowAnimation {
     }
 
     origin = -(x1 + 120);
-    d = x2 - x1 + margin * 2;
+    dx = x2 - x1 + margin * 2;
+    dy = -y1;
 
     // make canvas bigger if canvas is not wide enough.
-    if (3 * d > canvas.width - 200) set_canvas(3 * d + 200, 800, 200, 75);
+    if (3 * dx > canvas.width - 200) set_canvas(3 * dx + 200, 800, 200, 75);
 
 
-    ani.add_object(new Text("Flow Graph", x1 + origin, y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
-    ani.add_object(new Text("Residual Graph", x1 + d + origin, y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
-    ani.add_object(new Text("Original Graph", x1 + 2 * d +origin , y1 - 30 - g.node_radius, x2 - x1, "19px Times New Roman"));
+    ani.add_object(new Text("Flow Graph", x1 + origin, -45, x2 - x1, "19px Times New Roman"));
+    ani.add_object(new Text("Residual Graph", x1 + dx + origin, -45, x2 - x1, "19px Times New Roman"));
+    ani.add_object(new Text("Original Graph", x1 + 2 * dx +origin , -45, x2 - x1, "19px Times New Roman"));
 
   
-    ani.add_object(new quadraticCurve(new Point(x1 + d - margin + origin, y1 - 50), new Point(x1 + d - margin + origin, y2 + 50), 0, 0, false));
-    ani.add_object(new quadraticCurve(new Point(x1 + 2 * d - margin + origin, y1 - 50), new Point(x1 + 2 * d - margin + origin, y2 + 50), 0, 0, false));
+    ani.add_object(new quadraticCurve(new Point(x1 + dx - margin + origin, - 50), new Point(x1 + dx - margin + origin, y2 + dy + 50), 0, 0, false));
+    ani.add_object(new quadraticCurve(new Point(x1 + 2 * dx - margin + origin, - 50), new Point(x1 + 2 * dx - margin + origin, y2 + dy + 50), 0, 0, false));
 
     for (let i = 0; i < circles.length; i++) {
       n = circles[i];
-      g.get_node(flow_g_node(n.ref), n.x + origin, n.y, n.ref);
-      g.get_node(original_g_node(n.ref), n.x + 2 * d + origin, n.y, n.ref).ani_circle.visible = true;
-      n.move(d + origin, 0);
+      g.get_node(flow_g_node(n.ref), n.x + origin, n.y + dy, n.ref);
+      g.get_node(original_g_node(n.ref), n.x + 2 * dx + origin, n.y + dy, n.ref).ani_circle.visible = true;
+      n.move(dx + origin, dy);
     }
 
     // loop through list rather than g.node_map bc we keep adding ele to node_map 
@@ -359,7 +362,15 @@ class networkFlowAnimation {
     let find_path;
     let path_str, rev_path, rev_path_str;
 
+    for (let key in g.node_map) {
+      g.node_map[key].visited = 0;
+      g.node_map[key].ani_circle.ctx_prop = deep_copy(DEFAULT_CIRCLE_CTX);
+    }
+    for (let key in g.edge_map) {
+      g.edge_map[key].ani_line.ctx_prop = deep_copy(DEFAULT_LINE_CTX);
+    }
 
+    
     this.source = g.get_node("S");
     this.sink = g.get_node("T");
     if (this.is_init_graph == false) {
@@ -377,13 +388,7 @@ class networkFlowAnimation {
     ani.set_function_call("find_augmenting_path", [find_path_type, manual_path]);
 
 
-    for (let key in g.node_map) {
-      g.node_map[key].visited = 0;
-      g.node_map[key].ani_circle.ctx_prop = deep_copy(DEFAULT_CIRCLE_CTX);
-    }
-    for (let key in g.edge_map) {
-      g.edge_map[key].ani_line.ctx_prop = deep_copy(DEFAULT_LINE_CTX);
-    }
+    
 
 
     this.path = [];

@@ -31,12 +31,14 @@
       <button type="button" id = "add_edge">Add Edge</button>
       <button type="button" id = "remove_edge">Remove Edge</button> &emsp;&emsp;
       
-      <button type="button" id = "clear_graph">Clear Graph</button>
+     
      
       
       <div class = "line"></div>
       
-      <button type="button" id = "run" style="width: 195px">Run Kruskal Algorithm</button>&emsp;
+      <button type="button" id = "run" style="width: 195px">Run Kruskal Algorithm</button>&emsp; &emsp;
+      <button type="button" id = "clear_graph">Clear Graph</button> &emsp;
+      <button type="button" id = "modify_original_graph">Modify Graph</button>
 
       
 
@@ -114,7 +116,7 @@ $(document).ready(function(){
   MAIN_G_SPEC.create_reverse_edge = false;
 
   D_ANIMATION_TIME = 100 - $("#speed").val();
-  DISABLE_IDS = ["[id*=node]", "[id*=edge]", "#download_graph"];
+  DISABLE_IDS = ["[id*=node]", "[id*=edge]"];
   ENABLE_STEP_IDS = ["#clear_graph"];
   
   MAIN_A = new kruskalAnimation(); // must be name ani 

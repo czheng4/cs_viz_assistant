@@ -11,7 +11,7 @@ function update_rect_height(dict) {
   let q_rect = dict.q_rect,
       num = dict.num;
   q_rect.height = num * 26;
-  q_rect.y = 280 - q_rect.height;
+  q_rect.y = 250 - q_rect.height;
 }
 
 function dlist_to_rect_texts(dlist) {
@@ -50,7 +50,7 @@ class bfsAnimation {
         c.move(-d, 0);
       }
     }
-    this.ani.add_object(this.q_rect = new Rect(20, 280, 130, 0, "QUEUE_BFS_REF", [], "Queue", "bottom", "v", {lineWidth: .5}));
+    this.ani.add_object(this.q_rect = new Rect(20, 250, 130, 0, "QUEUE_BFS_REF", [], "Queue", "bottom", "v", {lineWidth: .5}));
     for (let i = 0; i < 20; i++) {
       this.q_rect.fillStyles.push("");
     }
@@ -76,6 +76,7 @@ class bfsAnimation {
     n = g.get_node(node_id);
 
     if (this.q_rect == null) this.make_queue_rect();
+    
     this.ani.clear_animation();
     for (let key in g.node_map) {
       n = g.node_map[key];
@@ -91,6 +92,7 @@ class bfsAnimation {
       g.edge_map[key].ani_line.ctx_prop = deep_copy(DEFAULT_LINE_CTX);
     }
 
+    g.save_original_graph();
     this.path = [];
 
     ani.add_sequence_ani({
