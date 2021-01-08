@@ -16,7 +16,7 @@
     <div class = "header">Selection Sort</div>
     <div class = "control"> 
 
-      Array <input type="text" id="array" placeholder="Enter values separated by space" style = "width: 500px; height:25px; font-size:20px" value = "7 9 6 5 4 11 12 10 2 5 9"> 
+      Array <input type="text" id="array" placeholder="Enter values separated by space" style = "width: 500px; height:25px; font-size:20px" value = "6 3 2 3 1 11 12 10 11 6 7"> 
 
       <button type="button" id = "run">run</button>
       <div class="line"></div>
@@ -81,18 +81,19 @@ $(document).ready(function(){
     }
     
     
-    if(v.length == 0) v = v1;
-    else if(v.length < 2) {
-      v = v1;
-      MAIN_A.ani.elaboration.text("array size must be >= 2");
+    if(v.length == 0) {
+      MAIN_A.ani.elaboration.text("array is empty");
       return;
-    }
+    } else if(v.length <= 2 || v.length >= 20) {
+      MAIN_A.ani.elaboration.text("array size must be > 2 and <= 20");
+      return;
+    } 
 
-    if (v.length != 0) {
-      MAIN_A = new selectionSortAnimation(deep_copy(v));
-      MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
-      MAIN_A.run_animation();
-    }
+    
+    MAIN_A = new selectionSortAnimation(deep_copy(v));
+    MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
+    MAIN_A.run_animation();
+    
   })
 
 
