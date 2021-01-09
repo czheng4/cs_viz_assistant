@@ -48,6 +48,37 @@
     </div>
 
     <div class = "canvas"> 
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Queue: </span>Queue is a "first in, first out" data structure. It conatins a pointer to the first node and last node, and size.
+          </div>
+
+          <div>
+            <span class="red">Queue Node: </span>It contains the data and a pointer to the next queue node. Its information is shown in a rectangular. The label below the rectangular shows the associated memory address<br>
+          </div>
+          <div>
+            <span class="red">API Explanations:</span> <br>
+
+            <span class="red">1. Push Back: </span>Add a new node at the end<br>
+            <span class="red">2. Pop Front: </span>Remove the first node<br>
+            <span class="red">3. Clear Queue: </span>Clear the entire queue<br>
+           
+            
+          </div>
+       
+        </span>
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">队列定义：</span>队列是一种特殊的线性表，是一种先进先出（FIFO）的数据结构。它只允许在表的前端进行删除操作，而在表的后端进行插入操作。进行插入操作的端称为队尾，进行删除操作的端称为队头。队列中没有元素时，称为空队列<br>
+            
+          </div>
+          <div>
+            <span class="red">按键说明：</span>在文本框中输入要添加的新元素的值，点击”Push back”和”Pop front”进行添加和移除操作。要注意的是，由于队列的特殊性，在添加元素要时从队列的末尾进行添加，而想要移除其中的元素时，只能从队列的最前方（最早添加的元素）开始移除。所以无论在进行移除操作时，无论输入什么值，都只能默认从队列的最前方开始移除。<br>
+          
+            
+          </div>
+        </span>
        <canvas id = "draw"></canvas>
     </div>
 

@@ -70,15 +70,35 @@
 
 
     <div class = "canvas"> 
-      <canvas id = "draw" style="position: fixed;"></canvas>
-      <div id ="board"  style="margin-left: 120px; margin-bottom: 60px; margin-top: 28px">
-    
-          <table id = "sudoku_table" border = 1 style= "border-collapse: collapse;">
-            <tr>
-              <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-            </tr>
-          </table>
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Sudoku Definition: </span><br>
+            1. No row has the same number. <br>
+            2. No column has the same number. <br>
+            3. The grid can be divided into 9 smaller grids(thick line width border) where they do not have the same number.
+          </div>
+
+          
+       
+        </span>
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">数独-暴力法定义：</span> <br>
+              1）没有行包含两个相同的数字。<br>
+              2）没有列包含两个相同的数字。<br>
+              3）从左上角开始，网格中有9个3x3面板。3x3面板不能包含两个相同的数字。
+          </div>
+          
+        </span>
       </div>
+
+      <canvas id = "draw" style="display: none;"></canvas>
+      <div id ="board"  style="margin-left: 120px; margin-bottom: 60px; margin-top: 28px; position: relative;">
+        <table id = "sudoku_table" border = 1 style= "border-collapse: collapse;">
+        </table>
+      </div>
+
     </div>
     
     
@@ -101,7 +121,7 @@
 $(document).ready(function(){
   
   
-  // set_canvas(270,250,0,0);
+  set_canvas(0,0,0,0);
   D_ANIMATION_TIME = 100 - $("#speed").val();
   var index = 0;
   ENABLE_STEP_IDS = ["#generate"];

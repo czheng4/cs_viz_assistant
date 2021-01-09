@@ -48,6 +48,37 @@
     </div>
 
     <div class = "canvas"> 
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Stack: </span>Stack is a "last in, first out" data structure. It conatins a pointer to the top node and size.
+          </div>
+
+          <div>
+            <span class="red">Stack Node: </span>It contains the data and a pointer to the next stack node. Its information is shown in a rectangular. The label below the rectangular shows the associated memory address<br>
+          </div>
+          <div>
+            <span class="red">API Explanations:</span> <br>
+
+            <span class="red">1. Push: </span>Add a new node at the end<br>
+            <span class="red">2. Pop: </span>Remove the last node<br>
+            <span class="red">3. Clear Stack: </span>Clear the entire stack<br>
+           
+            
+          </div>
+       
+        </span>
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">栈定义: </span>栈的概念可以理解为是一个特定的存储区或寄存器，它的一端是固定的，另一端是浮动的 。这个存储区存入的数据，是一种特殊的数据结构。所有的数据存入或取出，只能在浮动的一端（称栈顶）进行，严格按照“先进后出”的原则存取，位于其中间的元素，必须在其栈上部（后进栈者）诸元素逐个移出后才能取出。在内存储器（随机存储器）中开辟一个区域作为堆栈，叫软件堆栈；用寄存器构成的堆栈，叫硬件堆栈。<br>
+            
+          </div>
+          <div>
+            <span class="red">按键说明：</span>在文本框中输入要添加的新元素的值，点击”Push”和”Pop”进行添加和移除操作。要注意的是，由于栈的特殊性，在想要移除栈中的元素时，只能从栈的最上方（最新添加的元素）开始移除。所以无论在进行移除操作时，无论输入什么值，都只能默认从栈的最顶端开始移除。<br>
+          
+            
+          </div>
+        </span>
        <canvas id = "draw"></canvas>
     </div>
 

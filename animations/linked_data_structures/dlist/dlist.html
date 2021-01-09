@@ -64,23 +64,25 @@
       <div class="tooltip">?
         <span class="tooltiptext" id ="english">
           <div>
-            <span class="red">Doubly Linked List: </span>Its nodes include three parts: the value field, the forward link field and the backward link field. <br>
-            (1)The value field: It stores the data. The type of the data is determined by the problem. <br>
-            (2)The forward link: It stores the pointer of the next node. <br>
-            (3)The backward link: It stores the pointer of the previous node. <br>
-          </div> <br>
+            <span class="red">Doubly Linked List:</span> This is a circular linked structure with a sentinel node. The sentinel node is an additional node. It does not store any data. It helps to find the first and last node on the list.
+          </div>
           <div>
-            <span class="red">API Explanations：</span> <br>
-            <span class="red">1. Node：</span>Each node's information is shown in a rectangular where it stores value, forward link(flink), and backward link(blink) from top to bottom. The label below the rectangular shows the associated memory address<br>
+            <span class="red">Node:</span> It has three fields. Its information is shown in a rectangular. The label below the rectangular shows the associated memory address<br>
+            (1)The value field: It stores the data. The type of the data is determined by the problem. <br>
+            (2)The forward link: It stores the pointer to the next node. <br>
+            (3)The backward link: It stores the pointer to the previous node. <br>
+          </div>
+          <div>
+            <span class="red">API Explanations: </span><br>
 
-            <span class="red">2. Push Back: </span>Add a new node at the end<br>
-            <span class="red">3. Pop Back: </span>Remove the last node<br>
-            <span class="red">4. Push Front: </span>Add a new node at beginning<br>
-            <span class="red">5. Pop Front:</span>Remove the first node<br>
-            <span class="red">6. Erase: </span>Erase a node given its memory address <br>
-            <span class="red">7. Insert Before: </span>Insert a new node before the given node<br>
-            <span class="red">8. Insert Afrer: </span>Insert a new node after the given node<br>
-            <span class="red">9. Clear List: </span>Clear the entire list<br>
+            <span class="red">1. Push Back: </span>Add a new node at the end<br>
+            <span class="red">2. Pop Back: </span>Remove the last node<br>
+            <span class="red">3. Push Front: </span>Add a new node at beginning<br>
+            <span class="red">4. Pop Front:</span>Remove the first node<br>
+            <span class="red">5. Erase: </span>Erase a node given its memory address <br>
+            <span class="red">6. Insert Before: </span>Insert a new node before the given node<br>
+            <span class="red">7. Insert Afrer: </span>Insert a new node after the given node<br>
+            <span class="red">8. Clear List: </span>Clear the entire list<br>
             
           </div>
        
@@ -93,18 +95,21 @@
             (2)后继指针域，又称为右链指针，用于存放一个指针，该指针指向下一个结点的开始存储地址。<br>
             (3)前驱指针域，又称为左链指针，用于存放一个指针，该指针指向上一个结点的开始存储地址。<br>
             
-          </div> <br>
+          </div>
+          <div>
+            <span class="red">Node：</span>节点图像框中的第一层为节点中的数据值，第二层为节点中的后继指针域（它存储着下一个节点的存储地址），第三层为节点中的前驱指针域（它存储着上一个节点的存储地址）。<br>
+          </div>
           <div>
             <span class="red">按键说明：</span> <br>
-            <span class="red">1. Node：</span>节点图像框中的第一层为节点中的数据值，第二层为节点中的后继指针域（它存储着下一个节点的存储地址），第三层为节点中的前驱指针域（它存储着上一个节点的存储地址）。<br>
-            <span class="red">2. Push Back & Pop Back ：</span>在输入框内输入要添加的节点的数据值，点击” Push Back”将节点从最右侧插入（注意：这个节点其实是作为哨兵节点的前置节点进行插入的）。点击”Pop Back”则默认从最右侧弹出一个节点（弹出节点与用户的输入值无关）。<br>
-
-            <span class="red">3. Push Front & Pop Front: </span> 在输入框内输入要添加的节点的数据值，点击” Push Front”将节点从最左侧插入（注意：这个节点其实是作为哨兵节点的后置节点进行插入的）。点击”Pop Front”则默认从最左侧弹出一个节点（弹出节点与用户的输入值无关）。<br>
-            <span class="red">4. Erase：</span> 请在输入框中输入要删除节点的存储地址。<br>
-            <span class="red">5. Clear List：</span> 清除创建的整个列表。
-            <span class="red">6. Insert Before（靠左）：</span> 请在”insert”后的输入框中输入要添加节点的数据值，接着在”before”后的输入框中输入一个列表中现有节点的地址，便可以将一个新的节点作为前置节点插入到所选择的现有节点前。 <br>
             
-            <span class="red">7. Insert After（靠右）：</span>请在”insert”后的输入框中输入要添加节点的数据值，接着在”after”后的输入框中输入一个列表中现有节点的地址，便可以将一个新的节点作为后置节点插入到所选择的现有节点后。
+            <span class="red">1. Push Back & Pop Back ：</span>在输入框内输入要添加的节点的数据值，点击” Push Back”将节点从最右侧插入（注意：这个节点其实是作为哨兵节点的前置节点进行插入的）。点击”Pop Back”则默认从最右侧弹出一个节点（弹出节点与用户的输入值无关）。<br>
+
+            <span class="red">2. Push Front & Pop Front: </span> 在输入框内输入要添加的节点的数据值，点击” Push Front”将节点从最左侧插入（注意：这个节点其实是作为哨兵节点的后置节点进行插入的）。点击”Pop Front”则默认从最左侧弹出一个节点（弹出节点与用户的输入值无关）。<br>
+            <span class="red">3. Erase：</span> 请在输入框中输入要删除节点的存储地址。<br>
+            <span class="red">4. Clear List：</span> 清除创建的整个列表。<br>
+            <span class="red">5. Insert Before（靠左）：</span> 请在”insert”后的输入框中输入要添加节点的数据值，接着在”before”后的输入框中输入一个列表中现有节点的地址，便可以将一个新的节点作为前置节点插入到所选择的现有节点前。 <br>
+            
+            <span class="red">6. Insert After（靠右）：</span>请在”insert”后的输入框中输入要添加节点的数据值，接着在”after”后的输入框中输入一个列表中现有节点的地址，便可以将一个新的节点作为后置节点插入到所选择的现有节点后。
           </div>
         </span>
       </div>
