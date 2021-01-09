@@ -1,5 +1,52 @@
 
+/* 
+  tooltip: https://www.w3schools.com/css/tryit.asp?filename=trycss_tooltip_bottom
+*/
+.tooltip {
+  position: absolute;
+  background: rgba(0,0,0,0.3);
+  padding: 2px 6px;
+  border-radius: 100%;
+  font-size: 12px;
+  top: 1px;
+  left: 2px;
+  display: inline-block;
+  z-index: 1;
+}
 
+
+#english {
+  font-size: 15px;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 600px;
+  background-color: lightblue;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 5px 10px 30px 5px;
+  position: absolute;
+  z-index: 1;
+  top: -1px;
+  margin-left: -14px;
+  font-size: 13px;
+  color: black;
+
+}
+
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.red {
+  color:red;
+  font-weight: bold;
+}
+#draw {
+  position: absolute;
+}
 input[type="range"] {
   -webkit-appearance: none;
   background: linear-gradient(to right, green 0%, green 50%, #fff 50%, #fff 100%);
@@ -10,8 +57,9 @@ input[type="range"] {
   padding: 0px;
   transition: background 450ms ease-in;
 }
-body {
+body,html{
   margin: 0;
+  min-width: 1400px;
 }
 
 input {
@@ -123,6 +171,7 @@ button {
 }
 
 .header { 
+  
   grid-area: header; 
   background-color: lightblue;
   font-size: 30px;
@@ -131,12 +180,17 @@ button {
 }
 
 .control {
+ 
   grid-area: control;
   background-color: #d5e7c2;
   padding: 10px 5px 5px 10px;
 }
 
+#draw {
+  position: absolute;
+}
 .canvas {
+  position: relative;
   grid-area: canvas;
   background-color: white;
 }
