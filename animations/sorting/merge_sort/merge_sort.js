@@ -66,6 +66,7 @@ class mergeSortAnimation {
     x = this.margin * 2.5;
     y = 0;
     rect = new Rect(x, y, v.length * this.ss, this.ss, this.ms.get_reference(v), deep_copy(v), "", "bottom", "h");
+    for (let i = 0; i < v.length; i++) rect.subrect_labels.push(i);
     p = this.ani.get_point((rect.x + rect.width) / 2, rect.y + rect.height);
     rect.attach_point(p);
 
@@ -122,6 +123,7 @@ class mergeSortAnimation {
 
     
     rect1 = new Rect(x, y, v1.length * this.ss, this.ss, this.ms.get_reference(v1), deep_copy(v1), "", "bottom", "h");
+    for (i = 0; i < v1.length; i++) rect1.subrect_labels.push(i + start);
     p1 = ani.get_point(prev_rect.x + prev_rect.width / 2, prev_rect.y + prev_rect.height);
     p2 = ani.get_point(rect1.x + rect1.width / 2, rect1.y);
     
@@ -137,6 +139,7 @@ class mergeSortAnimation {
 
   
     rect2 = new Rect(x, y, v2.length * this.ss, this.ss, this.ms.get_reference(v2), deep_copy(v2), "", "bottom", "h");
+    for (i = 0; i < v2.length; i++) rect2.subrect_labels.push(i + start + v1.length);
     p2 = ani.get_point(rect2.x + rect2.width / 2, rect2.y);
     rect2.attach_point(p2);
     l2 = new quadraticCurve(p1, p2, 0);
