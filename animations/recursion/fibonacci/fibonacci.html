@@ -61,7 +61,7 @@
       <div class="tooltip">?
         <span class="tooltiptext" id ="english">
           <div>
-            <span class="red">Fibonacci Numbers: </span> a series of numbers where the first two numbers are 1, and the following number is the sum of two preceding numbers. (1, 1, 2, 3, 5, 8, 13 &middot;&middot;&middot;)
+            <span class="red">Fibonacci Numbers: </span> a series of numbers where the first two numbers are 0 and 1 respectively, and the following number is the sum of two preceding numbers. (0, 1, 1, 2, 3, 5, 8, 13 &middot;&middot;&middot;)
           </div>
           
           <div>
@@ -70,10 +70,10 @@
               <span style="top: -4px; position: relative;"> fibonacci(n) = </span>
               <span style="font-size:30px;">{</span>
               <span style="position: absolute;">fibonacci(n - 1) * fibonacci(n - 2)&emsp;n >= 2</span>
-              <span style="position: absolute; top: 23px">1&emsp;n = 0, 1</span>
+              <span style="position: absolute; top: 23px">n&emsp;n = 0, 1</span>
             </div>
           </div> 
-          <div style="margin-top: 20px">
+          <div style="margin-top: 10px">
             <span class="red">Memoization: </span> We use a table to store key-value pairs where key is n, and value is fib(n). If key is in the table, we can return instantly.
           </div>
 
@@ -81,18 +81,21 @@
         </span>
         <span class="tooltiptext" id ="chinese">
           <div>
-            <span class="red">Fibonacci Numbers: </span> a series of numbers where the first two numbers are 1, and following number is the sum of two preceding numbers. (1, 1, 2, 3, 5, 8, 13 &middot;&middot;&middot;)
+            <span class="red">斐波那契数列定义：</span>斐波那契数列，又称黄金分割数列。它指的是这样一个数列：0, 1, 1, 2, 3, 5, 8, 13 &middot;&middot;&middot;
           </div>
-          
           <div>
             <span class="red">Recursion Approach: </span>
             <div style="position: relative;">
               <span style="top: -4px; position: relative;"> fibonacci(n) = </span>
               <span style="font-size:30px;">{</span>
               <span style="position: absolute;">fibonacci(n - 1) * fibonacci(n - 2)&emsp;n >= 2</span>
-              <span style="position: absolute; top: 23px">1&emsp;n = 0, 1</span>
+              <span style="position: absolute; top: 23px">n&emsp;n = 0, 1</span>
             </div>
+          </div> 
+          <div style="margin-top: 10px">
+            <span class="red">Memoization: </span>勾选此处，就会显示出现一个存储列表，它存储key和对应的值。其中k为n，其值为fib(n)。 如果发现key在表中，就可以立即return。
           </div>
+            
         </span>
       </div>
       <canvas id = "draw"></canvas>

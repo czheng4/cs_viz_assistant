@@ -49,6 +49,41 @@
     </div>
 
     <div class = "canvas"> 
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <div><span class="red">AVL Tree: </span>A self-balancing binary search tree. <strong>Find</strong> operation is exactly like the binary search tree(BST). <strong>Deletion</strong> and <strong> Insertion </strong> operations follow the same step as BST. Subsequently, AVL tree potentially needs to perform rotation and update nodes' height. AVL tree has the following properties: </div>
+            1. If the left subtree is not empty, the values of all nodes on the left subtree are less than its rooted node <br>
+            2. If the right subtree is not empty, the values of all nodes on the right subtree are greater than its rooted node <br>
+            3. The heights of two children can not differ by more than one
+          </div>
+
+          <div>
+            <div><span class="red">API explanations: </span></div>
+            <span class="red">1. Insert: </span>Insert a new node - O(log(n))<br>
+            <span class="red">2. Delete: </span>Deleted a new node given a key - O(log(n))<br>
+            <span class="red">3. Find: </span>Find the node given a key - O(log(n)) <br>
+            <span class="red">4. Inorder Print: </span> Print keys in ascending order - O(n)<br>
+            <span class="red">6. Clear Tree:</span> Clear the entire tree</span>
+
+          </div>  
+        </span>
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <div><span class="red">AVL树定义：</span>AVL树又名自平衡二叉查找树，它是一种特殊的二叉搜索树, 相对于数据极端情况下, 二叉搜索树会退化成为单链表, 它定义了旋转操作, 在平衡因子大于等于2时, AVL树会旋转来调整树的结构, 来重新满足平衡因子小于2。故而AVL树中的任意一个结点, 其平衡因子的绝对值小于2。（平衡因子：树中某结点其左子树的高度和右子树的高度之差）</div>
+          </div>
+          <div>
+            <div><span class="red">API explanations: </span></div>
+            <span class="red">1. Insert: </span>Insert a new node - O(log(n))<br>
+            <span class="red">2. Delete: </span>Deleted a new node given a key - O(log(n))<br>
+            <span class="red">3. Find: </span>Find the node given a key - O(log(n)) <br>
+            <span class="red">4. Inorder Print: </span> Print keys in ascending order - O(n)<br>
+            <span class="red">6. Clear Tree:</span> Clear the entire tree</span>
+          </div>  
+        </span>
+
+      </div>
        <canvas id = "draw"></canvas>
     </div>
     <div class = "bottom-nav">
@@ -127,7 +162,7 @@ $(document).ready(function(){
 
   D_ANIMATION_TIME = 100 - $("#speed").val();
    
-  // bst_test1();
+  bst_test1();
  
   MAIN_G.draw();  
  

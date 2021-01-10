@@ -48,7 +48,41 @@
     </div>
 
     <div class = "canvas"> 
-       <canvas id = "draw"></canvas>
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <div><span class="red">Binary Heap: </span>It's commonly used to implement the priority queue. We can use a vector/array to represent the binary heap. It has the following properties: </div>
+            1. The values of children >= its parent <br>
+            2. It's a complete tree where every level is filled except for the last level. The last level is filled up from the left to right. <br>
+            3. Each node has at most two children (left and right).<br>
+
+          </div>
+
+          <div>
+            <div><span class="red">API explanations: </span></div>
+            <span class="red">1. Push: </span>Push a value onto the heap and then perform bubble-up - O(log(n))<br>
+            <span class="red">2. Pop: </span>Remove the first element from the heap and then perform bubble-down - O(log(n))<br>
+            <span class="red">3. Clear Heap </span> Clear the entire heap
+          </div>  
+        </span>
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <div><span class="red">二项堆定义：</span>二项堆是一种特殊的二项树，而二项树是一种递归定义的有序树，其定义如下：</div>
+            1）度数为0的二项树只包含一个结点。<br>
+            2）度数为n的二项树有一个根结点，根结点下有n个子女，每个子女分别是度数分别为n-1,n-2,…,0的二项树的根。
+          </div>
+          <div>
+            <div><span class="red">二项堆是指满足以下性质的二项树的集合：</span></div>
+            1）每棵二项树都满足最小堆性质，即结点的值大于等于其父结点的值<br>
+            2）不能有两棵或以上的二项树有相同度数（包括度数为0）。换句话说，具有相同度数的二项树有0个或1个。<br>
+          </div>
+        
+        </span>
+
+      </div>
+
+      <canvas id = "draw"></canvas>
     </div>
 
     <div class = "bottom-nav">

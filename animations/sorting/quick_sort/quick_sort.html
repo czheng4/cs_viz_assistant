@@ -54,6 +54,62 @@
     </div>
 
     <div class = "canvas"> 
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Quick Sort: </span>It chooses an element as pivot, partitions the array around the chosen pivot, and then make two recursive calls to the left and right partition respectively. The time complexity of the average case is O(n&middot;log(n)) where n is the size of the array. The worst-case performance is O(n<sup>2</sup>)
+          </div>
+
+          <div>
+            <span class="red">Pivot Choice: </span><br>
+            1. First: Choose the first element as the pivot. <br>
+            2. Last: Choose the last element as the pivot. <br>
+            3. Median-of-three: Choose the median of the first, miidle, and last element as pivot.
+          </div>
+          <div>
+            <span class="red">Partition scheme:</span><br>
+            1. Lomuto & Hoare partition: Please refer <a href = "https://en.wikipedia.org/wiki/Quicksort">here</a><br>
+            2. Hoare's modified partition: Please refer <a href = "http://web.eecs.utk.edu/~jplank/plank/classes/cs302/Notes/Sorting/"> here</a>
+          </div>
+          <div>
+            <span class="red">Recursion Details: </span><br>
+            1. If the array size is <= 1, simply return.<br>
+            2. If the array size is 2, when the first element is greater than the second element, make a swap and then return.<br>
+            3. If the array size is >= 3, we partition the array around the pivot and then make two recursive calls to these two partitions.
+          </div>
+          <div>
+            <span class="red">Animation Input:</span> Enter a series of numbers that are separated by space.
+          </div>
+       
+        </span>
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">快速排序定义：</span>通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。<br>
+            
+          </div>
+          <div>
+            <span class="red">Pivot Choice: </span><br>
+            1. First: Choose the first element as pivot. <br>
+            2. Last: Choose the last element as pivot. <br>
+            3. Median-of-three: Choose the median of first, miidle, and last element as pivot.
+          </div>
+          <div>
+            <span class="red">Partition scheme:</span><br>
+            1. Lomuto & Hoare partition: Please refer <a href = "https://en.wikipedia.org/wiki/Quicksort">here</a><br>
+            2. Hoare's modified partition: Please refer <a href = "http://web.eecs.utk.edu/~jplank/plank/classes/cs302/Notes/Sorting/"> here</a>
+          </div>
+          <div>
+            <span class="red">Recursion Details: </span><br>
+            1. If the array size is <= 1, simply return.<br>
+            2. If the array size is 2, when the first element is greater than the second element, make a swap and then return.<br>
+            3. If the array size is >= 3, we partition the array around the pivot and then make two recursive calls to these two partitions. Note: Different partition checke
+          </div>
+          <div>
+            <span class="red">Animation Input:</span> Enter a series of numbers that are separated by space.
+          </div>
+
+        </span>
+      </div>
        <canvas id = "draw"></canvas>
     </div>
     <div class = "bottom-nav">

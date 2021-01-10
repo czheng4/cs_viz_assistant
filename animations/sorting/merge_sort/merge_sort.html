@@ -33,7 +33,40 @@
       </div>
     </div>
 
-    <div class = "canvas"> 
+    <div class = "canvas">
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Merge Sort: </span>Merge sort use the divide and conquer method where it splits the array into two halves by recursively calling these two subarrays, and then merge these two sorted arrays together. The time complexity of it is O(n&middot;log(n)) where n is the size of the array.
+          </div>
+
+          <div>
+            <span class="red">Recursion Details: </span><br>
+            1. If the array size is 1, simply return.<br>
+            2. If the array size is 2, when the first element is greater than the second element, make a swap and then return.<br>
+            3. If the array size is >= 3, we split the array into two halves by making two recursive calls. When they return, we merge them.
+          </div>
+          <div>
+            <span class="red">Animation Input:</span> Enter a series of numbers that are separated by space.
+          </div>
+       
+        </span>
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">归并排序：</span>栈归并排序，是创建在归并操作上的一种有效的排序算法，效率为O(nlogn) 。该算法是采用分治法的一个非常典型的应用，且各层分治递归可以同时进行。<br>
+            
+          </div>
+          <div>
+            <span class="red">Recursion Details: </span><br>
+            1. If the array size is 1, simply return.<br>
+            2. If the array size is 2, when the first element is greater than the second element, make a swap and then return.<br>
+            3. If the array size is >= 3, we split the array into two halves by making two recursive calls. When they return, we merge them.
+          </div>
+          <div>
+            <span class="red">按键说明：</span>Run：在文本框中输入要进行排序的数字，数字间用空格来隔开。之后点击”run”，在下方就会显示出输入的数字（初始排序以用户输入为准），并开始进行归并排序演示，最终以从小到大的顺序从左至右依次排开。（建议开始排序之前点击” Step-by-Step Animation”按钮，然后通过”Go Back”和”Go Forward”按钮来一步一步观看）。<br>
+          </div>
+        </span>
+      </div>
        <canvas id = "draw"></canvas>
     </div>
     <div class = "bottom-nav">

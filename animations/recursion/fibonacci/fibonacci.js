@@ -3,7 +3,7 @@
   All rights reserved.
   
   01/09/2021
-  last modified 01/09/2021
+  last modified 01/10/2021
 
 */
 
@@ -21,7 +21,7 @@ class fibonacciAnimation {
     this.ani.step_by_step = $("#step_by_step").is(":checked");
     this.code_rect = new Rect(15, 30, 185, 90, "CODE_REF", 
                                ["def fib(n):", 
-                                "    if n <= 1: return 1",
+                                "    if n <= 1: return n",
                                 "    return fib(n - 1) + fib(n - 2)"]);
 
     this.code_rect.text_align = "left";
@@ -99,7 +99,7 @@ class fibonacciAnimation {
     
 
     if (n <= 1) {
-      e_text = "{} <= 1. Return 1".format_b(n);
+      e_text = "{} <= 1. Return {}".format_b(n, n);
       
       this.rect_color_change(1);
       ani.add_sequence_ani({
@@ -107,7 +107,7 @@ class fibonacciAnimation {
         target: rect,
         prop: {fade_out: true, time: ANIMATION_TIME * 2}
       });
-      return 1;
+      return n;
     } else {
       e_text = "{} > 1. Return fibonacci({}) + fibonacci({})".format_b(n,  n - 1, n - 2);
       
@@ -176,7 +176,7 @@ class fibonacciDPAnimation {
     this.ani.step_by_step = $("#step_by_step").is(":checked");
     this.code_rect = new Rect(15, 30, 210, 180, "CODE_REF", 
                                ["def fib(n):", 
-                                "    if n <= 1: return 1",
+                                "    if n <= 1: return n",
                                 "    if n in cache: return cache[n]",
                                 "    cache[n] = fib(n - 1) + fib(n - 2)",
                                 "    return cache[n]"]);
@@ -305,7 +305,7 @@ class fibonacciDPAnimation {
     
 
     if (n <= 1) {
-      e_text = "{} <= 1. Return 1".format_b(n);
+      e_text = "{} <= 1. Return {}".format_b(n, n);
       
       this.rect_color_change(1);
       ani.add_sequence_ani({
@@ -313,7 +313,7 @@ class fibonacciDPAnimation {
         target: rect,
         prop: {fade_out: true, time: ANIMATION_TIME * 2}
       });
-      return 1;
+      return n;
     } else if (n in this.tables) {
       this.rect_color_change(2);
       ani.add_sequence_ani({
