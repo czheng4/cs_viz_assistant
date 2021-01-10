@@ -40,7 +40,7 @@ class factorialAnimation {
       rect.label = i;
       rect.label_position = "left";
       rect.text_align = "left";
-      rect.fillStyle = ["lightblue"];
+      rect.fillStyles = ["lightblue"];
       rect.visible = false;
       this.stacks.push(rect);
       this.ani.add_object(rect);
@@ -65,19 +65,6 @@ class factorialAnimation {
         target: this.line_ptr,
         text: text,
         prop: {p: new Point(0, dy), type: "parallel", time: time, step: step},
-      });
-    }
-  }
-
-  e_text_ani(text, time = 1) {
-    this.ani.add_sequence_ani({
-      text: text,
-      pause: 1,
-    });
-    if (time != 0) {
-      this.ani.add_sequence_ani({
-        pause: time,
-        prop: {step:true}
       });
     }
   }
@@ -128,7 +115,7 @@ class factorialAnimation {
     // rect.visible = true;
     ani.add_sequence_ani({
       target:rect,
-      prop: {fade_in: true, fillStyle:["lightblue"], text: ["f({})".format(n)],  visible:true }
+      prop: {fade_in: true, text: ["f({})".format(n)],  visible:true }
     });
     ani.add_sequence_ani({prop: {step: true}});
     
@@ -144,7 +131,7 @@ class factorialAnimation {
       });
       return 1;
     } else {
-      e_text = "{} > 1. Retrun {} * factorial({}), which is going to call factorial({})".format_b(n, n, n - 1, n - 1);
+      e_text = "{} > 1. Return {} * factorial({}), which is going to call factorial({})".format_b(n, n, n - 1, n - 1);
       
       ani.add_sequence_ani({
         target:rect,
@@ -170,6 +157,8 @@ class factorialAnimation {
         target: rect,
         prop: {fade_out: true, time: ANIMATION_TIME * 3}
       })
+
+
 
       return n * rv;
     }
