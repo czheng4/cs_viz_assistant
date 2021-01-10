@@ -1,0 +1,130 @@
+<!--
+  ChaoHui Zheng
+  12/26/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <meta charset="UTF-8"> 
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="../../../lib/jquery.js"></script>
+  <style type="text/css">
+    input[type = "number"]{
+      width: 80px;
+    }
+    #fme_table td{
+      padding: 5px 13px 5px 13px;
+      text-align: center;
+    }
+    #fme_table th{
+      padding: 5px 13px 5px 13px;
+      text-align: center;
+      background: #87AFC7;
+    }
+    #compute {
+      height: 26px;
+    }
+   
+  </style>
+  
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header">Factorial</div>
+    <div class = "control"> 
+
+     
+      <input type = "number" id = "factorial_n" placeholder="number" min = 0 max = 12>
+      <button id = "compute">Compute n!</button>
+      <div class = "line"></div>
+      
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="0" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
+      </div>
+    </div>
+
+
+    <div class = "canvas"> 
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Factorial: </span> The product of all postitive numbers from 1 to n (inclusive). <br>
+          </div>
+          <div>
+            <strong>n! = n &middot; (n - 1) &middot; (n - 2) &middot; (n - 3) &middot;&middot;&middot; 3 &middot; 2 &middot; 1</strong> <br>
+            <strong>0!= 1</strong>
+          </div>
+
+         
+        </span>
+        <span class="tooltiptext" id ="chinese">
+          <div>
+           TO DO.
+          </div>
+        </span>
+      </div>
+      <canvas id = "draw"></canvas>
+    </div>
+    
+    
+
+    <div class = "bottom-nav">
+      <button id = "script">Script</button>
+    </div>
+  </div>
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="factorial.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+
+
+
+$(document).ready(function(){
+  
+
+
+  /* get rid of - + and e*/
+  $(document).on('keypress', ':input[type="number"]', function (e) {
+    if (e.key == '-' || e.key == '+' || e.key == 'e' || e.key == '.') {
+      return false;
+    }
+  });
+
+  set_canvas(700,420,0,0);
+  D_ANIMATION_TIME = 100 - $("#speed").val();
+  
+  MAIN_A = new factorialAnimation();
+
+  $("#compute").click(function() {
+    let n;
+    n = $("#factorial_n").val();
+    
+    if (n == "") {
+      $("#elaboration_text").text("One of values is empty");
+      return;
+    }
+    MAIN_A = new factorialAnimation();
+    MAIN_A.call_factorial(parseInt(n));
+  })
+
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+
+</html>
