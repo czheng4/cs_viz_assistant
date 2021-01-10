@@ -60,7 +60,7 @@ input[type="range"] {
   padding: 0px;
   transition: background 450ms ease-in;
 }
-body,html{
+body {
   margin: 0;
   min-width: 1400px;
 }
