@@ -57,7 +57,7 @@ class insertionSortAnimation {
     fill_styles[0] = "lightblue";
     ani.add_sequence_ani({ 
       target: rect,
-      text: "Before looping through the array, the first element is always sorted.",
+      text: "The first element is always sorted.",
       prop: {
         fade_in: true,
         fillStyle: deep_copy(fill_styles),
