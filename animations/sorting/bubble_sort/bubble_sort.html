@@ -34,7 +34,35 @@
       </div>
     </div>
 
-    <div class = "canvas"> 
+    <div class = "canvas">
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Bubble Sort:</span> This algorithm sorts (horribly) in <b>O(n<sup>2</sup>)</b> where <b>n</b> is the size of the input array/vector.<br>
+            The algorithm is fully explained, with more references, <a href="http://web.eecs.utk.edu/~jplank/plank/classes/cs302/Notes/Sorting/">here</a>.<br>The following code is a snippet of what is found at the link, but it's the most relevent piece:<br>
+          </div>
+          <div>
+            <span class="red">Given:</span><br>
+            Array <b>v</b> of <b>n</b> values to be sorted<br>
+          </div>
+          <div>
+            <span class="red">Method:</span><pre>
+for(i = 0; i < n - 1; i++) {
+  for(j = 0; j < n - i - 1; j++){
+    if(v[j] > v[j + 1]){
+      tmp = v[j];
+      v[j] = v[j + 1];
+      v[j + 1] = tmp;
+    }
+  }
+}
+          </pre></div>
+       
+        </span>
+        <span class="tooltiptext" id ="chinese">
+          
+        </span>
+      </div>
        <canvas id = "draw"></canvas>
     </div>
     <div class = "bottom-nav">
