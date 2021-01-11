@@ -56,12 +56,47 @@
 
 
     <div class = "canvas"> 
+
       <canvas id = "draw" style="position: fixed;"></canvas>
       <div id ="board"  style="margin-left: 300px; margin-bottom: 60px; margin-top: 28px">
     
-          <table id = "fme_table" border = 1 style= "border-collapse: collapse;">
-            
-          </table>
+        <table id = "fme_table" border = 1 style= "border-collapse: collapse;">
+          
+        </table>
+      </div>
+
+
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div><span class="red">Fast Modular Exponentiation (b<sup>e</sup> % n): </span>This algorithm is comoonly use in public key cryptography. In cryptography, base <strong>b</strong> and power <strong>e</strong> are both large numbers. Multiplying <strong>b</strong> by itself (<strong>e</strong> - 1) times is not pratical. </div>
+          
+          <div><span class="red">Algorithm Detail:</span> The last euqation shows the pattern of reperatly squaring <strong>b</strong></div> 
+          <div style="font-size: 16px">
+            e = e<sub>i</sub> &middot; 2<sup>i</sup> + e<sub>i - 1</sub> &middot; 2<sup>i - 1</sup> + e<sub>i - 2</sub> &middot; 2<sup>i - 2</sup> + &middot;&middot;&middot; + e<sub>1</sub> &middot; 2<sup>1</sup>  + e<sub>0</sub> &middot; 2<sup>0</sup> 
+            &emsp;where e<sub>i</sub> is the i<sub>th</sub> bit of e 
+          </div>
+          <div style="font-size: 16px">
+            b <sup>e</sup> % n = ( b <sup>e<sub>i</sub> &middot; 2<sup>i</sup> + e<sub>i - 1</sub> &middot; 2<sup>i - 1</sup> + e<sub>i - 2</sub> &middot; 2<sup>i - 2</sup> + &middot;&middot;&middot; + e<sub>1</sub> &middot; 2<sup>1</sup>  + e<sub>0</sub> &middot; 2<sup>0</sup> </sup>) % n
+
+          </div>
+
+          <div style="font-size: 16px">
+             b <sup>e</sup> % n = ( b<sup>e<sub>i</sub> &middot; 2<sup>i</sup></sup> &middot; b<sup>e<sub>i - 1</sub> &middot; 2<sup>i - 1</sup></sup> &middot; b<sup>e<sub>i - 2</sub> &middot; 2<sup>i - 2</sup></sup> &middot; &middot;&middot;&middot; &middot; b<sup>e<sub>1</sub> &middot; 2<sup>1</sup></sup> &middot; b<sup>e<sub>0</sub> &middot; 2<sup>0</sup></sup> ) % n
+
+          </div>
+        </span>
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <div><span class="red">快速模块化求幂定义：</span>快速模块化求幂实现的最基本的理论的引理就是积的取余等于取余的积的取余。在在这条引理的基础之上，对指数型数据进行拆分以及合并，从而得到我们用的快速幂算法。</div>
+           
+            <div><span class="red">按键说明：</span>
+            <div><span class="red">Compute b<sup>e</sup> % n </span> 在三个文本框中分别输入b，e，n三个数值，并点击此按钮计算得到b的e次方并对n进行取余。</div>
+
+          </div>
+          
+        </span>
+
       </div>
     </div>
     
@@ -94,7 +129,7 @@ $(document).ready(function(){
   });
 
   set_canvas(270,250,0,0);
-  MAIN_A = {ani:new Animation()};
+  MAIN_A = new fmeAnimation(0,0,0, $("#fme_table"), true);
   D_ANIMATION_TIME = 100 - $("#speed").val();
   
 

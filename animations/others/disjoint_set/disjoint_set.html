@@ -86,7 +86,42 @@
     </div>
 
     <div class = "canvas"> 
-       <canvas id = "draw"></canvas>
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <div><span class="red">Disjoint Set: </span>Any two sets have no common elements. There are three different implementations: </div>
+            <div><span class="red">1. Union-By-Height: </span>When performing union on two root nodes, merge the root node with the smaller height onto the root node with the higher height</div>
+            <div><span class="red">2. Union-By-Size: </span>When performing union on two root nodes, merge the root node with smaller size onto the root node with bigger size</div>
+            <div><span class="red">3. Union-By-Rank: </span> <strong>Union</strong> is the same as Union-By-Height. When performing <strong>Find</strong>, it makes every node on the path points to its root node.</div>
+
+          </div>
+          <div>
+            <div><span class="red">API explanations: </span></div>
+            <span class="red">1. Initialize Disjoint Set: </span>Initialize the disjoint set with size n - O(n)<br>
+            <span class="red">2. Union: </span>Merge two disjoint sets - O(1) <br>
+            <span class="red">3. Find: </span>Find the root node id given an id - O(log(n)) with Union-By-Height and Union-By-Size and O(α(n)) with Union-By-Rank with path compression<br>
+          </div>  
+        </span>
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <div><span class="red">并查集定义：</span>并查集是一种非常精巧而实用的数据结构，它主要用于处理一些不相交集合的合并问题。一些常见的用途有求连通子图、求最小生成树的 Kruskal 算法和求最近公共祖先（Least Common Ancestors, LCA）等。在并查集进行合并操作时，共有三种合并方式: </div>
+            <div><span class="red">1. Union-By-Height: </span>该方法使用秩来表示树高度的上界，在合并时，为如果两个根节点的高度度一致，第一个输入的节点会合并到第二个输入的节点下方，成为其子节点，如果不一致，总是将具有较小秩的树根指向具有较大秩的树根。简单的说，就是总是将比较矮的树作为子树，添加到较高的树中。</div>
+            <div><span class="red">2. Union-By-Size: </span>在合并时根据两个集合中根节点的大小来进行合并，根节点大小即时它包含的所有子节点个数以及它本身，将小的集合添加到大的集合中去。</div>
+            <div><span class="red">3. Union-By-Rank: </span> 和Union-By-Height一样当执行union时候， 但是执行find的时候， 每个途径的节点将执行根节点</div>
+
+          </div>
+          <div>
+            <div><span class="red">按键说明：</span></div>
+            <span class="red">1. Initialize Disjoint Set: </span>在文本框中输入0-20的数字，点击按钮即可创建对应数目的节点，节点ID从0开始。<br>
+            <span class="red">2. Union </span>在文本框中输入两个节点的id，注意：此处输入的节点必须是两个根节点，如果输入的节点已经成为了一个集合中的根节点的子节点，那么将无法合并。<br>
+
+            <span class="red">3. Find: </span>在文本框中输入要查找的节点ID，下方动画就会显示出从选定节点到其根节点的路径。<br>
+          </div>  
+        </span>
+
+      </div>
+      <canvas id = "draw"></canvas>
     </div>
 
     <div class = "bottom-nav">
@@ -113,6 +148,7 @@ $(document).ready(function(){
   MAIN_G_SPEC.num_cols = 10;
   // MAIN_G_SPEC.show_edge_weight = false;
   
+  MAIN_G_SPEC.enable_node_move = true;
   MAIN_G_SPEC.enable_edge_color_change = false;
   MAIN_G_SPEC.enable_edge_create = false;
   MAIN_G_SPEC.gap_y = 300;

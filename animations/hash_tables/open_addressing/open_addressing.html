@@ -78,7 +78,80 @@
     </div>
 
     <div class = "canvas"> 
-       <canvas id = "draw"></canvas>
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <div><span class="red">Open Addressing: </span>It resolves the hash collision by searching through the array until reaching a valid location. Each element in the array is either empty or store one piece of data. The animation shows searching strategies: </div>
+            <span class="red">1. Linear Probing: </span>Use a linear function (y(i) = c &middot; i, c is constant) to search for a valid location. Our animation uses constant value 1 for <strong>c</strong>. <br>
+            <div style="text-align:center; margin-top: 7px"> h<sub>i</sub> = (Hash(key) + c &middot; i) % tableSize</div>
+
+
+
+            <span class="red">2. Quadratic Probing: </span>Use a quadratic function (y(i) = c<sub>1</sub>i + c<sub>2</sub>i<sup>2</sup>, c<sub>1</sub> and c<sub>2</sub> are constant) to search for a valid location. The animation uses constant valiue 0, 1 for <strong>c<sub>1</sub></strong> and <strong>c<sub>2</sub></strong> respetively.
+            <div style="text-align:center; margin-top: 7px"> h<sub>i</sub> = (Hash(key) + c<sub>1</sub>i + c<sub>2</sub>i<sup>2</sup>) % tableSize</div>
+
+            <span class="red">3. Double Hashing: </span>Use a second hash function to search for a valid location.
+            <div style="text-align:center; margin-top: 7px"> h<sub>i</sub> = (Hash<sub>1</sub>(key) +  Hash<sub>2</sub>(key) &middot; i ) % tableSize</div>
+          </div>
+
+          <div>
+            <div><span class="red">Animation Supported Hash Functions:</span></div>
+            <span class="red">1. DJB2: </span>Please refer <a href="http://www.cse.yorku.ca/~oz/hash.html">here</a><br>
+            <span class="red">2. ASCII: </span>Return the sum of ASCII values of each character given a string. <br>
+            <span class="red">3. Manually Enter: </span>This is not a hash function. But it helps you insert an element to a specific location flexibly without knowing the behavior of the hash function.
+          </div>
+
+          <div>
+            <div><span class="red">API explanations: </span>A good hash function helps the performance of hash table operations because the collision happens in less time. </div>
+            <span class="red">1. Insert: </span> Insert a new element onto the hash table - average O(1), worse case O(n)<br>
+            <span class="red">2. Delete: </span> Delete the given element if it's found - average O(1), worse case O(n)<br>
+            <span class="red">3. Find </span>Find the given element - average O(1), worse case O(n)<br>
+          </div>
+
+          <div>
+            <div><span class="red">A little math about modulo operation:</span></div>
+            <div style="text-align:center; margin-top: 7px">(a + b) % c = (a % c + b % c) % c</div>
+          </div>
+         
+        </span>
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <div><span class="red">Open Addressing: </span>It resolves the hash collision by searching through the array until reaching a valid location. Each element in the array is either empty or store one piece of data. The animation shows searching strategies: </div>
+            <span class="red">1. Linear Probing: </span>Use a linear function (y(i) = c &middot; i, c is constant) to search for a valid location. Our animation uses constant value 1 for <strong>c</strong>. <br>
+            <div style="text-align:center; margin-top: 7px"> h<sub>i</sub> = (Hash(key) + c &middot; i) % tableSize</div>
+
+
+
+            <span class="red">2. Quadratic Probing: </span>Use a quadratic function (y(i) = c<sub>1</sub>i + c<sub>2</sub>i<sup>2</sup>, c<sub>1</sub> and c<sub>2</sub> are constant) to search for a valid location. The animation uses constant valiue 0, 1 for <strong>c<sub>1</sub></strong> and <strong>c<sub>2</sub></strong> respetively.
+            <div style="text-align:center; margin-top: 7px"> h<sub>i</sub> = (Hash(key) + c<sub>1</sub>i + c<sub>2</sub>i<sup>2</sup>) % tableSize</div>
+
+            <span class="red">3. Double Hashing: </span>Use a second hash function to search for a valid location.
+            <div style="text-align:center; margin-top: 7px"> h<sub>i</sub> = (Hash<sub>1</sub>(key) +  Hash<sub>2</sub>(key) &middot; i ) % tableSize</div>
+          </div>
+
+          <div>
+            <div><span class="red">Animation Supported Hash Functions:</span></div>
+            <span class="red">1. DJB2: </span>Please refer <a href="http://www.cse.yorku.ca/~oz/hash.html">here</a><br>
+            <span class="red">2. ASCII: </span>Return the sum of ASCII values of each character given a string. <br>
+            <span class="red">3. Manually Enter: </span>This is not a hash function. But it helps you insert an element to a specific location flexibly without knowing the behavior of the hash function.
+          </div>
+
+          <div>
+            <div><span class="red">API explanations: </span>A good hash function helps the performance of hash table operations because the collision happens in less time. </div>
+            <span class="red">1. Insert: </span> Insert a new element onto the hash table - average O(1), worse case O(n)<br>
+            <span class="red">2. Delete: </span> Delete the given element if it's found - average O(1), worse case O(n)<br>
+            <span class="red">3. Find </span>Find the given element - average O(1), worse case O(n)<br>
+          </div>
+
+          <div>
+            <div><span class="red">A little math about modulo operation:</span></div>
+            <div style="text-align:center; margin-top: 7px">(a + b) % c = (a % c + b % c) % c</div>
+          </div>
+        </span>
+
+      </div>
+      <canvas id = "draw"></canvas>
     </div>
     <div class = "bottom-nav">
       <button id = "script">Script</button>

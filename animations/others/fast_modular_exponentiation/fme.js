@@ -16,7 +16,7 @@ function color_row(id) {
   $("#row_" + (id - 1)).css("background", "lightblue");
 }
 class fmeAnimation {
-  constructor(b, e, n, table) {
+  constructor(b, e, n, table, show_table_only = false) {
     
     this.ani = new Animation();
     this.ani.step_by_step = $("#step_by_step").is(":checked");
@@ -33,8 +33,13 @@ class fmeAnimation {
     this.code_rect.text_align = "left";
     this.code_rect.ctx_prop.lineWidth = 0.4;
     this.ani.add_object(this.code_rect);
-
+    if (show_table_only) {
+      this.ani.draw();
+      return;
+    }
     this.move_dy = this.code_rect.height / this.code_rect.text.length;
+    
+
     this.line_ptr = new quadraticCurve(new Point(215 + 40, 30 + this.move_dy / 2), new Point(215, 30 + this.move_dy / 2), 0);
     this.line_ptr.angle_length = 9;
     this.line_ptr.ctx_prop.lineWidth = 2;
@@ -43,13 +48,13 @@ class fmeAnimation {
     this.fme_table = table;
 
     this.ani.draw();
+
+
     b = BigInt(b);
     e = BigInt(e);
     n = BigInt(n);
 
    
-    
-
     this.fast_modular_exponentiation(b,e,n);
   
   }
