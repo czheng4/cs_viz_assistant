@@ -23,6 +23,7 @@ class insertionSortAnimation {
 
     rect = new Rect(x, y, v.length * this.ss, this.ss, 0, v, "", "bottom", "h");
     t_rect = new Rect(x, this.ss + this.ss, this.ss, this.ss, 1, [""], "tmp", "bottom", "h");
+    for (let i = 0; i < v.length; i++) rect.subrect_labels.push(i);
     rect.font = "20px Arial";
     t_rect.font = "20px Arial";
     this.ani.add_object(rect);
@@ -105,7 +106,7 @@ class insertionSortAnimation {
         ani.add_sequence_ani({
           target: rect,
           prop: {
-            copy: {index1: (j - 1), rect: rect, index2: j, h_scale: 2, w_scale: 0},
+            copy: {index1: (j - 1), rect: rect, index2: j, h_scale: 3, w_scale: 0},
             fillStyle: deep_copy(fill_styles),
             time: 1.5 * ANIMATION_TIME, 
           }
