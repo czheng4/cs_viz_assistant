@@ -40,7 +40,7 @@
       <div class = "line"></div>
 
       <input type = "text" id = "start_node_id" placeholder="starting node">
-      <input type = "text" id = "end_node_id" placeholder="ending node(optional)">
+      <input type = "text" id = "end_node_id" placeholder="ending node(optional)" style="width: 140px">
       <button type = "button" id = "run_dfs">Run DFS</button> &emsp;
       <button type="button" id = "clear_graph">Clear Graph</button> &emsp;
       <button type="button" id = "modify_original_graph">Modify Graph</button>   
@@ -59,6 +59,39 @@
     </div>
 
     <div class = "canvas"> 
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Depth-First Search(DFS): </span> DFS is a graph algorithm that is able to visit every node and every edge given a starting node. With that being said, the time complexity of using DFS to traverse the entire graph is O(|V| + |E|) where V is the number of nodes and E is the number of edges.
+          </div>
+          <div>
+            <sapn class="red">Pseudocode:</sapn><pre>
+def DFS(n):
+  mark n as visited
+  for each edge of n:
+    if edge->to_node is not visited: DFS(to_node)</pre>
+          </div>
+          <div>
+            <span class="red">Input Explanations: </span> <br>
+            <span class="red">1. starting node: </span> The starting node to begin with traversing <br>
+            <span class="red">2. ending node: </span>This is an optional input. If this is specified. DFS will try to find a path between the starting node and ending node <br>
+            <br>
+          </div>
+       
+        </span>
+
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">深度优先搜索定义：</span>深度优先搜索属于图算法的一种，是一个针对图和树的遍历算法，利用深度优先搜索算法可以产生目标图的相应拓扑排序表，利用拓扑排序表可以方便的解决很多相关的图论问题，如最大路径问题等等。一般用堆数据结构来辅助实现DFS算法。其过程简要来说是对每一个可能的分支路径深入到不能再深入为止，而且每个节点只能访问一次。
+          </div>
+          <div>
+            <span class="red">按键说明：</span>Run DFS：从输入的起始顶点开始，沿着一条路一直走到终止节点，然后从这条路尽头的节点回退到上一个节点，再从另一条路开始走到底...，不断递归重复此过程，直到所有的顶点都遍历完成<br>
+          
+            
+          </div>
+        </span>
+      </div> 
        <canvas id = "draw"></canvas>
     </div>
     <div class = "bottom-nav">

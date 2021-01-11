@@ -40,6 +40,7 @@
       <div class = "line"></div>
 
       <input type = "text" id = "start_node_id" placeholder="starting node">
+      <input type = "text" id = "end_node_id" placeholder="ending node(optional)" style="width: 140px">
       <button type = "button" id = "run_bfs">Run BFS</button> &emsp;
       <button type="button" id = "clear_graph">Clear Graph</button> &emsp;
       <button type="button" id = "modify_original_graph">Modify Graph</button>   
@@ -59,6 +60,33 @@
     </div>
 
     <div class = "canvas"> 
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Breadth-First Search(BFS): </span> BFS is a graph algorithm that explores the closest nodes first. Therefore, it's commanly used to find the shortest path between the starting node and ending node. The time complexity of BFS is O(|V| + |E|) where V is the number of nodes and E is the number of edges, since every node and every edge will be visited in the worse case.
+          </div>
+
+          <div>
+            <span class="red">Input Explanations: </span> <br>
+            <span class="red">1. starting node: </span> The starting node to begin with traversing <br>
+            <span class="red">2. ending node: </span>This is an optional input. If this is specified. DFS will try to find a path between the starting node and ending node <br>
+            <br>
+          </div>
+       
+        </span>
+
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">广度优先搜索定义：</span>已知图G=(V,E)和一个源顶点s，广度优先搜索以一种系统的方式探寻G的边，从而“发现”s所能到达的所有顶点，并计算s到所有这些顶点的距离(最少边数)，该算法同时能生成一棵根为s且包括所有可达顶点的宽度优先树。对从s可达的任意顶点v，广度优先树中从s到v的路径对应于图G中从s到v的最短路径，即包含最小边数的路径。该算法对有向图和无向图同样适用。
+          </div>
+          <div>
+            <span class="red">按键说明：</span>Run BFS：从输入的节点出发，先遍历这个节点的相邻节点，再依次遍历每个相邻节点的相邻节点。<br>
+          
+            
+          </div>
+        </span>
+      </div> 
        <canvas id = "draw"></canvas>
     </div>
     <div class = "bottom-nav">
@@ -120,7 +148,7 @@ $(document).ready(function(){
       $("#elaboration_text").text("Graph is empty");
       return;
     }
-    MAIN_A.run_bfs($("#start_node_id").val().trim());
+    MAIN_A.run_bfs($("#start_node_id").val().trim(), $("#end_node_id").val().trim());
   })
 
 });

@@ -74,13 +74,21 @@ class bfsAnimation {
     }
 
     n = g.get_node(node_id);
-
-    if (this.q_rect == null) this.make_queue_rect();
+    this.ending_node = null;
+    if (g.is_node(node_id2)) {
+      this.ending_node = g.get_node(node_id2);
+    }
+    if (this.ending_node != null && n == this.ending_node) {
+      $("#elaboration_text").text("Please enter different node ids for starting node and ending node");
+      return;
+    }
+    
     
     this.ani.clear_animation();
     for (let key in g.node_map) {
       n = g.node_map[key];
       n.distance = -1;
+      n.backedge = null;
       n.ani_circle.label = -1;
       n.ani_circle.label_font = "12px Arial";
       n.ani_circle.label_padding = 5;
@@ -93,6 +101,8 @@ class bfsAnimation {
     }
 
     g.save_original_graph();
+    if (this.q_rect == null) this.make_queue_rect();
+    
     this.path = [];
 
     ani.add_sequence_ani({
@@ -199,8 +209,16 @@ class bfsAnimation {
         e = n.adj[i];
         n2 = e.n2;
 
-        if (n2.distance != -1) continue;
+        if (n2.distance != -1) {
+          ani.add_sequence_ani({
+            target: e.ani_line,
+            prop: {fade_in:true, strokeStyle: "red", lineWidth:3, time:1},
+            concurrence: true,
+          });
+          continue;
+        }
         n2.distance = n.distance + 1;
+        n2.backedge = e;
         queue.push_back(n2);
         size++;
 
@@ -220,11 +238,66 @@ class bfsAnimation {
           prop: {fade_in: true, fillStyle: "pink", label: {color:"red", text: n2.distance}, time:1},
           concurrence: true,
         });
+
+       
+        if (n2 == this.ending_node) {
+
+          ani.add_sequence_ani({pause:1});
+          if (n2.backedge != null) {
+            ani.add_sequence_ani({
+              text: "Reach the ending node {}. Now we traverse back through the backedge".format_b(this.ending_node.id),
+              target: n2.ani_circle,
+              prop: {fade_in:true, fillStyle:"lightblue", time:1, step:true},
+            });
+          }
+          
+          while (n2.backedge != null) {
+            if (n2 == this.ending_node) text = "{}".format_b(n2.backedge.n1.id + " " + RIGHT_ARROW + " " + n2.id);
+            else text = "{}".format_b(n2.backedge.n1.id + " " + RIGHT_ARROW + " ") + text;
+
+            ani.add_sequence_ani({
+              text: "Path: " + text,
+              target: n2.backedge.ani_line,
+              prop: {fade_in: true, strokeStyle: "blue", lineWidth:3, time : 1},
+            });
+           
+            ani.add_sequence_ani({
+              target: n2.ani_circle,
+              prop: {walk: {circle: n2.backedge.n1.ani_circle, h_scale: 0}},
+            })
+
+            ani.add_sequence_ani({
+              target: n2.backedge.n1.ani_circle,
+              prop: {fade_in: true, fillStyle: "lightblue", time: 1, step:true},
+            });
+            n2 = n2.backedge.n1;
+          }
+          return true;
+        }
+
+
+
       }
 
 
+      text = "";
+      if (unvisited_text != "") {
+        text = "Push back unvisited adjacent nodes {} into queue, update their distance to {}, and set corresponding backedge. ".format_b(unvisited_text, n.distance + 1);
+      }
+
+      if (visited_text != "") {
+        text += "Do nothing for visited adjacent nodes {}".format_b(visited_text);
+      }
+
+      if (text == "") {
+        text = "Node {} has no adjacent nodes. Do nothing".format_b(n.id);
+      }
+
       /* update the rect */
-      ani.add_sequence_ani({pause:ANIMATION_TIME});
+      ani.add_sequence_ani({
+        text: text,
+        pause:ANIMATION_TIME
+      });
       ani.add_sequence_ani({
         target: q_rect,
         prop: {text: dlist_to_rect_texts(queue), time: 1},
@@ -246,22 +319,10 @@ class bfsAnimation {
         });
       }
 
-      text = "";
-      if (unvisited_text != "") {
-        text = "Push back unvisited adjacent nodes {} into queue and update their distance to {}. ".format_b(unvisited_text, n.distance + 1);
-      }
-
-      if (visited_text != "") {
-        text += "Do nothing for visited adjacent nodes {}".format_b(visited_text);
-      }
-
-      if (text == "") {
-        text = "Node {} has no adjacent nodes. Do nothing".format_b(n.id);
-      }
+      
 
       ani.add_sequence_ani({
         pause:1,
-        text: text,
         prop: {step: true}
       });
 
