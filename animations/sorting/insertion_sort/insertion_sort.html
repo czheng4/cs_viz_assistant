@@ -1,0 +1,122 @@
+<!--
+  Hunter Leef
+  ChaoHui Zheng
+  1/3/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header">Insertion Sort</div>
+    <div class = "control"> 
+
+      Array <input type="text" id="array" placeholder="Enter values separated by space" style = "width: 500px; height:25px; font-size:20px"> 
+
+      <button type="button" id = "run">run</button>
+      <div class="line"></div>
+
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="0" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text" style="color: black"></span></div>
+      </div>
+    </div>
+
+    <div class = "canvas"> 
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Insertion Sort:</span> This algorithm sorts in <b>O(n<sup>2</sup>)</b> where <b>n</b> is the size of the input array/vector.<br>
+            The algorithm is fully explained and 3 variants are covered <a href="http://web.eecs.utk.edu/~jplank/plank/classes/cs302/Notes/Sorting/src/">here</a>. The following code is modeled after the second variant:<br>
+          </div>
+          <div>
+            <span class="red">Given:</span><br>
+            Array <b>v</b> of <b>n</b> values to be sorted<br>
+            <span class="red">Method:</span><br>
+            for(i = 1; i < v.size; i++){<br>
+              <span style="margin-left:10px;">tmp = v[i];</span><br>
+              <span style="margin-left:10px;">for(j = i; j >= 1 && tmp < v[j - 1]; j--){</span><br>
+                <span style="margin-left:20px;">v[j] = v[j - 1];</span><br>
+              <span style="margin-left:10px;">}</span><br>  
+              <span style="margin-left:10px;">v[j] = tmp;</span><br>
+            }
+          </div>
+       
+        </span>
+        <span class="tooltiptext" id ="chinese">
+          
+        </span>
+      </div>
+       <canvas id = "draw"></canvas>
+    </div>
+    <div class = "bottom-nav">
+      <button id = "script">Script</button>
+    </div>
+  </div>
+
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="../../../lib/memory_generator.js"></script>
+<script src="./insertion_sort.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+  
+  set_canvas(1200, 800, 150, 50);
+
+  var v = [3, 21, 99, 10, 9, 3, 2, 21];
+  MAIN_A = new insertionSortAnimation(deep_copy(v)); //must use name MAIN_A
+
+
+  $("#run").click(function() {
+
+    let str = $("#array").val();
+    let d;
+    let v1 = v;
+    str = str.split(/[ ,]+/);
+   
+    v = [];
+    for (let i = 0; i < str.length; i++) {
+      d = parseFloat(str[i]);
+      if (!isNaN(d)) v.push(d);
+    }
+    
+    
+    if(v.length == 0) v = v1;
+    else if(v.length < 2) {
+      v = v1;
+      MAIN_A.ani.elaboration.text("array size must be >= 2");
+      return;
+    }
+
+    if (v.length != 0) {
+      MAIN_A = new insertionSortAnimation(deep_copy(v));
+      MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
+      MAIN_A.run_animation();
+    }
+  })
+
+
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+
+</html>
