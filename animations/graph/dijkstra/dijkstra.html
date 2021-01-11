@@ -85,6 +85,37 @@
     </div>
 
     <div class = "canvas"> 
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Dijkstra: </span> It finds the shortest path from the starting node to all other nodes. The animation uses the <strong>multimap</strong> data structure to store processed nodes where key is the distance to the starting node and value is the "to" node. Another option is to use the <strong>priority queue</strong> since the min element can be retrieved too.
+          </div>
+
+          <div>
+            <span class="red">API Explanations: </span> <br>
+            <span class="red">1. Run: </span> Run Dijkstra with a given starting node <br>
+            <span class="red">2. Get Path </span>Find a path from the starting node to ending node. Note: must run Dijkstra first before we can get a path.<br>
+            <span class="red">3. Leave node on multimap: </span>When it's checked, we do not remove a node from the multimap when its distance gets improved.
+          </div>
+       
+        </span>
+
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">Dijkstra算法定义：</span>Dijkstra算法采用的是一种贪心的策略，声明一个数组dis来保存源点到各个顶点的最短距离和一个保存已经找到了最短路径的顶点的集合：T，初始时，原点 s 的路径权重被赋为 0 （dis[s] = 0）。若对于顶点 s 存在能直接到达的边（s,m），则把dis[m]设为w（s, m）,同时把所有其他（s不能直接到达的）顶点的路径长度设为无穷大。初始时，集合T只有顶点s。然后，从dis数组选择最小值，则该值就是源点s到该值对应的顶点的最短路径，并且把该点加入到T中，OK，此时完成一个顶点，接着需要判断新加入的顶点是否可以到达其他顶点并且看看通过该顶点到达其他点的路径长度是否比源点直接到达短，如果是，那么就替换这些顶点在dis中的值。然后，又从dis中找出最小值，重复上述动作，直到T中包含了图的所有顶点。
+
+          </div>
+          <div>
+            <div><span class="red">按键说明：</span></div>
+            <span class="red">Run: </span> 输入作为原点的节点名字，将其作为原点来进行后续最短路径计算<br>
+            <span class="red">Get Path: </span> 注意，只有当之前已经选择了原始节点并点击”Run”按钮完成最短路径计算后，此按钮才能使用。输入一个节点的名字，并点击”Get Path”后会在下方显示出原始节点到此节点的最短路径序列，以坐标的形式呈现。<br>
+
+          
+            
+          </div>
+        </span>
+      </div>
        <canvas id = "draw"></canvas>
     </div>
   </div>

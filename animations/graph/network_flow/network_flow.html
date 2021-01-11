@@ -79,7 +79,53 @@
       </div>
     </div>
 
-    <div class = "canvas"> 
+    <div class = "canvas">
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Network Flow: </span> It finds the max flow from <b>Source</b> to <b>Sink</b>.
+          </div>
+          <div> 
+            <div><span class="red">Path Finding Methods: </span> "Manually Enter" helps you flexibilly try any path from <b>source</b> to <b>sink</b></div>
+            <span class="red">1. BFS: </span>Find path from source to sink with the fewest number of edges. See BFS animation <a href="../bfs/bfs.html">here</a><br>
+            <span class="red">2. Greedy-DFS: </span>The adjacencts edges are sorted in desceding order by weight(capacity). <br>
+            <span class="red">3. DFS: </span>Standard DFS. See DFS animation <a href="../dfs/dfs.html" target="_blank">here</a> <br>
+            <span class="red">4. Modified Dijkstra: </span> Find the path from source to sink that has the max flow. <br>
+            <span class="red">5. Manually Enter: </span> Enter node ids on the path from source to sink where node ids are separated by space. <br>
+
+          </div>
+          <div>
+            <div><span class="red">API Explanations: </span></div>
+            <span class="red">1. Run Augmenting Path: </span> Find a path from <b>source</b> to <b>sink</b> based on the selected path finding method and process it<br>
+            <span class="red">2. Find Minimum Cut: </span>Find a set of edges disconnect the <b>source
+            </b> and <b>sink</b> that has the smallest total weight(capacity)<br>
+            <br>
+          </div>
+       
+        </span>
+
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">网络流定义：</span>给定指定的一个有向图,其中有两个特殊的点源S(Sources)和汇T(Sinks),每条边有指定的容量,常见的网络流中提及的概念是最大流和最小割。
+          </div>
+
+          <div>
+            <span class="red">最大流：</span>指的是在这个网络流中，每一个节点到另一个节点之间都存在着“流量”（边上的值），这些“流量”就像是一个自来水管能通过的水的量。好比从原点出发，开始有水流出，不断分流，直到最后的终点。每条边最终累计通过的“水”都不能大于它的“流量”。而满足条件的从S流到T最多的“水”的量，就是最大流。
+          </div>
+          <div>
+            <span class="red">最小割：</span>最小割：容量最小的割。最大流最小割定理：对容量网络G(V,E)，其最大流的容量等于最小割的容量. 通俗来讲，在一个网络流中，每一个边都好似自来水管道，有“水“从S流到T。而如果有人拿把刀，割断了一部分自来水管（边），导致最后这些”水“无法到达T。但从割断的水管（边）中流出的水加起来，是和这个网络流中的最大流的量时相等的，同时这些被割断的水管（边）的最大容量加起来是尽可能最小的时候，就是我们所说的”最小割“。
+
+          </div>
+          <div>
+            <div><span class="red">按键说明：</span></div>
+            <span class="red">1. Run Augmenting Path: </span> 点击此处运行增广路。每点击一次运行一条路径直到结束。<br>
+            <span class="red">2. Find Minimum Cut: </span>点击此处可以找到该网络流中的最小割。（注意：这个按钮只有在处理完所有增广路并得到最大流后才能点击，如果显示无法点击，请点击“Run Augmenting Path “按钮来继续运行）
+          
+            
+          </div>
+        </span>
+      </div> 
        <canvas id = "draw"></canvas>
     </div>
   </div>

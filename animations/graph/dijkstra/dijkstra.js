@@ -329,7 +329,7 @@ class dijkstraAnimation {
       multimap_text = multimap_content(node_q, dist_q, n, dist);
       ani.add_sequence_ani({ 
         pause: 1,
-        text: "Remove {}({}, {})</span> from the front of the multimap.".format(BLUE_SPAN, dist, n.id),
+        text: "Get {}({}, {})</span> from the front of the multimap.".format(BLUE_SPAN, dist, n.id),
         action: { params: {content: multimap_text }, func: update_multimap_content },
         rev_action: { params: {content: pre_multimap_text }, func: update_multimap_content },
         concurrence: true,
@@ -370,10 +370,10 @@ class dijkstraAnimation {
       
 
       if (dist != n.distance) {
-        e_text = "Node {}{}'s</span> distance != key on multimap ({} != {}). Do nothing".format(BLUE_SPAN, n.id, n.distance, dist);
+        e_text = "Remove front node. {}{}'s</span> distance != key on multimap ({} != {}). Do nothing".format(BLUE_SPAN, n.id, n.distance, dist);
       } else {
 
-        e_text = "Process node {}{}'s</span> adj list".format(BLUE_SPAN, n.id);
+        e_text = "Remove front node. Process node {}{}'s</span> adj list".format(BLUE_SPAN, n.id);
 
 
       

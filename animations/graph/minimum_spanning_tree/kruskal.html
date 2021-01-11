@@ -36,7 +36,7 @@
       
       <div class = "line"></div>
       
-      <button type="button" id = "run" style="width: 195px">Run Kruskal Algorithm</button>&emsp; &emsp;
+      <button type="button" id = "run" style="width: 195px">Run Kruskal's Algorithm</button>&emsp; &emsp;
       <button type="button" id = "clear_graph">Clear Graph</button> &emsp;
       <button type="button" id = "modify_original_graph">Modify Graph</button>
 
@@ -63,8 +63,42 @@
       </div>
     </div>
 
-    <div class = "canvas"> 
-       <canvas id = "draw"></canvas>
+    <div class = "canvas">
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Minimum Spanning Tree:</span> Find a set of edges that connect every node in the original graph with minimum total cost(weight)
+          </div>
+          <div>
+            <span class="red">Kruskal's Algorithm: </span> It builds the minimum spanning tree edge by edge by using <b>disjoint-set</b> data structure. You can find the <b> disjoint-set</b> animation <a href="../../others/disjoint_set/disjoint_set.html" target="_blank">here</a>.
+          </div>
+
+          <div> 
+            <div><span class="red">Algorithm Detail: </span> </div>
+            (1) Sort edges in descending order by weight <br>
+            (2) We process the sorted edges edge by edge. For each edge, if the edge connects two different sets(components), we union them and add the edge to spanning tree. We repeate this process until we have only one set(component).
+          </div>
+         
+       
+        </span>
+
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">最小生成树-kruskal算法定义：</span>最小生成树就是用最少的代价来使得一个图连通。
+          </div>
+
+          <div>
+            <div><span class="red">Steps：</span></div>
+            1）先对每条的权重按从小到大排序 <br>
+            2）每次选取其中没有被选过的最小权重的边，并且不能形成环 <br>
+            3）一直搜索到边数=点数-1，如果不能则该图不连通 
+
+          </div>
+          
+        </span>
+      </div>
+      <canvas id = "draw"></canvas>
     </div>
   </div>
 
