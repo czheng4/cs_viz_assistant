@@ -70,21 +70,28 @@ class insertionSortAnimation {
     fill_styles[0] = "#DDDDDD";
     for(i = 1; i < v_size; i++){
       fill_styles[i] = "lightblue";
+
+      ani.add_sequence_ani({
+        text: "Save {}{} (array[{}])</span> into tmp.".format(BLUE_SPAN, v_c[i], i),
+        target:rect,
+        prop: {fillStyle: deep_copy(fill_styles), time:1, fade_in:true}
+      });
+
       ani.add_sequence_ani({
         target: rect,
-        text: "Save {}{} (array[{}])</span> into tmp.".format(BLUE_SPAN, v_c[i], i),
         prop: {
           copy: {index1: i, rect: t_rect, index2: 0, h_scale: 0, w_scale: 0},
-          fillStyle: deep_copy(fill_styles),
           time: 1.5 * ANIMATION_TIME, 
         }
       });
+
       ani.add_sequence_ani({
         target: t_rect,
         prop: {
           fade_in: true,
           fillStyle: "lightblue",
-          time: 1
+          time: 1,
+          step: true,
         }
       });
       fill_styles[i] = "#DDDDDD";
@@ -99,7 +106,6 @@ class insertionSortAnimation {
           prop: {
             fade_in: true,
             fillStyle: deep_copy(fill_styles),
-            step: true,
             time: 1
           }
         });
@@ -107,8 +113,8 @@ class insertionSortAnimation {
           target: rect,
           prop: {
             copy: {index1: (j - 1), rect: rect, index2: j, h_scale: 3, w_scale: 0},
-            fillStyle: deep_copy(fill_styles),
             time: 1.5 * ANIMATION_TIME, 
+            step: true,
           }
         });
         fill_styles[j] = "#DDDDDD";
@@ -124,8 +130,7 @@ class insertionSortAnimation {
             copy: {index1: 0, rect: rect, index2: j, h_scale: 0, w_scale: 0},
             fillStyle: "lightblue",
             time: 1.5 * ANIMATION_TIME, 
-          },
-          concurrence: true
+          }
         });
         ani.add_sequence_ani({
           target: rect,
@@ -140,7 +145,8 @@ class insertionSortAnimation {
           prop: {
             fade_in: true,
             fillStyle: "#DDDDDD",
-            time: 1
+            time: 1,
+            step:true,
           }
         });
         fill_styles[j] = "#DDDDDD";
@@ -176,6 +182,7 @@ class insertionSortAnimation {
             copy: {index1: 0, rect: rect, index2: j, h_scale: 0, w_scale: 0},
             fillStyle: "lightblue",
             time: 1.5 * ANIMATION_TIME, 
+            step:true
           }
         });
       }
