@@ -117,8 +117,7 @@ class insertionSortAnimation {
             step: true,
           }
         });
-        fill_styles[j] = "#DDDDDD";
-        fill_styles[j - 1] = "#DDDDDD";
+        fill_styles[j - 1] = "lightblue";
         v_c[j] = v_c[j - 1];
       }
       if(j !== i){
@@ -149,7 +148,6 @@ class insertionSortAnimation {
             step:true,
           }
         });
-        fill_styles[j] = "#DDDDDD";
         v_c[j] = tmp;
       }else{
         fill_styles[i] = "pink";
@@ -165,7 +163,6 @@ class insertionSortAnimation {
           }
         });
         fill_styles[i] = "lightblue";
-        fill_styles[j - 1] = "#DDDDDD";
         ani.add_sequence_ani({
           target: rect,
           prop: {
@@ -186,7 +183,6 @@ class insertionSortAnimation {
           }
         });
       }
-      fill_styles[i] = "#DDDDDD";
       ani.add_sequence_ani({pause:ANIMATION_TIME * 1});
     }
     for(i = 0; i < v_size; i++){ fill_styles[i] = "lightblue"; }
