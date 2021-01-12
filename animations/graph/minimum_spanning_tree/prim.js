@@ -195,6 +195,7 @@ class primAnimation {
     }
     
     let starting_node, edge, node, node2, s_edge;
+    let line, s_line;
     let i, sum, key, best_d, pos;
     let e_text, texts, pre_texts, highlight_texts, base_text;
     let multimap = new Dlist();
@@ -251,6 +252,17 @@ class primAnimation {
       node.visited = 1;
 
       s_edge = g.get_edge_by_name(init_graph_node(edge.n1.id), init_graph_node(edge.n2.id), edge.weight);
+      
+      /* sync the text direction and text position */
+      if (edge.n1.ani_circle == edge.ani_line.p1.obj) {
+        s_edge.ani_line.text_t = edge.ani_line.text_t;
+        s_edge.ani_line.text_direction = edge.ani_line.text_direction;
+      } else {
+        s_edge.ani_line.text_t = 1 - edge.ani_line.text_t;
+        if ( edge.ani_line.text_direction == "right")  s_edge.ani_line.text_direction = "left";
+        else s_edge.ani_line.text_direction = "right";
+      }
+
       s_edge.ani_line.ctx_prop = deep_copy(HIGHLIGHT_LINE);
       s_edge.ani_line.visible = false;
       

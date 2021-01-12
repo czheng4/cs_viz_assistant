@@ -194,7 +194,7 @@ $(document).ready(function(){
     } else if (g == null) {
       $("#elaboration_text").text("Graph is empty");
     } else if (!g.is_node(id)) {
-      $("#elaboration_text").text(id + "doesn't exist");
+      $("#elaboration_text").text(id + " doesn't exist");
     } else {
       $("#table").css("display","table");
       MAIN_A.run_dijkstra(g.get_node(id), g, $("#leave_node").is(":checked"));

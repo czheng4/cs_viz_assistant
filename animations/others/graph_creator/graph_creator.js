@@ -18,7 +18,9 @@ function generate_graph_file_content(g) {
   let circle, line, e;
 
 
-  str = "#### Please do not change this file. Any unexpected content changes may cause error when importing\n";
+  str =  "#### Contact: ChaoHui Zheng(czheng4@vols.utk.edu)\n"
+  str += "#### Please do not change this file. Any unexpected content changes may cause an error when importing\n\n";
+
   if (g.original_graph != null) g = g.original_graph;
   if (g.graph_type == "undirect" || g.graph_type == "undirected") str += "TYPE UNDIRECTED\n";
   else str += "TYPE DIRECTED\n";
@@ -459,8 +461,12 @@ $(document).ready(function(){
 
     id = $("#node_t").val();
     id = id.replace(/\s/g,'');
+
+
     if (id == "") {
       $("#elaboration_text").text("node id is empty");
+    } else if (!id.match("^[a-zA-Z0-9_-]+$")) {
+      $("#elaboration_text").text("node id must only conatin letters, digits, -, or _");
     } else if (g.is_node(id)) {
       elaboration_append("{} exists".format_b(id));
     } else {

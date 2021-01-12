@@ -84,7 +84,7 @@ class kruskalAnimation {
     let ani = this.ani;
     let x1, x2, y1, y2;
     let dy;
-    let n, d, nodes;
+    let n, d, nodes, new_n;
     let c;
     let margin = 60;
     let origin;
@@ -128,7 +128,7 @@ class kruskalAnimation {
     //console.log(ani.obj_map);
     for (let i = 0; i < nodes.length; i++) {
       n = nodes[i];
-      g.get_node(init_graph_node(n.ref), n.x + origin, n.y + dy, n.ref);
+      new_n = g.get_node(init_graph_node(n.ref), n.x + origin, n.y + dy, n.ref);
       n.move(d, dy);
     }
 
@@ -257,6 +257,8 @@ class kruskalAnimation {
         n2 = g.get_node(init_graph_node(e.n2.id));
         tmp_e = g.get_edge(n1, n2, e.weight);
         line = tmp_e.ani_line;
+        line.text_t = e.ani_line.text_t;
+        line.text_direction = e.ani_line.text_direction;
 
         sum += e.weight;
         ds.union(id1, id2);

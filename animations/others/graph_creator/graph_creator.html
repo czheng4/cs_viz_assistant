@@ -78,7 +78,35 @@
       </div>
     </div>
 
-    <div class = "canvas"> 
+    <div class = "canvas">
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Graph Creator:</span> A tool to create graphs for graph algorithms.
+          </div>
+      
+          <div> 
+            <div><span class="red">Shortcuts: </span> </div>
+            (1) Mouse down: Drag a node or edge weight <br>
+            (2) Press W/w + mouse down + mouse move: Create an edge. <br>
+            (3) Press D/d + mouse down + mouse move: Delete an edge. <br>
+            (4) Press T/t + mouse click edge weight: switch the text to other side <br>
+            (5) Press C/c + number(1,2,3,4): switch to differen node color. <br>
+            (6) Press C/s + mouse click a node: change to chosen node color <br>
+            (7) Press W/w + number(1,2,3,4): switch to differen edge line color.
+          </div>
+         
+       
+        </span>
+
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">拓扑排序定义：</span>输入一个点，对创建的有向无环图进行拓扑排序，将图中所有顶点排成一个线性序列，使得图中任意一对顶点u和v，若边<u,v>∈E(G)，则u在线性序列中出现在v之前。也可以理解为，由某个集合上的一个偏序得到该集合上的一个全序，这个操作称之为拓扑排序。
+          </div>
+          
+        </span>
+      </div>
        <canvas id = "draw"></canvas>
     </div>
   </div>
@@ -112,14 +140,14 @@ function example(ani) {
                        [3,7,20], [7,6,1],  [6,5,1]]);
   $("input[name=graph_type]").prop("disabled", true);
   $("#elaboration_text").text("");
-  $("#elaboration_text").append(
-    "Press W/w + mouse down + mouse move to create edge" + NEW_LINE + 
-    "Press D/d + mouse down + mouse move to delete edge" + NEW_LINE +
-    "Press T/t + mouse click edge weight to switch the text to other direction" + NEW_LINE + 
-    "Press C/c + mouse click node to change its color" + NEW_LINE + 
-    "Press C/c + number to switch to differen node colors" + NEW_LINE +
-    "Press W/w + number to switch to differen edge line colors"              
-  );
+  // $("#elaboration_text").append(
+  //   "Press W/w + mouse down + mouse move to create edge" + NEW_LINE + 
+  //   "Press D/d + mouse down + mouse move to delete edge" + NEW_LINE +
+  //   "Press T/t + mouse click edge weight to switch the text to other direction" + NEW_LINE + 
+  //   "Press C/c + mouse click node to change its color" + NEW_LINE + 
+  //   "Press C/c + number to switch to differen node colors" + NEW_LINE +
+  //   "Press W/w + number to switch to differen edge line colors"              
+  // );
   return g;
 }
 

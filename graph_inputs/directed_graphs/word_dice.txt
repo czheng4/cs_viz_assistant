@@ -1,0 +1,33 @@
+#### Contact: ChaoHui Zheng(czheng4@vols.utk.edu)
+#### Please do not change this file. Any unexpected content changes may cause an error when importing
+#### Please refer http://web.eecs.utk.edu/~jplank/plank/classes/cs302/Labs/LabA/ for graph info.
+
+TYPE DIRECTED
+TRANSLATE_X 150
+TRANSLATE_Y 25
+NODE S COL red POS 0 100
+NODE ENG POS 150 20 COL yellow
+NODE SAA POS 150 80 COL yellow
+NODE PRR POS 150 140 COL yellow
+NODE EAE POS 150 200 COL yellow
+NODE R POS 300 20 COL yellow
+NODE A POS 300 80 COL yellow
+NODE G POS 300 140 COL yellow
+NODE E POS 300 200 COL yellow
+NODE T POS 450 100
+
+EDGE S ENG 1
+EDGE S SAA 1
+EDGE S PRR 1
+EDGE S EAE 1
+EDGE ENG E 1
+EDGE ENG G 1
+EDGE SAA A 1
+EDGE PRR R 1
+EDGE EAE A 1
+EDGE EAE E 1
+EDGE R T 1
+EDGE A T 1
+EDGE G T 1
+EDGE E T 1
+
