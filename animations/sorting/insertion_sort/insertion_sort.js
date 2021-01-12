@@ -67,7 +67,6 @@ class insertionSortAnimation {
       }
     });
     ani.add_sequence_ani({pause:ANIMATION_TIME * 1});
-    fill_styles[0] = "#DDDDDD";
     for(i = 1; i < v_size; i++){
       fill_styles[i] = "lightblue";
 
