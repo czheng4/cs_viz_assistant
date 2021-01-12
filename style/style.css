@@ -48,7 +48,7 @@
   font-weight: bold;
 }
 #draw {
-  position: absolute;
+ /* position: absolute;*/
 }
 input[type="range"] {
   -webkit-appearance: none;
@@ -183,15 +183,11 @@ button {
 }
 
 .control {
- 
   grid-area: control;
   background-color: #d5e7c2;
   padding: 10px 5px 5px 10px;
 }
 
-#draw {
-  position: absolute;
-}
 .canvas {
   position: relative;
   grid-area: canvas;

@@ -93,7 +93,10 @@
 
         <span class="tooltiptext" id ="chinese">
          <div>
-            <div><span class="red">Separate Chaining: </span>Each element in the hash table stores a list of data. Unlike opening addressing, it has no limitation on how much data it can contain.</div>
+          <div><span class="red">哈希表定义：</span>哈希表（又名散列表），是根据关键码值(Key value)而直接进行访问的数据结构。它通过把关键码值映射到表中一个位置来访问记录，以加快查找的速度。其存放记录的数组叫做哈希表。
+          </div>
+
+          <div><span class="red">分离链接法：</span>对于需要动态维护的哈希表，关键码在查询过程中会出现地址的冲突这一点是无法避免的。分离链接法就是解决冲突的方法之一。这个算法将散列到同一个值的所有元素保留到一个链表中。其优势在于，除了最初的表头，无需预留任何更多的空间，甚至可以避免使用这些表头。而且表的长度可以根据需要自由的伸缩，只要系统的资源足够，任意多次的冲突都可以解决。</div>
           </div>
 
           <div>

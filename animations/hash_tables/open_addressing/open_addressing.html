@@ -117,7 +117,10 @@
 
         <span class="tooltiptext" id ="chinese">
           <div>
-            <div><span class="red">Open Addressing: </span>It resolves the hash collision by searching through the array until reaching a valid location. Each element in the array is either empty or store one piece of data. The animation shows searching strategies: </div>
+            <div><span class="red">哈希表定义：</span>哈希表（又名散列表），是根据关键码值(Key value)而直接进行访问的数据结构。它通过把关键码值映射到表中一个位置来访问记录，以加快查找的速度。其存放记录的数组叫做哈希表。</div>
+            
+            <div><span class="red">Open Addressing: </span>对于需要动态维护的哈希表，关键码在查询过程中会出现地址的冲突这一点是无法避免的。开放定址法就是解决冲突的方法之一。此算法将所有的元素都存储在散列表中，要系统的检查所有的表项，直到找到所需的元素，或者所需的不在表中。用开放寻址法来插入元素，需要进行探查，直到找到空的槽来存放关键字为止。</div>
+
             <span class="red">1. Linear Probing: </span>Use a linear function (y(i) = c &middot; i, c is constant) to search for a valid location. Our animation uses constant value 1 for <strong>c</strong>. <br>
             <div style="text-align:center; margin-top: 7px"> h<sub>i</sub> = (Hash(key) + c &middot; i) % tableSize</div>
 

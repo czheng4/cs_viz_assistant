@@ -61,7 +61,24 @@ for(i = 0; i < n - 1; i++) {
        
         </span>
         <span class="tooltiptext" id ="chinese">
-          
+          <div>
+            <span class="red">选择排序定义：</span>选择排序首先从第一次从待排序的数据元素中选出最小（或最大）的一个元素，存放在序列的起始位置，然后再从剩余的未排序元素中寻找到最小（大）元素，然后放到已排序的序列的末尾。以此类推，直到全部待排序的数据元素的个数为零。要注意的是，该算法是不稳定的排序方法。
+          </div>
+
+          <div>
+            <span class="red">Method:</span><pre>
+for(i = 0; i < n - 1; i++) {
+  min_index = i;
+  for(j = i + 1; j < n; j++){
+    if(v[j] < min_index){
+      min_index = j;
+    }
+  }
+  tmp = v[i];
+  v[i] = v[min_index];
+  v[min_index] = tmp;
+}
+          </pre></div>
         </span>
       </div>
        <canvas id = "draw"></canvas>

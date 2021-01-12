@@ -574,8 +574,13 @@ $(document).ready(function(){
         n1 = g.get_node(id1);
         n2 = g.get_node(id2);
         
-        elaboration_append("Add/Update edge {} successfully".format_b(pretty_edge(n1, n2)));
-        g.get_edge(n1, n2, weight);
+        
+        e = g.get_edge(n1, n2, weight);
+        if (e == null) {
+          elaboration_append("Weight {} is not valid".format_b(weight));
+        } else {
+          elaboration_append("Add/Update edge {} successfully".format_b(pretty_edge(n1, n2)));
+        }
         g.draw();
         
       }
