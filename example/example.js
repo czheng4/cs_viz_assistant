@@ -185,7 +185,7 @@ function example4() {
   set_canvas(1200, 700, 50, 50);
   let ani = MAIN_A.ani;
   let bit_array;
-  let number = 43;
+  let number = 0x42;
   let fill_styles;
 
 
@@ -226,7 +226,7 @@ function example4() {
       prop: {
         fade_in:true, 
         text: bit_array, // a new bit array
-        "width": (i + 1) * 35 + rect.width, // we need to change the rect width as well 
+        "width": bit_array.length * 35,
         subrect_labels: bit_indices(bit_array), // change the bit index as well
         fillStyle: deep_copy(fill_styles), // change the fill_styles. The new added bit will have blue color
         time:1, 
@@ -251,9 +251,7 @@ function example4() {
       prop: {
         fade_in:true, 
         text: bit_array, // a new bit array
-        width: -(i + 1) * 35 + rect.width + 3 * 35, // why we add 3 * 35 here? because we left shift 3 bit above. 
-                                                    // So far rect's width are still the same. Remember before running animation,
-                                                    // everything does not change.
+        width: bit_array.length * 35,
         subrect_labels: bit_indices(bit_array), // change the bit index as well
         time:1, 
         step:true}
