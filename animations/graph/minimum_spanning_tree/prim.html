@@ -76,8 +76,8 @@
           <div> 
             <div><span class="red">Algorithm Detail: </span> </div>
             <div>(1) Start by inserting an arbitrary starting node's adjacent edges onto <b>multimap</b> with keyed on edge weight. </div>
-            <div>(2) Remove the first element from the <b>multimap</b> and add its edge to the minimum spanning tree. Then we process the destination node by adding its adjacent edges onto <b>multimap</b>, if the edge's detination node is not in the spanning tree and improves the destination node's current distance. </div>
-            <div>(3) Repate step (2) until multimap is empty.</div>
+            <div>(2) Remove the first element from the <b>multimap</b> and add its edge to the minimum spanning tree. Then we process the destination node by adding its adjacent edges onto <b>multimap</b>, if the edge's destination node is not in the spanning tree and improves the destination node's current distance. </div>
+            <div>(3) Repeat step (2) until the <b>multimap</b> is empty.</div>
           </div>
          
        
@@ -94,12 +94,11 @@
             1）先在图中任意选一个起点，将其放入一个集合VT中 <br>
             2）然后选取与VT中的点相连的未被选取过且使得边权最小的点，加入VT <br>
             3）然后重复步骤2直到所有点都被选取
-
           </div>
           
         </span>
       </div>
-       <canvas id = "draw"></canvas>
+      <canvas id = "draw"></canvas>
     </div>
   </div>
 

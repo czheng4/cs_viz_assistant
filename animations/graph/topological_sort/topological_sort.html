@@ -23,7 +23,7 @@
 </head>
 <body>
    <div class = "grid-container">
-    <div class = "header">Toplogical Sort</div>
+    <div class = "header">Topological Sort</div>
     <div class = "control"> 
 
      
@@ -91,7 +91,31 @@
     </div>
 
     <div class = "canvas"> 
-       <canvas id = "draw"></canvas>
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Topological Sort:</span> Topological Sort works on the directed acyclic graph (DAG). It is a linear ordering of vertices such that for every edge <b>uv</b> from vertex <b>u</b> to vertex <b>v</b>, <b>u</b> comes before <b>v</b>.
+          </div>
+      
+          <div> 
+            <div><span class="red">Algorithm Detail: </span> </div>
+            <div>(1) Start by inserting all nodes onto <b>list</b> that have no incoming edges</div>
+            <div>(2) Remove the first element from the <b>list</b>. Then we process it by removing its adjacent edges and update the destionation node's <b>distance</b>, <b>backedge</b>, and <b>number of incoming edges</b>. If the destination node ends up having 0 incoming edges, we append it to the <b>list</b></div>
+            <div>(3) Repeat step (2) until the <b>list</b> is empty.</div>
+          </div>
+         
+       
+        </span>
+
+
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">拓扑排序定义：</span>输入一个点，对创建的有向无环图进行拓扑排序，将图中所有顶点排成一个线性序列，使得图中任意一对顶点u和v，若边<u,v>∈E(G)，则u在线性序列中出现在v之前。也可以理解为，由某个集合上的一个偏序得到该集合上的一个全序，这个操作称之为拓扑排序。
+          </div>
+          
+        </span>
+      </div>
+      <canvas id = "draw"></canvas>
     </div>
   </div>
 
