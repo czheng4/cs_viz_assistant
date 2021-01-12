@@ -64,7 +64,7 @@
 
       <div class = "elaboration">
         <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
-        <table border = 1 class = "elaboration-table">
+        <table border = 1 class = "elaboration-table" id = "table" style="display: none">
           <tr id = "node">
             <td>Node</td>
           </tr>
@@ -196,11 +196,15 @@ $(document).ready(function(){
     } else if (!g.is_node(id)) {
       $("#elaboration_text").text(id + "doesn't exist");
     } else {
+      $("#table").css("display","table");
       MAIN_A.run_dijkstra(g.get_node(id), g, $("#leave_node").is(":checked"));
     }
 
   })
 
+  $("#modify_original_graph").click(function(){
+    $("#table").css("display", "none");
+  })
 
 });
 

@@ -59,7 +59,7 @@
       </div>
 
       <div class = "elaboration">
-        <div class = "main-elaboration" style = "height: 57px;">Elaboration: <span id = "elaboration_text"></span></div>
+        <div class = "main-elaboration" style = "height: 20px;">Elaboration: <span id = "elaboration_text"></span></div>
       </div>
     </div>
 
@@ -168,9 +168,15 @@ $(document).ready(function(){
       $("#elaboration_text").text("Graph is empty");
       return;
     }
-    MAIN_A.run($("#starting_n").val());
+    
+    if (MAIN_A.run($("#starting_n").val())) {
+      $(".main-elaboration").css("height","57px");
+    }
   })
 
+  $("#modify_original_graph").click(function(){
+    $(".main-elaboration").css("height", "20px");
+  })
 
 });
 

@@ -194,15 +194,16 @@ class toplogicalSortAnimation {
     starting_node_id = starting_node_id.trim();
     if (starting_node_id == "") {
       $("#elaboration_text").text("Node id is empty");
-      return;
+      return false;
     } else if (!g.is_node(starting_node_id)) {
-      $("#elaboration_text").text("Node {} does not exist".format(starting_node_id));
-      return;
+      $("#elaboration_text").text("");
+      $("#elaboration_text").append("Node {} does not exist".format_b(starting_node_id));
+      return false;
     }
 
     if (g.cycle_detection() == true) {
       $("#elaboration_text").text("It must be directed acyclic graph");
-      return;
+      return false;
     }
     this.reset_graph();
     if (this.init == false) {
@@ -421,6 +422,7 @@ class toplogicalSortAnimation {
       text: "Done"
     });
     ani.run_animation();
+    return true;
   }
   
 }

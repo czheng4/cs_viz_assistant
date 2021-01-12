@@ -63,7 +63,7 @@
 
       <div class = "elaboration">
         <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
-        <table border = 1 class = "elaboration-table" style="font-size: 13px;">
+        <table id = "table" border = 1 class = "elaboration-table" style="font-size: 13px; display: none">
           <tr id = "node">
             <td>Node</td>
           </tr>
@@ -134,7 +134,7 @@
 <script src="../../../lib/drawing.js"></script>
 <script src="../../../lib/memory_generator.js"></script>
 <script src="../../linked_data_structures/dlist/dlist.js"></script>
-<script src="toplogical_sort.js"></script>
+<script src="topological_sort.js"></script>
 <script src="../../../lib/canvas_helper.js"></script>
 <script type="text/javascript">
 
@@ -180,16 +180,20 @@ $(document).ready(function(){
   // D_ANIMATION_TIME = 0;
  
   $("#run").click(function(){
+    let rv;
     if (MAIN_A.g == null) {
       $("#elaboration_text").text("Graph is empty");
       return;
     }
-    MAIN_A.run($("#run_node_id").val());
-
+    
+    rv = MAIN_A.run($("#run_node_id").val());
+    if(rv) $("#table").css("display","table");
    
   })
 
-
+  $("#modify_original_graph").click(function(){
+    $("#table").css("display", "none");
+  })
 
 });
 

@@ -181,10 +181,11 @@ class primAnimation {
     
     if (starting_node_id === "") {
       $("#elaboration_text").text("Starting Node Id is empty");
-      return;
+      return false;
     } else if (!this.g.is_node(starting_node_id)) {
-      $("#elaboration_text").text("Starting Node Id {} does not exist".format(starting_node_id));
-      return;
+      $("#elaboration_text").text("");
+      $("#elaboration_text").append("Starting Node Id {} does not exist".format_b(starting_node_id));
+      return false;
     }
 
     if (this.init == true) {
@@ -403,7 +404,7 @@ class primAnimation {
     })
 
     ani.run_animation();
-
+    return true;
 
 
   }
