@@ -127,10 +127,13 @@ function example2() {
   let A = g.get_node("A");
   let B = g.get_node("B");
 
-  ani.add_sequence_ani({
-    target: A.ani_circle,
-    prop: {swap: {circle: B.ani_circle, h_scale:1.2, w_scale:0.4}},
-  })
+  for (let i = 0; i < 100000; i++) {
+    ani.add_sequence_ani({
+      target: A.ani_circle,
+      prop: {swap: {circle: B.ani_circle, h_scale:1.2, w_scale:0.4, time : ANIMATION_TIME / 2}, step:true},
+    })
+  }
+
   ani.run_animation();
 
 }
@@ -155,6 +158,111 @@ function example3() {
 
   ani.draw();
 
+}
+
+
+
+/* a example of doing bitwise shifting */
+// n is a number 
+function toBinaryArray(n) {
+  let a = [];
+  n = n.toString(2);
+
+  for (let i = 0; i < n.length; i++) {
+    a.push(n.charCodeAt(i) - 48);
+  }
+  return a;
+}
+function bit_indices(bit_array) {
+  let a = [];
+  for (let i = bit_array.length - 1; i >= 0; i--) a.push(i);
+  return a;
+}
+
+
+function example4() {
+  MAIN_A = {ani: new Animation()};
+  set_canvas(1200, 700, 50, 50);
+  let ani = MAIN_A.ani;
+  let bit_array;
+  let number = 43;
+  let fill_styles;
+
+
+  bit_array = toBinaryArray(number);
+  let rect = new Rect(200, 100, bit_array.length * 35, 32, 0, bit_array, "", "bottom", "h");
+  let line = new quadraticCurve(new Point(rect.x + rect.width + 1, rect.y - 30), new Point(rect.x + rect.width + 1, rect.y + rect.height + 30));
+  
+  rect.subrect_labels = bit_indices(bit_array); // this shows the index
+  line.h_scale = 0;
+  line.draw_arrow = false;
+  line.ctx_prop = {"strokeStyle": "red", lineWidth: 3};
+
+  ani.add_object(line);
+  ani.add_object(rect);
+
+  // now let's look at Text object
+  //constructor(text, x, y, width, font = FONT, ctx_prop = {}) {
+  // it will draw text "AND(&)" in the middle of a straight line where starting point is (30, 170)
+  // ending point is (30 + 200, 170).
+  let text = new Text("AND(&)", 30, 170, 200, FONT, {"fillStyle":"red"});
+  ani.add_object(text);
+
+
+  // make a animation of shifting to left three bits
+  fill_styles = deep_copy(rect.fillStyles);
+  for (i = 0; i < 3; i++) {
+    number <<= 1;
+    bit_array = toBinaryArray(number); // a new bit array
+
+    ani.add_sequence_ani({
+      target: rect,
+      prop: {p: new Point(-35, 0), type: "relative"}
+    })
+
+    fill_styles.push("lightblue");
+    ani.add_sequence_ani({
+      target: rect,
+      prop: {
+        fade_in:true, 
+        text: bit_array, // a new bit array
+        "width": (i + 1) * 35 + rect.width, // we need to change the rect width as well 
+        subrect_labels: bit_indices(bit_array), // change the bit index as well
+        fillStyle: deep_copy(fill_styles), // change the fill_styles. The new added bit will have blue color
+        time:1, 
+        step:true}
+    })
+   
+  }
+
+  // make a animation of shifting to right three bits
+  for (i = 0; i < 3; i++) {
+    number >>= 1;
+    bit_array = toBinaryArray(number); // a new bit array
+
+    ani.add_sequence_ani({
+      target: rect,
+      prop: {p: new Point(+35, 0), type: "relative"}
+    })
+
+    fill_styles.push("lightblue");
+    ani.add_sequence_ani({
+      target: rect,
+      prop: {
+        fade_in:true, 
+        text: bit_array, // a new bit array
+        width: -(i + 1) * 35 + rect.width + 3 * 35, // why we add 3 * 35 here? because we left shift 3 bit above. 
+                                                    // So far rect's width are still the same. Remember before running animation,
+                                                    // everything does not change.
+        subrect_labels: bit_indices(bit_array), // change the bit index as well
+        time:1, 
+        step:true}
+    })
+  }
+
+
+
+  ani.run_animation();
 }
 
 
