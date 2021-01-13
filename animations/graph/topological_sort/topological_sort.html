@@ -94,12 +94,12 @@
       <div class="tooltip">?
         <span class="tooltiptext" id ="english">
           <div>
-            <span class="red">Topological Sort:</span> Topological Sort works on the directed acyclic graph (DAG). It is a linear ordering of vertices such that for every edge <b>uv</b> from vertex <b>u</b> to vertex <b>v</b>, <b>u</b> comes before <b>v</b>.
+            <span class="red">Topological Sort:</span> This algorithm works on the directed acyclic graph (DAG). It is a linear ordering of vertices such that for every edge <b>uv</b> from vertex <b>u</b> to vertex <b>v</b>, <b>u</b> comes before <b>v</b>.
           </div>
       
           <div> 
-            <div><span class="red">Algorithm Detail: </span> </div>
-            <div>(1) Start by inserting all nodes onto <b>list</b> that have no incoming edges</div>
+            <div><span class="red">Algorithm Details: </span> </div>
+            <div>(1) Start by inserting all nodes that have no incoming edges onto a <b>list</b></div>
             <div>(2) Remove the first element from the <b>list</b>. Then we process it by removing its adjacent edges and update the destionation node's <b>distance</b>, <b>backedge</b>, and <b>number of incoming edges</b>. If the destination node ends up having 0 incoming edges, we append it to the <b>list</b></div>
             <div>(3) Repeat step (2) until the <b>list</b> is empty.</div>
           </div>

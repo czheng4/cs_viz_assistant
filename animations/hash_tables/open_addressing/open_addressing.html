@@ -81,13 +81,13 @@
       <div class="tooltip">?
         <span class="tooltiptext" id ="english">
           <div>
-            <div><span class="red">Open Addressing: </span>It resolves the hash collision by searching through the array until reaching a valid location. Each element in the array is either empty or store one piece of data. The animation shows searching strategies: </div>
-            <span class="red">1. Linear Probing: </span>Use a linear function (y(i) = c &middot; i, c is constant) to search for a valid location. Our animation uses constant value 1 for <strong>c</strong>. <br>
+            <div><span class="red">Open Addressing: </span>It resolves the hash collision issue by searching through the array until reaching a valid location. Each element in the array is either empty or stores one piece of data. The animation shows searching strategies: </div>
+            <span class="red">1. Linear Probing: </span>Use a linear function (y(i) = c &middot; i, c is constant) to search for a valid location. Our animation uses the constant value 1 for <strong>c</strong>. <br>
             <div style="text-align:center; margin-top: 7px"> h<sub>i</sub> = (Hash(key) + c &middot; i) % tableSize</div>
 
 
 
-            <span class="red">2. Quadratic Probing: </span>Use a quadratic function (y(i) = c<sub>1</sub>i + c<sub>2</sub>i<sup>2</sup>, c<sub>1</sub> and c<sub>2</sub> are constant) to search for a valid location. The animation uses constant valiue 0, 1 for <strong>c<sub>1</sub></strong> and <strong>c<sub>2</sub></strong> respetively.
+            <span class="red">2. Quadratic Probing: </span>Use a quadratic function (y(i) = c<sub>1</sub>i + c<sub>2</sub>i<sup>2</sup>, c<sub>1</sub> and c<sub>2</sub> are constant) to search for a valid location. The animation uses the constant values 0 and 1 for <strong>c<sub>1</sub></strong> and <strong>c<sub>2</sub></strong> respectively.
             <div style="text-align:center; margin-top: 7px"> h<sub>i</sub> = (Hash(key) + c<sub>1</sub>i + c<sub>2</sub>i<sup>2</sup>) % tableSize</div>
 
             <span class="red">3. Double Hashing: </span>Use a second hash function to search for a valid location.
@@ -102,7 +102,7 @@
           </div>
 
           <div>
-            <div><span class="red">API explanations: </span>A good hash function helps the performance of hash table operations because the collision happens in less time. </div>
+            <div><span class="red">API explanation: </span>A good hash function helps the performance of hash table operations because the collision happens in less time. </div>
             <span class="red">1. Insert: </span> Insert a new element onto the hash table - average O(1), worse case O(n)<br>
             <span class="red">2. Delete: </span> Delete the given element if it's found - average O(1), worse case O(n)<br>
             <span class="red">3. Find </span>Find the given element - average O(1), worse case O(n)<br>
