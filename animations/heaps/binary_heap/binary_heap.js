@@ -28,7 +28,14 @@ class binaryHeapAnimation {
     this.size = 0;
     this.heaps = [];
     this.nodes = [];
+
+    this.func_text = new Text("", 50, 120, 100, "15px Arial");
+    this.func_text.text_align = "left";
+    this.ani.add_object(this.func_text);
+
     if (init) this.setup_graph();
+
+
   }
 
   deep_copy() {
@@ -39,7 +46,7 @@ class binaryHeapAnimation {
     bh.heaps = deep_copy(this.heaps);
     bh.nodes = this.nodes;
     bh.size = this.size;
-    
+    bh.func_text = this.func_text;
     return bh;
   }
 
@@ -203,7 +210,7 @@ class binaryHeapAnimation {
 
     this.ani.set_function_call("push", [val]);
     this.set_state();
-
+    this.func_text.text = "Push {}".format(val);
     this.clear_ctx_prop();
     e = null;
     this.heaps.push(val);
@@ -252,6 +259,7 @@ class binaryHeapAnimation {
           text: "Parent {} <= Child {}. We are done".format_b(this.heaps[parent], this.heaps[child]),
           prop:{step:true, time:1},
         });
+        this.func_text_ani();
         ani.run_animation();
         return;
       }
@@ -265,6 +273,7 @@ class binaryHeapAnimation {
       text: "Done",
       pause:1,
     });
+    this.func_text_ani();
     ani.run_animation();
   }
 
@@ -283,6 +292,8 @@ class binaryHeapAnimation {
 
     this.ani.set_function_call("pop", []);
     this.set_state();
+    this.func_text.text = "Pop";
+
     this.clear_ctx_prop();
     index = this.heaps.length - 1;
     last_node = this.nodes[index];
@@ -410,8 +421,15 @@ class binaryHeapAnimation {
       }
 
     }
-
+    this.func_text_ani();
     ani.run_animation();
 
+  }
+
+  func_text_ani() {
+    this.ani.add_sequence_ani({
+      target: this.func_text,
+      prop: {text: this.func_text.text, time:1},
+    });
   }
 }

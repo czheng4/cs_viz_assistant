@@ -49,8 +49,8 @@
       
       <div class = "line"></div>
 
-      <input type="number" id="union_t1" placeholder="id1"> 
-      <input type="number" id="union_t2" placeholder="id2"> 
+      <input type="number" id="union_t1" placeholder="id1" min=0> 
+      <input type="number" id="union_t2" placeholder="id2" min=0> 
       <button type="button" id = "union">Union</button> &emsp;&emsp;
 
       <input type="number" id="find_t" placeholder="setId"> 
@@ -142,7 +142,7 @@
 
 $(document).ready(function(){
   
-  set_canvas(1200, 800, 75, 50);
+  set_canvas(1200, 800, 120, 50);
 
   MAIN_G_SPEC.weight_type = T_CONSTANT;
   MAIN_G_SPEC.num_cols = 10;

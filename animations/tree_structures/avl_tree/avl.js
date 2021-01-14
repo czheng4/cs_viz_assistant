@@ -415,7 +415,7 @@ class avlTreeAnimation {
     this.ani = new Animation();
     this.g = new Graph(this.ani, "directed");
     this.bst_tree = new BSTree(this.g);
-    this.func_text = new Text("", 100, -20, 100, "13px Arial");
+    this.func_text = new Text("", 100, -20, 100, "15px Arial");
     this.key_rect = new Rect(0, 0, 0, 0, "INRODER_KEY", [], "Sorted Keys", "top", "h");
     this.key_rect.visible = false;
     this.ani.add_object(this.key_rect);

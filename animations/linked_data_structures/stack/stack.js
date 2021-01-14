@@ -3,7 +3,7 @@
   All rights reserved.
   
   12/18/2020
-  Last Modified 01/06/2021
+  Last Modified 01/14/2021
 */
 
 "use strict";
@@ -131,6 +131,7 @@ class stackAnimation {
     this.ani = new Animation();
     this.stack_rect = new Rect(350, 30, 150, 50, "STACK_CLASS_REF", ["top = NULL", "size = 0"], "Stack", "top","h");
     this.max_size = 8;
+
     p = this.ani.get_point(375, 80);
     this.stack_rect.attach_point(p);
     this.top_ptr_line = new quadraticCurve(p, p, 0);
@@ -141,6 +142,10 @@ class stackAnimation {
     this.ani.connect_object(this.top_ptr_line);
     this.ani.draw();
     this.stack = new Stack();
+
+    this.func_text = new Text("", 0, 40, 100, "15px Arial");
+    this.func_text.text_align = "left";
+    this.ani.add_object(this.func_text);
   }
 
 
@@ -151,6 +156,7 @@ class stackAnimation {
 
     sa.stack = this.stack.deep_copy();
     sa.ani = this.ani.deep_copy();
+    sa.func_text = this.func_text;
     this.ani.set_state(sa);
   }
 
@@ -170,6 +176,7 @@ class stackAnimation {
 
     this.ani.set_function_call("pop");
     this.set_state();
+    this.func_text.text = "Pop";
     
     snode = stack.pop();
     pre_node = snode.next;
@@ -225,6 +232,7 @@ class stackAnimation {
       rev_action: {params: {ani:ani, obj:snode.rect, lines: [snode.next_line]}, func: add_ani_object},
     });
 
+    this.func_text_ani();
     ani.run_animation();
 
 
@@ -249,7 +257,7 @@ class stackAnimation {
 
     this.ani.set_function_call("push", [v]);
     this.set_state();
-
+    this.func_text.text = "Push {}".format(v);
 
     size = this.stack.size;
     pre_node = this.stack.top;
@@ -334,7 +342,14 @@ class stackAnimation {
       prop: {fade_in:true, strokeStyle: '#696969', shadowBlur:0, time:1},
     });   
 
-
+    this.func_text_ani();
     ani.run_animation();
+  }
+
+  func_text_ani() {
+    this.ani.add_sequence_ani({
+      target: this.func_text,
+      prop: {text: this.func_text.text, time:1},
+    });
   }
 }

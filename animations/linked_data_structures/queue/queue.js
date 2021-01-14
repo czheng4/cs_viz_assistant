@@ -3,7 +3,7 @@
   All rights reserved.
   
   12/19/2020
-  Last Modified 01/06/2021
+  Last Modified 01/14/2021
 */
 "use strict";
 const R_WIDTH = 100;
@@ -156,6 +156,11 @@ class queueAnimation {
     this.ani.connect_object(this.last_ptr_line);
   
     this.queue = new Queue();
+
+    this.func_text = new Text("", 0, 40, 100, "15px Arial");
+    this.func_text.text_align = "left";
+    this.ani.add_object(this.func_text);
+
     this.ani.draw();
   }
 
@@ -168,6 +173,7 @@ class queueAnimation {
 
     qa.queue = this.queue.deep_copy();
     qa.ani = this.ani.deep_copy();
+    qa.func_text = this.func_text;
     this.ani.set_state(qa);
   }
 
@@ -187,6 +193,7 @@ class queueAnimation {
 
     this.ani.set_function_call("pop");
     this.set_state();
+    this.func_text.text = "Pop Front";
     
     qnode = queue.pop();
     next_node = qnode.next;
@@ -285,7 +292,7 @@ class queueAnimation {
       action: {params: {ani:ani, ref: qnode.ref}, func: rm_ani_object},
       rev_action: {params: {ani:ani, obj:qnode.rect, lines: [qnode.next_line]}, func: add_ani_object},
     });
-
+    this.func_text_ani();
     ani.run_animation();
   }
 
@@ -307,7 +314,7 @@ class queueAnimation {
 
     this.ani.set_function_call("push", [v]);
     this.set_state();
-
+    this.func_text.text = "Push {}".format(v);
 
     size = this.queue.size;
     pre_node = this.queue.last;
@@ -445,5 +452,10 @@ class queueAnimation {
     }
   }
 
-
+  func_text_ani() {
+    this.ani.add_sequence_ani({
+      target: this.func_text,
+      prop: {text: this.func_text.text, time:1},
+    });
+  }
 }

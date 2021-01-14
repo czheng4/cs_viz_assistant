@@ -1,7 +1,7 @@
 /*
   ChaoHui Zheng
   11/22/2020
-  last modified 12/26/2020
+  last modified 01/14/2021
 */
 const UNION_BY_SIZE = 0b1;
 const UNION_BY_RANK = 0b11;
@@ -180,6 +180,11 @@ class disjointSetAnimation {
     this.num_elements = 0;
     this.g = null;
 
+    this.func_text = new Text("", -110, 0, 100, "15px Arial");
+    this.func_text.text_align = "left";
+    this.ani.add_object(this.func_text);
+
+
   }
 
   deep_copy() {
@@ -191,7 +196,7 @@ class disjointSetAnimation {
     ds.nodes = this.nodes;
     ds.g = this.g;
     ds.num_elements = this.num_elements;
-
+    ds.func_text = this.func_text;
     return ds;
 
   }
@@ -270,6 +275,7 @@ class disjointSetAnimation {
 
     this.ani.set_function_call("union", [id1, id2]);
     this.set_state();
+    this.func_text.text = "Union {} {}".format(id1, id2);
     this.union_by_types(id1, id2);
 
   }
@@ -303,6 +309,7 @@ class disjointSetAnimation {
 
     this.ani.set_function_call("find", [id]);
     this.set_state();
+    this.func_text.text = "Find {}".format(id);
     // this.reset_color();
     ani.add_sequence_ani({
       pause:1,
@@ -439,6 +446,7 @@ class disjointSetAnimation {
       text: "Done. Find({}) = {}".format_b(id, ele)
     });
 
+    this.func_text_ani();
     ani.run_animation();
     return ele;
   
@@ -548,8 +556,14 @@ class disjointSetAnimation {
       rev_action: {params: {ds: old_ds, id1:id1, id2:id2}, func: color_two_sets},
     });
 
+    this.func_text_ani();
     ani.run_animation();
   }
 
-
+  func_text_ani() {
+    this.ani.add_sequence_ani({
+      target: this.func_text,
+      prop: {text: this.func_text.text, time:1},
+    });
+  }
 }

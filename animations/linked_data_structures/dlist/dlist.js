@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/22/2020
-  Last Modified 01/06/2021
+  Last Modified 01/14/2021
 */
 
 class Dnode {
@@ -249,7 +249,9 @@ class dlistAnimation {
     this.y = 150;
     this.margin = margin;
     this.max_size = 8;
-
+    this.func_text = new Text("", -120, 13, 100, "15px Arial");
+    this.func_text.text_align = "left";
+    ani.add_object(this.func_text);
     // create sentinel node.
     flink_ref = dlist.ms.get_reference(node.flink);
     blink_ref = dlist.ms.get_reference(node.blink);
@@ -282,22 +284,23 @@ class dlistAnimation {
     let da = new dlistAnimation();
     da.dlist = this.dlist.deep_copy();
     da.ani = this.ani.deep_copy();
+    da.func_text = this.func_text;
     this.ani.set_state(da);
   }
 
   pop_back() {
 
     this.ani.set_function_call("pop_back");
-    this.erase(this.dlist.ms.get_reference(this.dlist.sentinel.blink));
+    this.erase(this.dlist.ms.get_reference(this.dlist.sentinel.blink), "Pop Back");
   }
 
   pop_front() {
     this.ani.set_function_call("pop_front");
-    this.erase(this.dlist.ms.get_reference(this.dlist.sentinel.flink));
+    this.erase(this.dlist.ms.get_reference(this.dlist.sentinel.flink), "Pop Front");
   }
 
 
-  erase(ref) {
+  erase(ref, type = "Erase") {
 
     // if (this.error_check(0, ref)) return; 
     ref = ref.trim();
@@ -330,6 +333,8 @@ class dlistAnimation {
         margin = this.margin,
         size = this.dlist.size;
 
+    if (type != "Erase") this.func_text.text = type;
+    else this.func_text.text = type + " " + ref;
     ani.set_function_call("erase", [ref]);
     this.set_state();
     // ani.clear_animation();
@@ -496,6 +501,7 @@ class dlistAnimation {
 
 
     dlist.erase(node);
+    this.func_text_ani();
     // dlist.print();
     ani.run_animation();
 
@@ -513,6 +519,7 @@ class dlistAnimation {
     if (this.size_check()) return;
 
     this.ani.set_function_call("push_back", [v]);
+    this.func_text.text = "Push Back {}".format(v);
     this.insert_node(v, this.dlist.ms.get_reference(this.dlist.sentinel), "before");
   }
   push_front(v) {
@@ -520,6 +527,7 @@ class dlistAnimation {
     if (this.size_check()) return;
     
     this.ani.set_function_call("push_front", [v]);
+    this.func_text.text = "Push Front {}".format(v);
     this.insert_node(v, this.dlist.ms.get_reference(this.dlist.sentinel.flink), "after");
   }
 
@@ -535,6 +543,7 @@ class dlistAnimation {
     n = n.flink;
     ref = this.dlist.ms.get_reference(n);
     
+    this.func_text.text = "Insert {} after {}".format(v, ref);
     this.insert_node(v, ref , "after");
   }
   insert_before_node(v, ref) {
@@ -544,6 +553,7 @@ class dlistAnimation {
     if (ref.indexOf("0x")) ref = "0x" + ref;
 
     this.ani.set_function_call("insert_before_node", [v, ref]);
+    this.func_text.text = "Insert {} before {}".format(v, ref);
     this.insert_node(v, ref, "before");
   }
 
@@ -796,12 +806,18 @@ class dlistAnimation {
       q_curve.w_scale = to_sentinel_w;
     }
 
-
+    this.func_text_ani();
     ani.run_animation();
    
   }
 
 
+  func_text_ani() {
+    this.ani.add_sequence_ani({
+      target: this.func_text,
+      prop: {text: this.func_text.text, time:1},
+    });
+  }
 }
 
 
