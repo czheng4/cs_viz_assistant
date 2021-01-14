@@ -20,7 +20,7 @@ class bubbleSortAnimation {
     let y = 0;
     //constructor(x, y, width, height, ref = "", text = [], label = "", label_position = "top", text_direction = 'v', ctx_prop = {})
     rect = new Rect(x, y, v.length * this.ss, this.ss, 0, v, "", "bottom", "h");
-    rect.font = "20px Arial"
+    rect.font = "20px Arial";
     for (let i = 0; i < v.length; i++) rect.subrect_labels.push(i);
     rect.label_position = "top";
     this.ani.add_object(rect);

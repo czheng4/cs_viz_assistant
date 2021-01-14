@@ -74,7 +74,7 @@ class binaryHeapAnimation {
       n = this.g.get_node("NODE_" + i, null, null, i);
       n.ani_circle.label = i;
       n.ani_circle.label_padding = 6;
-      n.ani_circle.label_font = "10px Arial"
+      n.ani_circle.label_font = "10px Arial";
      
       this.nodes.push(n);
       n.ani_circle.visible = false;
@@ -143,7 +143,7 @@ class binaryHeapAnimation {
     this.ani.add_sequence_ani({
       target: e.ani_line,
       prop: {fade_in:true, strokeStyle: color, time:1},
-    })
+    });
   }
 
   fade_in(obj, prop, concurrence = true) {
@@ -160,7 +160,7 @@ class binaryHeapAnimation {
       target: obj,
       prop: {"fade_out": true},
       concurrence: concurrence
-    })
+    });
   }
 
   rect_ani(index, val = null, color = "pink", time = ANIMATION_TIME) {
@@ -217,7 +217,7 @@ class binaryHeapAnimation {
     ani.add_sequence_ani({
       pause:1,
       text: "Push back value {} into vector and then bubble up".format_b(val),
-    })
+    });
     this.fade_in(n.ani_circle, update_dict(HIGHLIGHT_NODE, {text: val}), e != null);
     if (e != null) this.fade_in(e.ani_line, HIGHLIGHT_EDGE, false);
     this.rect_ani(index, val);
@@ -307,7 +307,7 @@ class binaryHeapAnimation {
     ani.add_sequence_ani({
       target: this.rects[index],
       prop:{fade_out: true, time :ANIMATION_TIME * 3},
-    })
+    });
 
 
     e = g.get_edge_if_exists(parent_node, last_node);

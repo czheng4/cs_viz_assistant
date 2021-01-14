@@ -108,7 +108,7 @@ class oaHashAnimation {
 
     ani.draw();
   }
-  /* please refer to http://www.cse.yorku.ca/~oz/hash.html */
+  // please refer to http://www.cse.yorku.ca/~oz/hash.html 
   djb_hash(str) {
     let i;
     let h = 5381;
@@ -241,7 +241,7 @@ class oaHashAnimation {
         ani.add_sequence_ani({
           text: e_text + "Back to the original entry {}. Done with searching".format_b(sentinel),
           pause:1,
-        })
+        });
         this.color_entry(entry);
         if (run || insert_entry != null) break;
         else return null;
@@ -259,7 +259,7 @@ class oaHashAnimation {
           target:entry.rect,
           text: e_text + " It's an empty slot. Done with searching",
           prop: deep_copy(BLUE_SHADOW_PROP),
-        }) 
+        });
         this.color_entry(entry);
         break;
       }
@@ -288,7 +288,7 @@ class oaHashAnimation {
       ani.add_sequence_ani({
         text: "Couldn't find key {}".format_b(key),
         pause:1,
-      }) 
+      });
       this.func_text_rev();
       ani.run_animation();
     } else if (call_from_insert) {
@@ -299,7 +299,7 @@ class oaHashAnimation {
           target:entry.rect,
           text: "Index {} is the first deleted slot along the way we find empty slot. We insert key here".format_b(entry.index),
           prop: deep_copy(BLUE_SHADOW_PROP),
-        }) 
+        });
         this.color_entry(entry);
 
       }
@@ -361,11 +361,11 @@ class oaHashAnimation {
       text: "Add key {} into index {} of hash table".format_b(key, entry.index),
       target: entry.rect,
       prop: deep_copy(RED_SHADOW_PROP)
-    })
+    });
     ani.add_sequence_ani({
       target: entry.rect,
       prop: {"text_fade_in": {text: key, index: 0}},
-    })
+    });
 
     this.func_text_rev();
     ani.run_animation();
@@ -438,7 +438,7 @@ class oaHashAnimation {
       target: entry.rect,
       prop: {"fillStyle": [color], time:time},
       concurrence:true,
-    })
+    });
     this.ani.add_sequence_ani({prop:{step:true, time: time - 2}});
   }
 
@@ -449,7 +449,7 @@ class oaHashAnimation {
         target: objs[i],
         prop: {fade_in:true, visible:true},
         concurrence: i != objs.length - 1
-      })
+      });
     }
   }
 

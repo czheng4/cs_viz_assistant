@@ -11,7 +11,7 @@
 */
 "use strict";
 // for node type
-const T_ROOT_NODE = 0b1
+const T_ROOT_NODE = 0b1;
 const T_LEFT_NODE = 0b10;
 const T_RIGHT_NODE = 0b100;
 const T_UNKNOWN = 0b1000;
@@ -431,7 +431,7 @@ class avlTreeAnimation {
       //console.log(dict);
       dict.rect.visible = dict.visible;
       if ("text" in dict) dict.rect.text = dict.text;
-    }
+    };
 
     dict = {};
     dict.rect = this.key_rect;
@@ -445,7 +445,7 @@ class avlTreeAnimation {
       target: this.func_text,
       prop: {text: this.func_text.text, time:1},
       rev_action: {params: dict, func: show_rect},
-    })
+    });
 
   }
 
@@ -476,7 +476,7 @@ class avlTreeAnimation {
     ani.add_sequence_ani({
       target: c,
       prop: {fade_in: true, fillStyle: "yellow", time : 1, lineWidth:4, step:true},
-    })
+    });
     ani.add_sequence_ani({ pause: ANIMATION_TIME });
 
     // go left
@@ -487,7 +487,7 @@ class avlTreeAnimation {
       ani.add_sequence_ani({
         target: e_left.ani_line,
         prop: {fade_in: true, strokeStyle: "red", time : 1, },
-      })
+      });
 
       ani.add_sequence_ani({ 
         target: c,
@@ -502,7 +502,7 @@ class avlTreeAnimation {
       target: this.key_rect,
       text: "Push back key {}".format_b(node.key),
       prop: {text_fade_in: {index: keys.length, color: "black", fillStyle:"lightblue", text: node.key }, step: true}
-    })
+    });
     keys.push(node.key);
 
     // go right
@@ -513,7 +513,7 @@ class avlTreeAnimation {
       ani.add_sequence_ani({
         target: e_right.ani_line,
         prop: {fade_in: true, strokeStyle: "red", time : 1, },
-      })
+      });
       ani.add_sequence_ani({ 
         target: c,
         prop: {"walk": {circle: c_right, h_scale : 0}},
@@ -526,19 +526,19 @@ class avlTreeAnimation {
       ani.add_sequence_ani({
         target: c,
         prop: {"walk" : {circle: node.parent.ani_node.ani_circle, h_scale: 0}}
-      })
+      });
 
       e = g.get_edge_by_name(node.parent.ani_node.id, node.ani_node.id);
       ani.add_sequence_ani({
         target: e.ani_line,
         prop: {fade_in: true, strokeStyle: "black", time : 1},
-      })
+      });
     }
 
     ani.add_sequence_ani({
       target: c,
       prop: {fade_in: true, fillStyle: "#DDDDDD", time : 1, lineWidth:1},
-    })
+    });
     // ani.add_sequence_ani({ pause: ANIMATION_TIME });
   }
 
@@ -581,7 +581,7 @@ class avlTreeAnimation {
           ani.add_sequence_ani({
             pause:1,
             text: "Delete root node {}".format_b(n.key),
-          })
+          });
         }
 
         ani.add_sequence_ani({
@@ -665,7 +665,7 @@ class avlTreeAnimation {
           text: "Node {} has two children. Find the {} node in its {} subtree".format_b(n.ani_node.ani_circle.text, "rightmost", "left"),
           target: e.ani_line,
           prop: {"fade_in":true, strokeStyle: "red", time:1, step:true}
-        })
+        });
         
         this.find_path_animation(rv.lm_path, null, "pink");
 
@@ -676,14 +676,14 @@ class avlTreeAnimation {
           action: {params: {circle: n.ani_node.ani_circle, alpha:0.25}, func: change_alpha},
           rev_action: {params: {circle: n.ani_node.ani_circle, alpha: 1}, func: change_alpha},
           concurrence: true
-        })
+        });
 
         n = rv.node;
         ani.add_sequence_ani({
           target: rv.rv.node.ani_node.ani_circle,
           text: "Copy node {} key/value into node {}.".format_b(rv.rv.node.key, n.ani_node.ani_circle.text),
           prop: {copy: {circle: n.ani_node.ani_circle, h_scale:0}, "step": true}
-        })
+        });
         rv = rv.rv;
 
       }
@@ -695,14 +695,14 @@ class avlTreeAnimation {
       pause:1,
       action: {params: {reverse:true, type: rv.type, path: path}, func: reposition_node},
       rev_action: {params: {reverse:false,type: rv.type, path: path}, func: reposition_node}
-    })
+    });
 
     /* color the path to find the deleted node */
     ani.add_sequence_ani({
       pause:1,
       rev_action: {params: {g:this.g, path:tmp_rv.path, last_node_color:"pink"}, func: color_path},
       concurrence: true,
-    })
+    });
 
     /* color the deleted node(first node) and actual deleted node(last node) */
     if (tmp_rv.delete == true) {
@@ -711,12 +711,12 @@ class avlTreeAnimation {
       ani.add_sequence_ani({
         pause:1,
         rev_action: {params: {g:this.g, path:path, first_node_color:"pink", last_node_color:"pink"}, func: color_path},
-      })
+      });
     } else {
       ani.add_sequence_ani({
         text: "Couldn't find key {} in the tree to delete".format_b(key),
         // prop: {step: true, time: 1}
-      })
+      });
     }
 
     ani.add_sequence_ani({prop:{step:true, time:1}});
@@ -810,13 +810,13 @@ class avlTreeAnimation {
         target: n.ani_node.ani_circle,
         text: text,
         prop : {fade_in: true, fillStyle: "yellow", time: 1}
-      })
+      });
 
       if (i == path.length - 1 && last_node_color != null) {
         ani.last_seqence_ani().prop.fillStyle = last_node_color;
       }
 
-      ani.add_sequence_ani({pause: ANIMATION_TIME, prop: {step: true}})
+      ani.add_sequence_ani({pause: ANIMATION_TIME, prop: {step: true}});
     }
 
 
@@ -843,7 +843,7 @@ class avlTreeAnimation {
       puase:1,
       text: "{} key {} in the tree".format_b(find? "Find":"Couldn't find", key),
       rev_action: {params: {g:this.g, path:rv.path, last_node_color:"pink"}, func: color_path},
-    })
+    });
     
     this.clear_after_func_ani(false);
     ani.run_animation();
@@ -882,7 +882,7 @@ class avlTreeAnimation {
         pause:1,
         action: {params: {type:node.type, path: path}, func: reposition_node},
         rev_action: {params: {reverse:true, type:node.type, path: path}, func: reposition_node}
-      })
+      });
 
       e = rv.edge;
       parent = node.parent;
@@ -899,13 +899,13 @@ class avlTreeAnimation {
         text: text,
         prop : {fade_in: true, fillStyle: "pink", visible:true, time: ANIMATION_TIME * 2},
         concurrence: (e != null)
-      })
+      });
 
       if (e != null) {
         ani.add_sequence_ani({
           target: e.ani_line,
           prop: {fade_in: true, strokeStyle: "red", visible: true, time: ANIMATION_TIME * 2}
-        })
+        });
       }
 
     /* otherwise, we already have it in the tree */
@@ -946,7 +946,7 @@ class avlTreeAnimation {
       text: "Traverse from node {} to the root node. Update the height and(or) fix the imbalance along the way".format_b((after_insert)?node.parent.key:node.key),
       action: {params: {g:g, path:new_path, "default": true, last_node_color:"pink"}, func: color_path},
       prop: {step: true, time:1}
-    })
+    });
 
     if (after_insert) this.fix_imbalance(node.parent, node, after_insert);
     else this.fix_imbalance(node, null, after_insert);
@@ -1114,7 +1114,7 @@ class avlTreeAnimation {
     ani.add_sequence_ani({
       text: "Done with rotation. Fix the height of rotated node {} and its child {}".format_b(parent.parent.key, parent.key),
       prop: {time:1, step:true},
-    })
+    });
     
     // n = parent;
     // while (n != null) {
@@ -1184,7 +1184,7 @@ class avlTreeAnimation {
     this.ani.add_sequence_ani({
       target: from.ani_node.ani_circle,
       prop: { "walk": {circle: to.ani_node.ani_circle, h_scale: 0}},
-    })
+    });
   }
   fix_imbalance(n, from, after_insert = true) {
     let ani = this.ani;
@@ -1212,8 +1212,8 @@ class avlTreeAnimation {
         text: "Check node {}".format_b(n.key),
         target: n.ani_node.ani_circle,
         prop: {fade_in:true, fillStyle: "yellow", lineWidth:4, time:1},
-      })
-      ani.add_sequence_ani({prop:{step:true}})
+      });
+      ani.add_sequence_ani({prop:{step:true}});
       
       is_imbalance = this.imbalance(n);
       
@@ -1279,7 +1279,7 @@ class avlTreeAnimation {
       target: c,
       prop: {p : new Point(dx, dy), type: "relative", stop_propagation: stop_propagation},
       concurrence: concurrence
-    })
+    });
   }
 
   delete_edge(n1, n2, concurrence = true) {
@@ -1298,7 +1298,7 @@ class avlTreeAnimation {
       pause:1,  
       action: {params: {n1: n1, n2: n2, g:g}, func: d_edge},
       rev_action: {params: {n1: n1, n2:n2, g:g, line:line}, func: c_edge},
-    })
+    });
   }
   create_edge(n1, n2, concurrence = true) {
     let ani = this.ani,
@@ -1308,7 +1308,7 @@ class avlTreeAnimation {
       pause:1,  
       action: {params: {n1: n1, n2: n2, g:g}, func: c_edge},
       rev_action: {params: {n1: n1, n2:n2, g:g}, func: d_edge}
-    })
+    });
   }
 
   color_edges(from, to, reverse = false) {
@@ -1331,7 +1331,7 @@ class avlTreeAnimation {
           action: {params: {g:g, n1:n1, n2:n2, ctx: ctx1}, func: edge_prop},
           rev_action: {params: {g:g, n1:n1, n2:n2, ctx: ctx2}, func:edge_prop},
           concurrence:true
-        })
+        });
       }
     }
   }

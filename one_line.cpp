@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
     /* get rid of space */
     for (i = 0; i < line.size(); i++) {
       if (i != line.size() - 1 && line[i] == '/' && line[i + 1] == '/') {
-        line = line.substr(0, i);
+        if (!header_comment) line = line.substr(0, i);
         break;
       }
       if (line[i] != ' ') s += line[i];

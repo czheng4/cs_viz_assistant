@@ -98,9 +98,9 @@
             
         </span>
       </div>
-      <canvas id = "draw"></canvas>
+      <canvas id = "draw" style="position: absolute;"></canvas>
 
-      <div id ="board"  style="margin-left: 650px; margin-bottom: 50px; margin-top: 5px">
+      <div id ="board"  style="margin-left: 650px; margin-bottom: 50px; margin-top: 5px;">
     
         <table id = "cache_table" border = 1 style= "border-collapse: collapse; display: none">
           <tr><td colspan="2" style="border: hidden; color: red; font-size: 17px; font-weight: bold">Cache</td></tr>
@@ -137,7 +137,7 @@ $(document).ready(function(){
     }
   });
 
-  set_canvas(650,420,0,0);
+  set_canvas(650,500,0,0);
   D_ANIMATION_TIME = 100 - $("#speed").val();
   
   MAIN_A = new fibonacciAnimation();

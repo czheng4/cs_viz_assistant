@@ -20,7 +20,7 @@ class selectionSortAnimation {
     let y = 0;
     rect = new Rect(x, y, v.length * this.ss, this.ss, 0, v, "", "bottom", "h");
     for (let i = 0; i < v.length; i++) rect.subrect_labels.push(i);
-    rect.font = "20px Arial"
+    rect.font = "20px Arial";
     this.ani.add_object(rect);
     this.ani.draw();
 

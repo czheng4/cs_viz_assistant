@@ -18,7 +18,7 @@ function generate_graph_file_content(g) {
   let circle, line, e;
 
 
-  str =  "#### Contact: ChaoHui Zheng(czheng4@vols.utk.edu)\n"
+  str =  "#### Contact: ChaoHui Zheng(czheng4@vols.utk.edu)\n";
   str += "#### Please do not change this file. Any unexpected content changes may cause an error when importing\n\n";
 
   if (g.original_graph != null) g = g.original_graph;
@@ -127,7 +127,7 @@ $(document).ready(function(){
     $(this).val(val);
     MAIN_G_SPEC.node_radius = val;
     if (g != null) g.node_radius = MAIN_G_SPEC.node_radius;
-  })
+  });
 
   $("#edge_width").change(function() {
     let g = MAIN_G;
@@ -143,15 +143,15 @@ $(document).ready(function(){
     MAIN_G_SPEC.edge_width = val;
     if (g != null) g.edge_width = MAIN_G_SPEC.edge_width;
     MAIN_A.ani.draw();
-  })
+  });
  
   $("#download_graph").click(function() {
     download("graph.txt", generate_graph_file_content(MAIN_G));
-  })
+  });
 
   $("#import_graph").click(function(){
     $("#import_input").click();
-  })
+  });
 
   $("#import_input").change(function() {
 
@@ -173,7 +173,7 @@ $(document).ready(function(){
       data = data.replace(/\n/g,'');
       data = data.replace(/EDGE|NODE|TYPE|NODES|LAYOUT|TRANSLATE_X|TRANSLATE_Y/ig,'\n$&');
       data = data.split('\n');
-      console.log(data);
+      // console.log(data);
       
       tmp_ani = new Animation();
       tmp_g = new Graph(tmp_ani);
@@ -182,7 +182,7 @@ $(document).ready(function(){
       
       try {
         for (i = 0; i < data.length; i++) {
-          str = data[i]
+          str = data[i];
           if (str == "") continue;
 
           weight = "";
@@ -198,7 +198,7 @@ $(document).ready(function(){
               return;
             }
             j = 1;
-            sub_specifier = "NODE"
+            sub_specifier = "NODE";
             while (1) {
               if (j == size) {
                 break;
@@ -226,8 +226,8 @@ $(document).ready(function(){
                   elaboration_append("\"{}\". Position spec is not valid. Importing graph failed".format_b(data[i]));
                   return;
                 }
-                console.log(node, circle);
-                circle.move(x - circle.x, y - circle.y)
+                // console.log(node, circle);
+                circle.move(x - circle.x, y - circle.y);
                 sub_specifier = "";
               } else if (sub_specifier.indexOf("RADIUS") != -1) {
                 circle.r = parseFloat(str[j]);
@@ -251,7 +251,7 @@ $(document).ready(function(){
             }
             while(1) {
 
-               console.log(sub_specifier, size, j);
+               // console.log(sub_specifier, size, j);
               if (j == size) {
                 break;
               } else if (sub_specifier == "EDGE") {
@@ -275,7 +275,7 @@ $(document).ready(function(){
                   elaboration_append("Weight \"{}\" is not valid. Importing graph failed".format_b(weight));
                   return;
                 }
-                console.log(from, to, edge, weight.trim());
+                // console.log(from, to, edge, weight.trim());
                 
                 sub_specifier = "";
               } else if (sub_specifier.indexOf("COL") != -1) {
@@ -377,33 +377,35 @@ $(document).ready(function(){
       tmp_g.draw();
 
 
-      
-      // console.log(g.graph_type);
-      $(":button").prop("disabled", false);
-      $(":input").prop("disabled", false);
-
-      $("#go_back").prop("disabled", true);
-      $("#go_forward").prop("disabled", true);
-
-
-      if (MAIN_G.graph_type == "direct" || MAIN_G.graph_type == "directed") $("#directed").attr("checked", true);
-      else $("#undirected").attr("checked", true);
-      
-
       if ("make_new" in MAIN_A) MAIN_A = MAIN_A.make_new();
       MAIN_G = tmp_g;
       MAIN_A.ani = tmp_ani;
       MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
       if ("g" in MAIN_A) MAIN_A.g = MAIN_G;
 
-      console.log(MAIN_G);
+      $(":button").prop("disabled", false);
+      $(":input").prop("disabled", false);
+
+      $("#go_back").prop("disabled", true);
+      $("#go_forward").prop("disabled", true);
+
+      if (MAIN_G.graph_type == "direct" || MAIN_G.graph_type == "directed") {
+        $("#directed").attr("checked", true);
+      } else {
+        $("#undirected").prop("checked", true);
+      }
+      
+  
+      $("input[name=graph_type]").prop("disabled", true);
+
+      // console.log(MAIN_G);
      
       
     };
     
     reader.readAsText(files[0]);
     $(this).val(''); // for firing event when selectinhg the same file.
-  })
+  });
 
   $("#clear_graph").click(function(){
     let ani;
@@ -422,7 +424,7 @@ $(document).ready(function(){
     MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
     MAIN_G = null;
     MAIN_A.ani.draw();
-  })
+  });
 
   $("#modify_original_graph").click(function(){
     if (MAIN_A == null || MAIN_G == null || MAIN_G.original_graph == null) return;
@@ -441,7 +443,7 @@ $(document).ready(function(){
     MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
 
     MAIN_A.ani.draw();
-  })
+  });
 
 
  
@@ -476,8 +478,8 @@ $(document).ready(function(){
     }
     $("#node_t").val("");
     $("#node_t").focus();
-    console.log(MAIN_A.ani.obj_map);
-  })
+    // console.log(MAIN_A.ani.obj_map);
+  });
 
   $("#remove_node").click(function() {
     let id;
@@ -499,7 +501,7 @@ $(document).ready(function(){
     $("#node_t").val("");
     $("#node_t").focus();
    
-  })
+  });
 
 
   $("#remove_edge").click(function() {
@@ -542,7 +544,7 @@ $(document).ready(function(){
       $("#edge_t").focus();
 
     }
-  })
+  });
   $("#add_edge").click(function() {
     let id1, id2, weight;
     let n1, n2;
@@ -594,7 +596,7 @@ $(document).ready(function(){
       $("#edge_t").focus();
     }
     
-  })
+  });
 
 
 
@@ -603,16 +605,16 @@ $(document).ready(function(){
   $("#draw").mousedown(function(e) {
     MAIN_A.ani.mouse_down(e.pageX, e.pageY);
 
-  })
+  });
 
   $("#draw").mouseup(function(e) {
 
     MAIN_A.ani.mouse_up(e.pageX, e.pageY);
-  })
+  });
 
   $("#draw").mousemove(function(e) {
     MAIN_A.ani.mouse_move(e.pageX, e.pageY);
-  })
+  });
 
   $("body").keypress(function(e) {
     
@@ -641,7 +643,6 @@ $(document).ready(function(){
         
         // press 'c' and number to change node color
         if (MAIN_G.enable_node_color_change && PRESS_C_KEY && ("spectrum" in $("#node_color")) ) {
-           console.log("123");
           $("#node_color").spectrum("set", NODE_COLORS[color_swtich_num]);
           MAIN_G.node_color = NODE_COLORS[color_swtich_num];
         }
@@ -660,9 +661,9 @@ $(document).ready(function(){
       if (id == "edge_t") $("#add_edge").click();
       else if (id == "node_t") $("#add_node").click();
      
-      console.log($("input:focus").attr("id"));
+      // console.log($("input:focus").attr("id"));
     }
-  })
+  });
 
   $("body").keyup(function(e) {
     // console.log(e.keyCode, "up");
@@ -682,6 +683,6 @@ $(document).ready(function(){
       PRESS_T_KEY = false;
     }
    
-  })
+  });
 
 });

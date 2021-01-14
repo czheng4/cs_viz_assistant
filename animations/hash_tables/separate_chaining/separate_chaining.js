@@ -99,7 +99,7 @@ class scHashAnimation {
     ani.draw();
   }
 
-  /* please refer to http://www.cse.yorku.ca/~oz/hash.html */
+  // please refer to http://www.cse.yorku.ca/~oz/hash.html 
   djb_hash(str) {
     let i;
     let h = 5381;
@@ -211,7 +211,7 @@ class scHashAnimation {
       ani.add_sequence_ani({
         text: "Couldn't find key {}".format_b(key),
         pause:1,
-      })
+      });
       this.func_text_rev();
       ani.run_animation();
     }
@@ -349,12 +349,12 @@ class scHashAnimation {
         target: rect,
         prop: {p: new Point(rect.x, rect.y + dy), type : "parallel"},
         concurrence: true
-      })
+      });
       ani.add_sequence_ani({
         target: entries[i].line,
         prop: {p: new Point(0, dy), type : "parallel"},
         concurrence: true
-      })
+      });
       if (entry.index == 0 && i == 1){
         ani.add_sequence_ani({
           target: entries[i].line,
@@ -387,7 +387,7 @@ class scHashAnimation {
         target: objs[i],
         prop: {fade_in:true, visible:true},
         concurrence: i != objs.length - 1
-      })
+      });
     }
   }
 

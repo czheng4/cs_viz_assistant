@@ -4,12 +4,11 @@
   
   01/08/2021
   last modified 01/08/2021
-
+  
+  Here's what I refer to http://web.eecs.utk.edu/~jplank/plank/classes/cs140/Notes/Sudoku/index.html 
+  to write the sodukuSolver.
 */
 
-/* Here's what I refer to http://web.eecs.utk.edu/~jplank/plank/classes/cs140/Notes/Sudoku/index.html 
-   to write the sodukuSolver.
-*/
 
 const FIX_COLOR = "pink";
 const FILL_COLOR = "lightblue";
@@ -24,13 +23,13 @@ function create_sudoku_table(table) {
 
   $("#sudoku_table").text("");
   for (i = 0; i < 9; i++) {
-    table_str += "<tr>"
+    table_str += "<tr>";
     for (j = 0; j < 9; j++) {
       id = "T{}".format(i * 9 + j);
       if (str[i * 9 + j] != '-') table_str += '<td id={} style="background-color:{}">{}</td>'.format(id, FIX_COLOR, str[i * 9 + j]);
       else table_str += '<td id={}>{}</td>'.format(id, str[i * 9 + j]);
     }
-    table_str += "</tr>"
+    table_str += "</tr>";
   }
   
   $("#sudoku_table").append(table_str);
@@ -210,7 +209,7 @@ class sudokuAnimation {
       prop: {step:true},
       action: {params: {id: id, number: number, color: color}, func: table_td},
       rev_action: {params: {id: rev_id, number: rev_number, color: rev_color}, func: table_td}
-    })
+    });
 
   }
 }

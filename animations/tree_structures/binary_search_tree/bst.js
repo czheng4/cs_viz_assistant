@@ -7,7 +7,7 @@
 */
 
 // for node type
-const T_ROOT_NODE = 0b1
+const T_ROOT_NODE = 0b1;
 const T_LEFT_NODE = 0b10;
 const T_RIGHT_NODE = 0b100;
 const T_UNKNOWN = 0b1000;
@@ -384,7 +384,7 @@ class binarySearchTreeAnimation {
     this.ani.add_sequence_ani({
       pause:1,
       text: "Done",
-    })
+    });
     this.ani.run_animation();
   }
 
@@ -407,12 +407,12 @@ class binarySearchTreeAnimation {
       text: "Recursivly balance tree with sorted keys {}. Make a new node with the middle key Sorted_keys{} = {}".format_b("[{}:{}]".format(starting_index, starting_index + num_indices), "[" + m_index + "]", c.text),
       prop: {fade_in: true, fillStyle: "yellow", visible:true, step: true},
       concurrence:true
-    })
+    });
 
     ani.add_sequence_ani({
       target: this.key_rect,
       prop: {text_fade_in: {index: m_index, fillStyle:"lightblue" }, time:1 }
-    })
+    });
     
 
     left = this.recursive_rebalance_tree(sorted_keys, starting_index, m_index - starting_index);
@@ -424,7 +424,7 @@ class binarySearchTreeAnimation {
         text: "Set node {}'s left to node {}. Set node {}'s parent to node {}".format_b(key1, key2, key2, key1),
         target: e.ani_line,
         prop: {fade_in: true, strokeStyle: "red", visible: true, step: true},
-      })
+      });
     }
 
 
@@ -437,7 +437,7 @@ class binarySearchTreeAnimation {
         text: "Set node {}'s right to node {}. Set node {}'s parent to node {}".format_b(key1, key2, key2, key1),
         target: e.ani_line,
         prop: {fade_in: true, strokeStyle: "red", visible: true, step: true},
-      })
+      });
     }
 
 
@@ -445,13 +445,13 @@ class binarySearchTreeAnimation {
       ani.add_sequence_ani({
         target: c,
         prop: {"walk" : {circle: c.from[0], h_scale: 0}}
-      })
+      });
     }
 
     ani.add_sequence_ani({
       target: c,
       prop: {fade_in: true, fillStyle: "#DDDDDD", time : 1, lineWidth:1},
-    })
+    });
    
     return n;
   }
@@ -464,7 +464,7 @@ class binarySearchTreeAnimation {
       //console.log(dict);
       dict.rect.visible = dict.visible;
       if ("text" in dict) dict.rect.text = dict.text;
-    }
+    };
 
     dict = {};
     dict.rect = this.key_rect;
@@ -478,7 +478,7 @@ class binarySearchTreeAnimation {
       target: this.func_text,
       prop: {text: this.func_text.text, time:1},
       rev_action: {params: dict, func: show_rect},
-    })
+    });
 
   }
 
@@ -509,7 +509,7 @@ class binarySearchTreeAnimation {
     ani.add_sequence_ani({
       target: c,
       prop: {fade_in: true, fillStyle: "yellow", time : 1, lineWidth:4, step:true},
-    })
+    });
     ani.add_sequence_ani({ pause: ANIMATION_TIME });
 
     // go left
@@ -520,7 +520,7 @@ class binarySearchTreeAnimation {
       ani.add_sequence_ani({
         target: e_left.ani_line,
         prop: {fade_in: true, strokeStyle: "red", time : 1, },
-      })
+      });
 
       ani.add_sequence_ani({ 
         target: c,
@@ -535,7 +535,7 @@ class binarySearchTreeAnimation {
       target: this.key_rect,
       text: "Push back key {}".format_b(node.key),
       prop: {text_fade_in: {index: keys.length, color: "black", fillStyle:"lightblue", text: node.key }, step: true}
-    })
+    });
     keys.push(node.key);
 
     // go right
@@ -546,7 +546,7 @@ class binarySearchTreeAnimation {
       ani.add_sequence_ani({
         target: e_right.ani_line,
         prop: {fade_in: true, strokeStyle: "red", time : 1, },
-      })
+      });
       ani.add_sequence_ani({ 
         target: c,
         prop: {"walk": {circle: c_right, h_scale : 0}},
@@ -559,19 +559,19 @@ class binarySearchTreeAnimation {
       ani.add_sequence_ani({
         target: c,
         prop: {"walk" : {circle: node.parent.ani_node.ani_circle, h_scale: 0}}
-      })
+      });
 
       e = g.get_edge_by_name(node.parent.ani_node.id, node.ani_node.id);
       ani.add_sequence_ani({
         target: e.ani_line,
         prop: {fade_in: true, strokeStyle: "black", time : 1},
-      })
+      });
     }
 
     ani.add_sequence_ani({
       target: c,
       prop: {fade_in: true, fillStyle: "#DDDDDD", time : 1, lineWidth:1},
-    })
+    });
     // ani.add_sequence_ani({ pause: ANIMATION_TIME });
   }
 
@@ -615,7 +615,7 @@ class binarySearchTreeAnimation {
           ani.add_sequence_ani({
             pause:1,
             text: "Delete root node {}".format_b(n.key),
-          })
+          });
         }
 
         ani.add_sequence_ani({
@@ -699,7 +699,7 @@ class binarySearchTreeAnimation {
           text: "Node {} has two children. Find the {} node in its {} subtree".format_b(n.ani_node.ani_circle.text, "rightmost", "left"),
           target: e.ani_line,
           prop: {"fade_in":true, strokeStyle: "red", time:1, step:true}
-        })
+        });
         
         this.find_path_animation(rv.lm_path, null, "pink");
 
@@ -710,14 +710,14 @@ class binarySearchTreeAnimation {
           action: {params: {circle: n.ani_node.ani_circle, alpha:0.25}, func: change_alpha},
           rev_action: {params: {circle: n.ani_node.ani_circle, alpha: 1}, func: change_alpha},
           concurrence: true
-        })
+        });
 
         n = rv.node;
         ani.add_sequence_ani({
           target: rv.rv.node.ani_node.ani_circle,
           text: "Copy node {} key/value into node {}.".format_b(rv.rv.node.key, n.ani_node.ani_circle.text),
           prop: {copy: {circle: n.ani_node.ani_circle, h_scale:0}, "step": true}
-        })
+        });
         rv = rv.rv;
 
       }
@@ -729,14 +729,14 @@ class binarySearchTreeAnimation {
       pause:1,
       action: {params: {reverse:true, type: rv.type, path: path}, func: reposition_node},
       rev_action: {params: {reverse:false,type: rv.type, path: path}, func: reposition_node}
-    })
+    });
 
     /* color the path to find the deleted node */
     ani.add_sequence_ani({
       pause:1,
       rev_action: {params: {g:this.g, path:tmp_rv.path, last_node_color:"pink"}, func: color_path},
       concurrence: true,
-    })
+    });
 
     /* color the deleted node(first node) and actual deleted node(last node) */
     if (tmp_rv.delete == true) {
@@ -745,7 +745,7 @@ class binarySearchTreeAnimation {
       ani.add_sequence_ani({
         pause:1,
         rev_action: {params: {g:this.g, path:path, first_node_color:"pink", last_node_color:"pink"}, func: color_path},
-      })
+      });
     } else {
       ani.add_sequence_ani({
         text: "Couldn't find key {} in the tree to delete".format_b(key),
@@ -842,13 +842,13 @@ class binarySearchTreeAnimation {
         target: n.ani_node.ani_circle,
         text: text,
         prop : {fade_in: true, fillStyle: "yellow", time: 1}
-      })
+      });
 
       if (i == path.length - 1 && last_node_color != null) {
         ani.last_seqence_ani().prop.fillStyle = last_node_color;
       }
 
-      ani.add_sequence_ani({pause: ANIMATION_TIME, prop: {step: true}})
+      ani.add_sequence_ani({pause: ANIMATION_TIME, prop: {step: true}});
     }
 
 
@@ -876,7 +876,7 @@ class binarySearchTreeAnimation {
       puase:1,
       text: "{} key {} in the tree".format_b(find? "Find":"Couldn't find", key),
       rev_action: {params: {g:this.g, path:rv.path, last_node_color:"pink"}, func: color_path},
-    })
+    });
     
     this.clear_after_func_ani(false);
     ani.run_animation();
@@ -924,7 +924,7 @@ class binarySearchTreeAnimation {
         pause:1,
         action: {params: {type:node.type, path: path}, func: reposition_node},
         rev_action: {params: {reverse:true, type:node.type, path: path}, func: reposition_node}
-      })
+      });
 
       e = rv.edge;
       parent = node.parent;
@@ -941,13 +941,13 @@ class binarySearchTreeAnimation {
         text: text,
         prop : {fade_in: true, fillStyle: "pink", visible:true, time: ANIMATION_TIME * 2},
         concurrence: (e != null)
-      })
+      });
 
       if (e != null) {
         ani.add_sequence_ani({
           target: e.ani_line,
           prop: {fade_in: true, strokeStyle: "red", visible: true, time: ANIMATION_TIME * 2}
-        })
+        });
       }
 
     /* otherwise, we already have it in the tree */

@@ -202,7 +202,7 @@ class dijkstraAnimation {
       ani.add_sequence_ani({
         pause: ANIMATION_TIME,
         prop: {step: true}
-      })
+      });
       
       n = n.backedge.n1;
      
@@ -388,7 +388,7 @@ class dijkstraAnimation {
             target:n.adj[i].n2.ani_circle,
             prop: deep_copy(ADJ_NODE_CTX),
             concurrence: true
-          })
+          });
         }
       }
 
@@ -432,7 +432,7 @@ class dijkstraAnimation {
           ani.add_parallel_ani({ target:line, prop: line_prop});
 
           // generate shadow for adj node
-          ani.add_parallel_ani({ target:n2.ani_circle, prop: adj_prop})
+          ani.add_parallel_ani({ target:n2.ani_circle, prop: adj_prop});
 
 
           // animation of highlighting the node in the table
@@ -440,7 +440,7 @@ class dijkstraAnimation {
             pause:1,
             rev_action: { params: {g:g, node:n2.shallow_copy()}, func: hightlight_col },
             concurrence: true
-          })
+          });
           ani.add_sequence_ani({ 
             pause: 1, 
             text: e_text,
@@ -502,7 +502,7 @@ class dijkstraAnimation {
               action: { params: {g:g, node:n2.shallow_copy()}, func: hightlight_col},
               rev_action: { params: {g:g, node:pre_n}, func: hightlight_col },
               concurrence:true 
-            })
+            });
             pre_n = n2.shallow_copy();
 
 
@@ -510,7 +510,7 @@ class dijkstraAnimation {
               pause: ANIMATION_TIME,
               text: "Update node {}{}</span> and insert {}({}, {})</span> to multimap".format(BLUE_SPAN, n2.id, BLUE_SPAN, b_dist, e.n2.id),
               prop: {step: true}
-            })
+            });
             total_animation_time += ANIMATION_TIME;
              // console.log(dist_q);
           }
@@ -521,7 +521,7 @@ class dijkstraAnimation {
             action: { params: {content: multimap_text }, func: update_multimap_content },
             rev_action: { params: {content: pre_multimap_text }, func: update_multimap_content },
             concurrence:true 
-          })
+          });
           pre_multimap_text = multimap_text;
 
           ani.add_sequence_ani({pause:2});
@@ -533,7 +533,7 @@ class dijkstraAnimation {
             ani.add_sequence_ani({ 
               pause:1, 
               action: { params: {obj: n2.ani_circle, ctx_prop:update_dict(n2.ani_circle.ctx_prop, VISITED_NODE_CTX)}, func: update_ctx_prop},
-            })
+            });
             total_animation_time += 1;
           }
 
@@ -565,7 +565,7 @@ class dijkstraAnimation {
     ani.add_sequence_ani({
       pause:1,
       text: "Done",
-    })
+    });
     ani.run_animation();
   }
 }

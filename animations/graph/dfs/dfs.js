@@ -164,7 +164,7 @@ class dfsAnimation {
               target:  e.ani_line,
               text: "Node {} has been marked visited. Do nothing. Adjacency list {}".format("{}".format_b(to_n.id), this.hightlight_adj_text(n.adj, i)),
               prop: {fade_in: true, strokeStyle: "red", time : 1},
-            })
+            });
             ani.add_sequence_ani({
               prop: {step:true}
             });

@@ -116,7 +116,7 @@ class fibonacciAnimation {
         text: e_text,
         target:rect,
         prop: {fade_in: true, text: [stack_text], time:1}
-      })
+      });
  
       this.rect_color_change(2,  false);
       ani.add_sequence_ani({prop:{step:true}});
@@ -129,7 +129,7 @@ class fibonacciAnimation {
       ani.add_sequence_ani({
         target:rect,
         prop: {fade_in: true, text: [stack_text], time:1}
-      })
+      });
       ani.add_sequence_ani({
         prop: {step:true, time:1},
       });
@@ -141,21 +141,21 @@ class fibonacciAnimation {
       ani.add_sequence_ani({
         target:rect,
         prop: {fade_in: true, text: [stack_text], time:1}
-      })
+      });
       ani.add_sequence_ani({prop: {step:true}});
       // returns
       ani.add_sequence_ani({
         text: "f({}) returns {}".format_b(n, rv1 + rv2),
         target:rect,
         prop: {fade_in: true, text: [stack_text], time:1}
-      })
+      });
       this.rect_color_change(2,  false);
       // ani.add_sequence_ani({prop:{step:true}});
 
       ani.add_sequence_ani({
         target: rect,
         prop: {fade_out: true, time: ANIMATION_TIME * 2}
-      })
+      });
 
       return rv1 + rv2;
     } 
@@ -222,7 +222,7 @@ class fibonacciDPAnimation {
     let key_id, val_id, row_id;
     table.text("");
     str = '<tr><td colspan="2" style="border: hidden; color: red; font-size: 17px; font-weight: bold">Cache</td></tr>\
-           <tr><th>Key</th><th>Value</th></tr>'
+           <tr><th>Key</th><th>Value</th></tr>';
 
     for (let i = 2; i <= n; i++) {
       key_id = "key_" + i;
@@ -271,10 +271,10 @@ class fibonacciDPAnimation {
       $(row_id).css({ 
         "display" : "table-row",
         "background-color": "pink",
-      })
+      });
       $(key_id).text(n);
       $(val_id).text(val);
-    }
+    };
 
     this.ani.add_sequence_ani({
       pause:1,
@@ -331,7 +331,7 @@ class fibonacciDPAnimation {
         text: e_text,
         target:rect,
         prop: {fade_in: true, text: [stack_text], time:1}
-      })
+      });
       
       this.rect_color_change(3,  false);
       ani.add_sequence_ani({prop: {step:true}});
@@ -343,7 +343,7 @@ class fibonacciDPAnimation {
       ani.add_sequence_ani({
         target:rect,
         prop: {fade_in: true, text: [stack_text], time:1}
-      })
+      });
       ani.add_sequence_ani({prop: {step:true}});
 
       // second function call
@@ -360,7 +360,7 @@ class fibonacciDPAnimation {
         text: "Store ({}, {}) into table and return it".format_b(n, rv1 + rv2),
         target:rect,
         prop: {fade_in: true, text: [stack_text], time:1}
-      })
+      });
 
       this.table_ani(n, rv1 + rv2);
       this.rect_color_change(3);
@@ -368,7 +368,7 @@ class fibonacciDPAnimation {
       ani.add_sequence_ani({
         target: rect,
         prop: {fade_out: true, time: ANIMATION_TIME * 2}
-      })
+      });
 
       this.tables[n] = rv1 + rv2;
       return rv1 + rv2;

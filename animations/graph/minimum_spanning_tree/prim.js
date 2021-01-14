@@ -153,7 +153,7 @@ class primAnimation {
       pause:1,
       action: {params: {map_rect:this.map_rect, reverse: false}, func: set_color},
       rev_action: {params: {map_rect:this.map_rect, reverse: true}, func: set_color},
-    })
+    });
   }
 
 
@@ -235,9 +235,9 @@ class primAnimation {
       text: "Start by inserting starting node {}'s adjacent edges into multimap".format(starting_node.id),
       action: { params: {nodes: [starting_node], color :"pink"}, func: set_node_color },
       concurrence: true,
-    })
+    });
 
-    ani.add_sequence_ani({pause: ANIMATION_TIME, prop: {step: true}})
+    ani.add_sequence_ani({pause: ANIMATION_TIME, prop: {step: true}});
     dlist_to_rect_texts(multimap, map_rect);
 
     pre_texts = dlist_to_rect_texts(multimap);
@@ -274,7 +274,7 @@ class primAnimation {
         target: map_rect,
         text: "Process the first edge {}  in the multimap and remove it".format(highlight(edge.pretty_edge())),
         prop: {text_fade_out: {color: "red", index: 0}, step: true, time : ANIMATION_TIME * 3},
-      })
+      });
 
       e_text = "Process element: {}".format("{} ".format_b(key+ ":") + highlight(edge.pretty_edge())) + NEW_LINE;
 
@@ -286,7 +286,7 @@ class primAnimation {
         action: {params: {map_rect: map_rect, texts: texts}, func: update_rect_text},
         rev_action: {params: {map_rect: map_rect, texts: pre_texts}, func: update_rect_text},
         concurrence: true
-      })
+      });
       pre_texts = deep_copy(texts);
 
 
@@ -297,7 +297,7 @@ class primAnimation {
         action: {params: {line: s_edge.ani_line, visible: true}, func: line_visibility},
         rev_action: {params: {line: s_edge.ani_line, visible: false}, func: line_visibility},
         concurrence: true,
-      })
+      });
 
       // set node color
       if (first_line) {
@@ -413,7 +413,7 @@ class primAnimation {
     ani.add_sequence_ani({
       pause: 1,
       text: "Done. The sum of the weights of connected edges is " + sum
-    })
+    });
 
     ani.run_animation();
     return true;

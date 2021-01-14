@@ -162,7 +162,7 @@ class toplogicalSortAnimation {
         c.move(-d, 0);
       }
     }
-    this.ani.add_object(this.q_rect = new Rect(20, 280, 130, 0, "QUEUE_TOPSORT_REF", [], "List", "bottom", "v", {lineWidth: .5}))
+    this.ani.add_object(this.q_rect = new Rect(20, 280, 130, 0, "QUEUE_TOPSORT_REF", [], "List", "bottom", "v", {lineWidth: .5}));
   }
 
 
@@ -178,7 +178,7 @@ class toplogicalSortAnimation {
     }
     for (let key in g.edge_map) {
       g.edge_map[key].ani_line.alpha = 1;
-      g.edge_map[key].ani_line.ctx_prop = deep_copy(DEFAULT_LINE_CTX)
+      g.edge_map[key].ani_line.ctx_prop = deep_copy(DEFAULT_LINE_CTX);
     }
   }
 
@@ -230,7 +230,7 @@ class toplogicalSortAnimation {
       pause:1,
       text: "Set starting node {}{}'s{} distance to 0. Compute the number of incoming edges. For nodes that have 0 incoming edges, set their number of distinctive path to 1".format(BLUE_SPAN, starting_node_id, "</span>"),
       prop: {step: true},
-    })
+    });
     for (let key in g.node_map) {
       n = g.node_map[key];
       n.distance = -1;
@@ -244,7 +244,7 @@ class toplogicalSortAnimation {
       n2.num_in++;
     }
 
-    e_text = "Node" + BLUE_SPAN + " { "
+    e_text = "Node" + BLUE_SPAN + " { ";
     for (let key in g.node_map) {
       n = g.node_map[key];
       if (n.num_in == 0) {
@@ -262,7 +262,7 @@ class toplogicalSortAnimation {
       text: e_text,
       rev_action: {params: {nodes: []}, func: update_html_table },
       concurrence: true,
-    })
+    });
 
    
     ani.add_sequence_ani({
@@ -270,7 +270,7 @@ class toplogicalSortAnimation {
       prop: {fade_in:true, text: dlist_to_rect_texts(queue), fillStyle: make_fillstyles(queue.size, 0, queue.size), time: 1},
       action: {params: {q_rect: q_rect, num: queue.size}, func: update_rect_height},
       rev_action: {params: {q_rect: q_rect, num: 0}, func: update_rect_height}
-    })
+    });
 
 
     for (i = 0; i < queue.size; i++) {
@@ -278,7 +278,7 @@ class toplogicalSortAnimation {
         target: q_rect,
         prop: {"text_fade_in": {index: i}},
         concurrence: (i < queue.size - 1)
-      })
+      });
     }
     ani.add_sequence_ani({pause: 1, prop:{step: true}});
 
@@ -297,7 +297,7 @@ class toplogicalSortAnimation {
         target: n.ani_circle,
         action: {params: n.ani_circle, func: set_circle_color},
         concurrence: true
-      })
+      });
       e_text = "<span style = 'color: blue'>{ ";
       for (i = 0; i < n.adj.length; i++) {
         e = n.adj[i];
@@ -316,25 +316,25 @@ class toplogicalSortAnimation {
         text: "Remove the first node {} {} {}from the front of the list and process its adjacent edges ".format(BLUE_SPAN, n.id, "</span>") + e_text,
         action: {params: {nodes: [node_copy(n)]}, func: update_html_table },
         concurrence:true,
-      })
+      });
      
       ani.add_sequence_ani({
         target:q_rect,
         prop: {fade_in: true, fillStyle: make_fillstyles(queue.size + 1, queue.size, queue.size + 1), time:1},
-      })
+      });
 
     
       ani.add_sequence_ani({
         target: q_rect,
         prop: {text_fade_out: {index:queue.size}}
-      })
+      });
     
       ani.add_sequence_ani({
         target: q_rect,
         prop: {fade_in: true, text: dlist_to_rect_texts(queue), fillStyle: make_fillstyles(queue.size, 0,0), time: 1},
         action: {params: {q_rect: q_rect, num: queue.size}, func: update_rect_height},
         rev_action: {params: {q_rect: q_rect, num: queue.size + 1}, func: update_rect_height}
-      })
+      });
 
       ani.add_sequence_ani({prop:{step:true, time:1}});
 
@@ -370,12 +370,12 @@ class toplogicalSortAnimation {
           action: {params: {nodes: [node_copy(e.n1), tmp_n]}, func: update_html_table },
           rev_action: {params: {nodes: [node_copy(e.n1), tmp_n1]}, func: update_html_table },
           concurrence: true
-        })
+        });
 
         ani.add_sequence_ani({
           target: e.ani_line,
           prop: {fade_out: true, strokeStyle: "red", lineWidth: 4, time: ANIMATION_TIME, step: true},
-        })
+        });
 
 
         if (n2.num_in == 0) {
@@ -402,7 +402,7 @@ class toplogicalSortAnimation {
           ani.add_sequence_ani({
             target: q_rect,
             prop: {text_fade_in: {index: 0}, step: true, time: ANIMATION_TIME},
-          })
+          });
 
         }
 
@@ -410,7 +410,7 @@ class toplogicalSortAnimation {
           pause:1,
           action: {params: {nodes: [node_copy(e.n1), node_copy(e.n2)]}, func: update_html_table },
           rev_action: {params: {nodes: [node_copy(e.n1), tmp_n]}, func: update_html_table },
-        })
+        });
 
 
       }

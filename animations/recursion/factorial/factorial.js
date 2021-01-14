@@ -136,7 +136,7 @@ class factorialAnimation {
       ani.add_sequence_ani({
         target:rect,
         prop: {fade_in: true, text: ["f({}) {} {} * f({})".format(n, ARROW_UNICODE, n, n - 1)], time:1}
-      })
+      });
       this.move_ptr(e_text, this.move_dy * 2, ANIMATION_TIME * 2, false);
       this.rect_color_change(2,  true);
       this.move_ptr("", -this.move_dy * 2, ANIMATION_TIME * 2, false);
@@ -147,7 +147,7 @@ class factorialAnimation {
         text: "f({}) returns {}".format_b(n, rv * n),
         target:rect,
         prop: {fade_in: true, text: ["f({}) {} {} * f({}) {} {} * {}".format(n, ARROW_UNICODE, n, n - 1, ARROW_UNICODE, n, rv)], time:1}
-      })
+      });
 
       ani.add_sequence_ani({
         prop: {step:true, time:1},
@@ -156,7 +156,7 @@ class factorialAnimation {
 
         target: rect,
         prop: {fade_out: true, time: ANIMATION_TIME * 3}
-      })
+      });
 
 
 

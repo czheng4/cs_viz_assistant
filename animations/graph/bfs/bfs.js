@@ -264,7 +264,7 @@ class bfsAnimation {
             ani.add_sequence_ani({
               target: n2.ani_circle,
               prop: {walk: {circle: n2.backedge.n1.ani_circle, h_scale: 0}},
-            })
+            });
 
             ani.add_sequence_ani({
               target: n2.backedge.n1.ani_circle,

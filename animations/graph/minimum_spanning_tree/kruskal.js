@@ -155,7 +155,7 @@ class kruskalAnimation {
     }
 
     ani.add_object(this.edge_rect = new Rect(-230, 0, 130, sorted_edges.length * 26, "SORTED_EDGES_REF", texts, "Sorted Edges", "top", "v", {lineWidth: .5}));
-    ani.add_object(this.edge_ptr = new quadraticCurve(new Point(-50, 13), new Point(-100, 13), 0, 0, true))
+    ani.add_object(this.edge_ptr = new quadraticCurve(new Point(-50, 13), new Point(-100, 13), 0, 0, true));
     this.edge_ptr.angle_length = 10;
     this.edge_ptr.ctx_prop.strokeStyle = "red";
     this.edge_ptr.ctx_prop.lineWidth = 2.5;
@@ -243,12 +243,12 @@ class kruskalAnimation {
           pause:1,
           action: {params: {index1:i, index2: i - 1, obj: this.edge_rect}, func: color_edge_text},
           rev_action: {params: {index1:i - 1, index2: i, obj: this.edge_rect}, func: color_edge_text},
-        })
+        });
       
         ani.add_sequence_ani({
           target: this.edge_ptr,
           prop: {p: new Point(0, 26), type : "parallel"}
-        })
+        });
       }
 
       if (id1 != id2) {
@@ -275,13 +275,13 @@ class kruskalAnimation {
           rev_action: {params: line, func:disable_visibility},
           prop: {step: true},
           concurrence:true,
-        })
+        });
 
         ani.add_sequence_ani({
           pause:1,
           action: {params: {r_line: line, b_line: pre_line}, func: color_line},
           rev_action: {params: {r_line: pre_line, b_line: line}, func:color_line}
-        })
+        });
 
 
         pre_line = line;
@@ -298,7 +298,7 @@ class kruskalAnimation {
           pause: ANIMATION_TIME,
           text: "{}{} and {} </span>are in the same components. We skip it".format(BLUE_SPAN, e.n1.id, e.n2.id),
           prop : {step: true}
-        })
+        });
       }
     }
 
