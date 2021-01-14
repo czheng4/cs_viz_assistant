@@ -7,24 +7,24 @@
 */
 
 class Dnode {
-	constructor(v) {
-		this.value = v;
-		this.flink = null;
-		this.blink = null;
-	};
+  constructor(v) {
+    this.value = v;
+    this.flink = null;
+    this.blink = null;
+  };
 }
 
 class Dlist {
-	constructor() {
-		this.size = 0;
-		this.sentinel = new Dnode(0);
-		this.sentinel.flink = this.sentinel;
-		this.sentinel.blink = this.sentinel;
-		this.ms = new memorySimulator();
+  constructor() {
+    this.size = 0;
+    this.sentinel = new Dnode(0);
+    this.sentinel.flink = this.sentinel;
+    this.sentinel.blink = this.sentinel;
+    this.ms = new memorySimulator();
     this.ms.get_reference(this.sentinel);
-		
-	}
-	deep_copy() {
+    
+  }
+  deep_copy() {
     let dlist = new Dlist();
     let ms = new memorySimulator();
     let n = this.sentinel.flink;
@@ -56,34 +56,34 @@ class Dlist {
   last() {
     return this.sentinel.blink.value;
   }
-	insert_before_node(v, node) {
-		let prev_node, new_node;
-		new_node = new Dnode(v);
-		this.ms.get_reference(new_node);
+  insert_before_node(v, node) {
+    let prev_node, new_node;
+    new_node = new Dnode(v);
+    this.ms.get_reference(new_node);
 
-		prev_node = node.blink;
+    prev_node = node.blink;
 
-		prev_node.flink = new_node;
-		new_node.blink = prev_node;
+    prev_node.flink = new_node;
+    new_node.blink = prev_node;
 
-		new_node.flink = node;
-		node.blink = new_node;
+    new_node.flink = node;
+    node.blink = new_node;
 
-		this.size++;
-		return new_node;
-	}
+    this.size++;
+    return new_node;
+  }
 
-	insert_after_node(v, node) {
-		return this.insert_before_node(v, node.flink);
-	}
+  insert_after_node(v, node) {
+    return this.insert_before_node(v, node.flink);
+  }
 
-	push_back(v) {
-		return this.insert_before_node(v, this.sentinel);
-	}
+  push_back(v) {
+    return this.insert_before_node(v, this.sentinel);
+  }
 
-	push_front(v) {
-		return this.insert_before_node(v, this.sentinel.flink);
-	}
+  push_front(v) {
+    return this.insert_before_node(v, this.sentinel.flink);
+  }
 
   erase_value(v) {
     let n = this.sentinel.flink;
@@ -140,38 +140,38 @@ class Dlist {
     return this.insert_before_node(v, node);
   }
 
-	erase(node) {
-		let prev_node, next_node;
-		prev_node = node.blink;
-		next_node = node.flink;
+  erase(node) {
+    let prev_node, next_node;
+    prev_node = node.blink;
+    next_node = node.flink;
 
-		prev_node.flink = next_node;
-		next_node.blink = prev_node;
+    prev_node.flink = next_node;
+    next_node.blink = prev_node;
 
     this.ms.address_to_object.delete(this.ms.get_reference(node));
     this.ms.object_to_address.delete(node);
 
-		this.size--;
-	}
+    this.size--;
+  }
 
-	pop_back() {
-		let rv = this.sentinel.blink.value;
-		this.erase(this.sentinel.blink);
-		return rv;
-	}
-	pop_front() {
-		let rv = this.sentinel.flink.value;
-		this.erase(this.sentinel.flink);
-		return rv;
-	}
+  pop_back() {
+    let rv = this.sentinel.blink.value;
+    this.erase(this.sentinel.blink);
+    return rv;
+  }
+  pop_front() {
+    let rv = this.sentinel.flink.value;
+    this.erase(this.sentinel.flink);
+    return rv;
+  }
 
-	print() {
-		let node = this.sentinel.flink;
-		while (node != this.sentinel) {
-			console.log(node.value, this.ms.get_reference(node));
-			node = node.flink;
-		}
-	}
+  print() {
+    let node = this.sentinel.flink;
+    while (node != this.sentinel) {
+      console.log(node.value, this.ms.get_reference(node));
+      node = node.flink;
+    }
+  }
 }
 
 
@@ -229,19 +229,19 @@ const to_sentinel_w = -0.2;
 
 class dlistAnimation {
 
-	constructor() {
-		this.dlist = new Dlist();
-	  this.ani = new Animation();
+  constructor() {
+    this.dlist = new Dlist();
+    this.ani = new Animation();
     
     let ani = this.ani;
     let dlist = this.dlist;
     let p1, p2;
-		let rect, q_curve;
-		let node = dlist.sentinel;
-		let flink_ref, blink_ref, label;
-		let margin = 70,
-		    width = 77,
-		    height = 90;
+    let rect, q_curve;
+    let node = dlist.sentinel;
+    let flink_ref, blink_ref, label;
+    let margin = 70,
+        width = 77,
+        height = 90;
    
 
     this.width = width;
@@ -251,9 +251,9 @@ class dlistAnimation {
     this.max_size = 8;
 
     // create sentinel node.
-		flink_ref = dlist.ms.get_reference(node.flink);
-		blink_ref = dlist.ms.get_reference(node.blink);
-		label = dlist.ms.get_reference(node);
+    flink_ref = dlist.ms.get_reference(node.flink);
+    blink_ref = dlist.ms.get_reference(node.blink);
+    label = dlist.ms.get_reference(node);
 
     rect = new Rect(width + margin, 0, width, height, label, ["sentinel", flink_ref, blink_ref], label, "bottom");
     p1 = ani.get_point(width + margin, height / 2);
@@ -271,10 +271,10 @@ class dlistAnimation {
 
     q_curve = new quadraticCurve(p1, p2, 1);
     ani.connect_object(q_curve);
-	  ani.draw();
+    ani.draw();
 
-		
-	}
+    
+  }
 
   set_state() {
 

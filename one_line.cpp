@@ -45,6 +45,9 @@ int main(int argc, char **argv) {
         break;
       }
       if (line[i] != ' ') s += line[i];
+      else if ( (i + 1) < line.size() && line[i + 1] != ' ') {
+        s += ' ';
+      }
 
     }
 
@@ -54,7 +57,7 @@ int main(int argc, char **argv) {
     else if (header_comment) {
       all += line + '\n';
     } else {
-      all += line;
+      all += s;
     }
 
     if (s.size() >= 2 && s[s.size() - 2] == '*' && s[s.size() - 1] == '/') {
