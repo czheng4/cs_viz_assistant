@@ -373,7 +373,9 @@ class networkFlowAnimation {
     
     this.source = g.get_node("S");
     this.sink = g.get_node("T");
+
     if (this.is_init_graph == false) {
+     
       this.path = [];
       find_path = this.DFS(this.source);
       if (find_path == false) {
@@ -381,8 +383,14 @@ class networkFlowAnimation {
         $("#elaboration_text").append("Can't find any path from {} to {}".format_b("S", "T"));
         return 0;
       }
+
+      for (let key in g.node_map) {
+        g.node_map[key].visited = 0;
+      }
+
       this.create_init_graph();
       this.is_init_graph = true;
+      
     }
     this.set_state();
     ani.set_function_call("find_augmenting_path", [find_path_type, manual_path]);
