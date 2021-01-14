@@ -1,0 +1,18 @@
+#### Contact: ChaoHui Zheng(czheng4@vols.utk.edu)
+#### Please do not change this file. Any unexpected content changes may cause an error when importing
+#### Choose "manually enter". Enter "S 1 2 T" and "S 2 1 T" in turn.
+
+TYPE DIRECTED
+TRANSLATE_X 0
+TRANSLATE_Y 0
+NODE S POS 100 150 RADIUS 20 COL #DDDDDD
+NODE T POS 400 150 RADIUS 20 COL #DDDDDD
+NODE 1 POS 250 70 RADIUS 20 COL #DDDDDD
+NODE 2 POS 250 230 RADIUS 20 COL #DDDDDD
+
+
+EDGE S 1 10 COL black WIDTH 2 TEXT_T 0.65 TEXT_DIR right
+EDGE S 2 10 COL black WIDTH 2 TEXT_T 0.65 TEXT_DIR right
+EDGE 1 T 10 COL black WIDTH 2 TEXT_T 0.65 TEXT_DIR right
+EDGE 2 T 10 COL black WIDTH 2 TEXT_T 0.65 TEXT_DIR right
+EDGE 1 2 1 COL black WIDTH 2 TEXT_T 0.65 TEXT_DIR right
