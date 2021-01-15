@@ -150,6 +150,7 @@ $(document).ready(function(){
   });
 
   $("#import_graph").click(function(){
+    $("#import_input").prop("disabled",false);
     $("#import_input").click();
   });
 
