@@ -50,6 +50,9 @@
 #draw {
  /* position: absolute;*/
 }
+
+
+
 input[type="range"] {
   -webkit-appearance: none;
   background: linear-gradient(to right, green 0%, green 50%, #fff 50%, #fff 100%);
@@ -182,6 +185,14 @@ button {
   font-weight: bold;
 }
 
+.logo {
+  position:relative;
+  top: 4px;
+}
+.logo img {
+  width: 30px;
+  height: 30px;
+}
 .control {
   grid-area: control;
   background-color: #d5e7c2;

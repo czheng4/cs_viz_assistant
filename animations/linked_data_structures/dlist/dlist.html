@@ -20,6 +20,7 @@
 <body>
   <div class = "grid-container">
     <div class = "header">
+      <span class="logo"><img src="../../../images/logo.png"></span>
       Doubly Linked List 
     </div>
     <div class = "control"> 
@@ -138,7 +139,7 @@ $(document).ready(function(){
   
   MAIN_A = new dlistAnimation(); // must use name a for every animation
   D_ANIMATION_TIME = 100 - $("#speed").val();
-  dlist_test1();
+  
   $("#elaboration_text").append("The rectangular contains {}, {}, and {} from top to bottom".format_b("value", "forward link(flink)","backward link(blink)"));
   // dlist_test1();
   $("#push_back").click(function(){
