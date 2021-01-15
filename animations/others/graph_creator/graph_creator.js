@@ -3,7 +3,7 @@
   All rights reserved.
   
   11/24/2020
-  last modified 12/04/2020
+  last modified 01/14/2021
 */
 const NODE_COLORS = ['#DDDDDD', 'pink', 'lightblue', 'yellow'];
 const EDGE_COLORS = ["black", "red", "blue", "#FFB901"];
@@ -581,10 +581,11 @@ $(document).ready(function(){
       } else {
         n1 = g.get_node(id1);
         n2 = g.get_node(id2);
-        
-        
         e = g.get_edge(n1, n2, weight);
-        if (e == null) {
+
+        if (n1 == n2) {
+          elaboration_append("Can not have self-loop".format_b(weight));
+        } else if (e == null) {
           elaboration_append("Weight {} is not valid".format_b(weight));
         } else {
           elaboration_append("Add/Update edge {} successfully".format_b(pretty_edge(n1, n2)));

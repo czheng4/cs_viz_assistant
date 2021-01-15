@@ -239,16 +239,21 @@ class kruskalAnimation {
 
       // move edge pointer down one.
       if (i != 0) {
+
+        ani.add_sequence_ani({
+          target: this.edge_ptr,
+          prop: {p: new Point(0, 26), type : "parallel", time : ANIMATION_TIME * 1.5},
+          concurrence:true
+        });
+
         ani.add_sequence_ani({
           pause:1,
+          time_offset: ANIMATION_TIME * 0.75,
           action: {params: {index1:i, index2: i - 1, obj: this.edge_rect}, func: color_edge_text},
           rev_action: {params: {index1:i - 1, index2: i, obj: this.edge_rect}, func: color_edge_text},
         });
       
-        ani.add_sequence_ani({
-          target: this.edge_ptr,
-          prop: {p: new Point(0, 26), type : "parallel"}
-        });
+        
       }
 
       if (id1 != id2) {
@@ -292,6 +297,8 @@ class kruskalAnimation {
           });
           break;
         }
+
+        ani.add_sequence_ani({pause: ANIMATION_TIME});
 
       } else {
         ani.add_sequence_ani({

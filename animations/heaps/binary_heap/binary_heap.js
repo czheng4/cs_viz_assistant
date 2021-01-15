@@ -120,7 +120,7 @@ class binaryHeapAnimation {
     this.ani.add_sequence_ani({
       text: "Child {} < Parent {} Swap {} and {}".format_b(val1, val2, val1, val2),
       target:from.ani_circle,
-      prop: {"swap": {circle: to.ani_circle, h_scale: 0, time: ANIMATION_TIME * 4}},
+      prop: {"swap": {circle: to.ani_circle, h_scale: 0}, time: ANIMATION_TIME * 3},
       concurrence:true
     });
 
@@ -130,7 +130,7 @@ class binaryHeapAnimation {
     h_scale = -2.8 * 1 / Math.abs(child - parent) * h_direction; 
     this.ani.add_sequence_ani({
       target: from_rect,
-      prop: {"swap": {index1:0, rect: to_rect, index2: 0, time: ANIMATION_TIME * 4, h_scale:h_scale}},
+      prop: {"swap": {index1:0, rect: to_rect, index2: 0, h_scale:h_scale}, time: ANIMATION_TIME * 3},
     });
 
     this.color_node(from, "lightblue");

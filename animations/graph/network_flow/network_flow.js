@@ -371,6 +371,11 @@ class networkFlowAnimation {
     }
 
     
+    if (g.is_node("S") == false || g.is_node("T") == false) {
+      elaboration_append("Must have {} and {} nodes".format_b("S", "T"));
+      return;
+    }
+
     this.source = g.get_node("S");
     this.sink = g.get_node("T");
 

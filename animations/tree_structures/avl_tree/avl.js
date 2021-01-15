@@ -1277,7 +1277,7 @@ class avlTreeAnimation {
     //console.log(stop_propagation, n.id, dx, dy);
     ani.add_sequence_ani({
       target: c,
-      prop: {p : new Point(dx, dy), type: "relative", stop_propagation: stop_propagation},
+      prop: {p : new Point(dx, dy), type: "relative", stop_propagation: stop_propagation, time : ANIMATION_TIME * 2},
       concurrence: concurrence
     });
   }

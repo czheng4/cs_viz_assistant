@@ -97,6 +97,24 @@
 <script type="text/javascript">
 
 
+function example() {
+  MAIN_A = new stackAnimation();
+  aniTester = new animationTester(20, 20, 5);
+
+  aniTester.add_func("push", [1]);
+  aniTester.add_func("push", [2]);
+  aniTester.add_func("push", [3]);
+  aniTester.add_func("pop", []);
+  aniTester.add_func("push", [4]);
+  aniTester.add_func("pop", []);
+  aniTester.add_func("pop", []);
+  aniTester.add_func("pop", []);
+  // aniTester.add_func("erase", [])
+
+
+  aniTester.run_test();
+}
+
 
 $(document).ready(function(){
  
@@ -106,6 +124,7 @@ $(document).ready(function(){
   MAIN_A = new stackAnimation(); // must use name a for every animation
   D_ANIMATION_TIME = 100 - $("#speed").val();
 
+  // example();
 
   $("#push_back").click(function(){
     MAIN_A.push($("#push_back_t").val());

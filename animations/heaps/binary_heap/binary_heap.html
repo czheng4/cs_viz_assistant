@@ -100,10 +100,14 @@
 <script type="text/javascript">
 
 function test1() {
-  aniTester = new animationTester(100);
+  // aniTester = new animationTester(100);
   
-  for (let i = 70; i < 100; i++) {
+  aniTester = new animationTester(20, 20, 5);
+  for (let i = 100; i >= 92; i--) {
     aniTester.add_func("push", [i]);
+  }
+  for (let i = 0; i <= 8; i++) {
+    aniTester.add_func("pop", []);
   }
   // aniTester.add_func("push", [12]);
   // aniTester.add_func("push", [32]);

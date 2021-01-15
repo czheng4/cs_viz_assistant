@@ -176,7 +176,7 @@ button {
 .header { 
   
   grid-area: header; 
-  background-color: lightblue;
+  background-color: #ADD8E6;
   font-size: 30px;
   padding: 5px 5px 5px 10px;
   font-weight: bold;
