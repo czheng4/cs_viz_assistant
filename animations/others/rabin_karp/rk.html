@@ -1,0 +1,179 @@
+<!--
+  ChaoHui Zheng
+  12/26/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <meta charset="UTF-8"> 
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="../../../lib/jquery.js"></script>
+  <style type="text/css">
+    input[type = "text"]{
+      width: 300px;
+    }
+    
+    .tooltip .tooltiptext {
+      width: 600px;
+    }
+
+    b {
+      font-weight: bolder;
+    }
+  </style>
+  
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header"><span class = "logo"><img src="../../../images/logo.png"></span> Rabin-Karp Algorithm for Pattern Searching</div>
+    <div class = "control"> 
+
+     
+      <input type = "text" id = "string_text" placeholder="text" value=""> 
+
+
+      <span style="margin-left:100px">Rolling hash:</span>
+      <input type="radio" id="sum" name="hash_type" value = "sum" checked> 
+      <label for="hash_type">Sum</label> 
+
+      <input type="radio" id="polynomial" name="hash_type" value = "polynomial"> 
+      <label for="hash_type">Rabin fingerprint</label> 
+
+
+      <div class="line"></div>
+      <input type = "text" id = "pattern_text" placeholder="pattern" value=""> 
+     
+      <button id = "run">Run</button>
+      <div class = "line"></div>
+      
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="0" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
+      </div>
+    </div>
+
+
+    <div class = "canvas"> 
+
+      <canvas id = "draw"></canvas>
+
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Rabin-Karp: </span>It uses a rolling hash to filter out substrings that do not match the pattern.A rolling hash is able to calculate the new hash value from the old hash value, the new added value at the end, the removed value in the beginning quickly. 
+          </div>
+          
+          <div style="margin-top: 10px">
+            <div><span class="red">Moving sum rolling hash: </span> The hash function is:</div>
+            <div style="font-size: 16px; text-align: center; margin-top: 5px">H(S[i, j]) = (S[i] + S[i + 1] + S[i + 2] &middot;&middot;&middot; S[j]) % m</div>
+
+            <div style="margin-top: 12px">The above equation can also be written as:</div>
+            <div style="font-size: 16px; text-align: center; margin-top: 12px">H(S[i, j]) = (&middot;&middot;&middot;( ( ( S[i] % m ) + S[i + 1] ) % m + S[i+2] ) % m &middot;&middot;&middot; + S[j]) % m</div>
+            <div style="margin-top: 12px; margin-bottom: -5px">Therefore, we can calculate the hash value iteratively to avoid integer overflow:</div>
+            <pre>
+H = 0
+for index from i->j(inclusive): 
+  H = (H + S[index]) % m;
+            </pre>
+
+            <div style="margin-top: -14px">The new hash value can be calculated using the following formular:</div>
+            <div style="font-size: 16px; text-align: center; margin-top: 5px">H(S[i, j]) = ( <b>H(S[i - 1, j - 1])</b> - S[i - 1] + S[j] ) % m</div>
+          </div>
+
+          <div style="margin-top: 10px">
+            <div><span class="red">Polynomial rolling rolling hash: </span> The hash function is (b and m are contant, and L = j - i):</div> 
+            <div style="font-size: 16px; text-align: center; margin-top: 5px">H(S[i, j]) = ( S[i] &middot; b<sup>L - 1</sup> + S[i + 1] &middot; b<sup>L - 2</sup> + &middot; &middot; &middot;  + S[i + L - 1]) &middot; b<sup>1</sup> + S[i + L] &middot; b<sup>0</sup>) % m</div> 
+            <div style="margin-top: 12px">The above equation can also be written as:</div>
+            <div style="font-size: 16px; text-align: center; margin-top: 12px">H(S[i, j]) = (b&middot;(&middot;&middot;&middot;( b &middot;  ( b &middot; ( S[i] % m ) + S[i+1] ) % m + S[i+2] ) % m + &middot;&middot;&middot; ) % m + S[j]) % m</div>
+
+            <div style="margin-top: 12px; margin-bottom: -5px">Therefore, we can calculate the hash value iteratively:</div>
+            <pre>
+H = 0
+for index from i->j(inclusive): 
+  H = (b * H + S[index]) % m;
+            </pre>
+            <div style="margin-top: -14px">The new hash value can be calculated using the following formular:</div>
+            <div style="font-size: 16px; text-align: center; margin-top: 5px">H(S[i, j]) = ( b &middot; ( <b>H(S[i - 1, j - 1])</b> &#8211;  b<sup>L - 2</sup> &middot; S[i - 1] ) + S[j] ) ) % m</div>
+
+
+          </div>
+
+          
+         <!--  <div><span class="red">Algorithm Details:</span> The last equation shows the pattern of repeatedly squaring <strong>b</strong></div> 
+          <div style="font-size: 16px">
+            e = e<sub>i</sub> &middot; 2<sup>i</sup> + e<sub>i - 1</sub> &middot; 2<sup>i - 1</sup> + e<sub>i - 2</sub> &middot; 2<sup>i - 2</sup> + &middot;&middot;&middot; + e<sub>1</sub> &middot; 2<sup>1</sup>  + e<sub>0</sub> &middot; 2<sup>0</sup> 
+            &emsp;where e<sub>i</sub> is the i<sub>th</sub> bit of e 
+          </div>
+          <div style="font-size: 16px">
+            b <sup>e</sup> % n = ( b <sup>e<sub>i</sub> &middot; 2<sup>i</sup> + e<sub>i - 1</sub> &middot; 2<sup>i - 1</sup> + e<sub>i - 2</sub> &middot; 2<sup>i - 2</sup> + &middot;&middot;&middot; + e<sub>1</sub> &middot; 2<sup>1</sup>  + e<sub>0</sub> &middot; 2<sup>0</sup> </sup>) % n
+
+          </div>
+
+          <div style="font-size: 16px">
+             b <sup>e</sup> % n = ( b<sup>e<sub>i</sub> &middot; 2<sup>i</sup></sup> &middot; b<sup>e<sub>i - 1</sub> &middot; 2<sup>i - 1</sup></sup> &middot; b<sup>e<sub>i - 2</sub> &middot; 2<sup>i - 2</sup></sup> &middot; &middot;&middot;&middot; &middot; b<sup>e<sub>1</sub> &middot; 2<sup>1</sup></sup> &middot; b<sup>e<sub>0</sub> &middot; 2<sup>0</sup></sup> ) % n
+
+          </div> -->
+        </span>
+
+        <span class="tooltiptext" id ="chinese">
+         
+          
+        </span>
+
+      </div>
+    </div>
+    
+    
+
+    <div class = "bottom-nav">
+      <button id = "script">Script</button>
+    </div>
+  </div>
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="rk.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+
+
+
+$(document).ready(function(){
+  
+
+  set_canvas(1200, 1000,0, 50);
+  MAIN_A = {ani: new Animation()};
+  D_ANIMATION_TIME = 100 - $("#speed").val();
+  ENABLE_STEP_IDS = ["#run", "input"];
+  ENABLE_IDS = ["#run", "input"];
+  
+  $("#run").click(function() {
+    let t, p;
+    t = $("#string_text").val();
+    p = $("#pattern_text").val();
+  
+    if (t == "" || p == "") {
+      $("#elaboration_text").text("One of values is empty");
+      return;
+    }
+    MAIN_A = new rabinKarpAnimation(t, p, $("input[name=hash_type]:checked").val());
+  })
+
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+
+</html>
