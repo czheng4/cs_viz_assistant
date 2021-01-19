@@ -89,7 +89,7 @@ for index from i->j(inclusive):
           </div>
 
           <div style="margin-top: 10px">
-            <div><span class="red">Polynomial rolling rolling hash: </span> The hash function is (b and m are contant, and L = j - i):</div> 
+            <div><span class="red">Polynomial rolling hash(Rabin fingerprint): </span> The hash function is (b and m are contant, and L = j - i):</div> 
             <div style="font-size: 16px; text-align: center; margin-top: 5px">H(S[i, j]) = ( S[i] &middot; b<sup>L - 1</sup> + S[i + 1] &middot; b<sup>L - 2</sup> + &middot; &middot; &middot;  + S[i + L - 1]) &middot; b<sup>1</sup> + S[i + L] &middot; b<sup>0</sup>) % m</div> 
             <div style="margin-top: 12px">The above equation can also be written as:</div>
             <div style="font-size: 16px; text-align: center; margin-top: 12px">H(S[i, j]) = (b&middot;(&middot;&middot;&middot;( b &middot;  ( b &middot; ( S[i] % m ) + S[i+1] ) % m + S[i+2] ) % m + &middot;&middot;&middot; ) % m + S[j]) % m</div>

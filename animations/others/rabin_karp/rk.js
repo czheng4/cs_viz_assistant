@@ -33,6 +33,9 @@ class rabinKarpAnimation {
     } else if (pattern.length > 7) {
       $("#elaboration_text").text("Pattern size is {}. It must be <= 7".format(pattern.length));
       return;
+    } else if (pattern.length > text.length) {
+      $("#elaboration_text").text("Pattern size is > text size");
+      return;
     }
 
     this.window_v = [];
@@ -197,6 +200,7 @@ class rabinKarpAnimation {
       }
     }
     
+
     ani.add_sequence_ani({
       text: "Done",
       pause:1
