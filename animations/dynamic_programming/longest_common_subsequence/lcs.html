@@ -1,0 +1,199 @@
+<!--
+  ChaoHui Zheng
+  12/26/2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title></title>
+  <meta charset="UTF-8"> 
+  <link rel="stylesheet" href="../../../style/style.css">
+  <script src="../../../lib/jquery.js"></script>
+  <style type="text/css">
+    input[type = "number"]{
+      width: 80px;
+    }
+    #cache_table td{
+      padding: 5px 13px 5px 13px;
+      text-align: center;
+    }
+    #cache_table th{
+      padding: 5px 13px 5px 13px;
+      text-align: center;
+      background: #DFDFDF;
+    }
+    #compute {
+      height: 26px;
+    }
+
+
+    #cache_table tr:first-child th {
+      border-left: hidden;
+      border-right: hidden;
+      border-top: hidden;
+      color: red; 
+      font-size: 17px; 
+      font-weight: bold;
+      background: white;
+    }
+
+    #cache_table tr td:first-child {
+      background: #DFDFDF;
+    }
+   
+   
+  </style>
+  
+</head>
+<body>
+   <div class = "grid-container">
+    <div class = "header"><span class = "logo"><img src="../../../images/logo.png"></span> Longest Common Subsequence</div>
+    <div class = "control"> 
+
+      
+      <input type = "text" id = "string1" placeholder="string1">
+      <input type = "text" id = "string2" placeholder="string2">
+
+      <button id = "run">Run</button> &emsp;&emsp;
+
+     <!--  <label for="memoization">Memoization</label>
+      <input type="checkbox" id="memoization" name="memoization" value="memoization" style="position:relative; top: 2px"> -->
+
+      <div class = "line"></div>
+      
+      <div class = "animation-control">
+        <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
+        <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
+        Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="0" id="speed"> 
+      </div>
+
+      <div class = "elaboration">
+        <div class = "main-elaboration">Elaboration: <span id = "elaboration_text"></span></div>
+      </div>
+    </div>
+
+
+    <div class = "canvas"> 
+      <div class="tooltip">?
+        <span class="tooltiptext" id ="english">
+          <div>
+            <span class="red">Fibonacci Numbers: </span> a series of numbers where the first two numbers are 0 and 1 respectively, and the following number is the sum of two preceding numbers. (0, 1, 1, 2, 3, 5, 8, 13 &middot;&middot;&middot;)
+          </div>
+          
+          <div>
+            <span class="red">Recursive Approach: </span>
+            <div style="position: relative;">
+              <span style="top: -4px; position: relative;"> fibonacci(n) = </span>
+              <span style="font-size:30px;">{</span>
+              <span style="position: absolute;">fibonacci(n - 1) * fibonacci(n - 2)&emsp;n >= 2</span>
+              <span style="position: absolute; top: 23px">n&emsp;n = 0, 1</span>
+            </div>
+          </div> 
+          <div style="margin-top: 10px">
+            <span class="red">Memoization: </span> We use a table to store key-value pairs where the key is n, and the value is fib(n). If key is in the table, we can return instantly.
+          </div>
+
+         
+        </span>
+        <span class="tooltiptext" id ="chinese">
+          <div>
+            <span class="red">斐波那契数列定义：</span>斐波那契数列，又称黄金分割数列。它指的是这样一个数列：0, 1, 1, 2, 3, 5, 8, 13 &middot;&middot;&middot;
+          </div>
+          <div>
+            <span class="red">Recursion Approach: </span>
+            <div style="position: relative;">
+              <span style="top: -4px; position: relative;"> fibonacci(n) = </span>
+              <span style="font-size:30px;">{</span>
+              <span style="position: absolute;">fibonacci(n - 1) * fibonacci(n - 2)&emsp;n >= 2</span>
+              <span style="position: absolute; top: 23px">n&emsp;n = 0, 1</span>
+            </div>
+          </div> 
+          <div style="margin-top: 10px">
+            <span class="red">Memoization: </span>勾选此处，就会显示出现一个存储列表，它存储key和对应的值。其中k为n，其值为fib(n)。 如果发现key在表中，就可以立即return。
+          </div>
+            
+        </span>
+      </div>
+      <canvas id = "draw" style="position: absolute;"></canvas>
+
+      <div id ="board"  style="margin-left: 650px; margin-bottom: 50px; margin-top: 5px;">
+        
+        <table id = "cache_table" border = 1 style= "border-collapse: collapse;">
+        </table>
+      </div>
+    </div>
+    
+    
+
+    <div class = "bottom-nav">
+      <button id = "script">Script</button>
+    </div>
+  </div>
+  
+</body>
+
+<script src="../../../lib/drawing.js"></script>
+<script src="lcs.js"></script>
+<script src="../../../lib/canvas_helper.js"></script>
+<script type="text/javascript">
+
+
+
+
+$(document).ready(function(){
+  
+
+
+  /* get rid of - + and e*/
+  $(document).on('keypress', ':input[type="number"]', function (e) {
+    if (e.key == '-' || e.key == '+' || e.key == 'e' || e.key == '.') {
+      return false;
+    }
+  });
+
+  set_canvas(650,500,0,0);
+  D_ANIMATION_TIME = 100 - $("#speed").val();
+  
+  MAIN_A = new lcsAnimation("343fewve2", "341fe345");
+ 
+  $("#memoization").click(function(){
+    let val = $(this).is(':checked');
+    if (val) {
+      $("#cache_table").text("");
+      $("#cache_table").append(' <tr><td colspan="2" style="border: hidden; color: red; font-size: 17px; font-weight: bold">Cache</td></tr>\
+          <tr><th>Key</th><th>Value</th></tr>');
+
+      $("#cache_table").css("display", "table");
+    } else {
+      $("#cache_table").css("display","none");
+    }
+  })
+
+
+  $("#run").click(function() {
+    let n;
+    let memoization = $("#memoization").is(":checked");
+    n = $("#fibonacci_n").val();
+    
+    if (n == "") {
+      $("#elaboration_text").text("One of values is empty");
+      return;
+    }
+    if (memoization) {
+      MAIN_A = new fibonacciDPAnimation();
+    } else {
+      MAIN_A = new fibonacciAnimation();
+    }
+    MAIN_A.call_fibonacci(parseInt(n));
+  })
+
+
+});
+
+</script>
+
+<script src="../../../lib/control.js"></script>
+
+</html>
