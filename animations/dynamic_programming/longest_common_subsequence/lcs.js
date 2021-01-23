@@ -100,21 +100,16 @@ class lcsAnimation {
       this.table.push(a);
       str += '</tr>'
     }
-    // for (let i = 2; i <= n; i++) {
-    //   key_id = "key_" + i;
-    //   val_id = "val_" + i;
-    //   row_id = "row_" + i;
-    //   str += '<tr id={} style="display:none"> <td id={}></td> <td id={}></td> </tr>'.format(row_id, key_id, val_id); 
-    // }
 
     table.append(str);
 
   }
   
 
-  table_ani(i, j, n) {
+  table_ani(i, j, n, color = "pink", rev_color = "white") {
 
     let id;
+    let rec_color;
 
     let f = (dict) => {
       let n = dict.n;
@@ -123,24 +118,25 @@ class lcsAnimation {
     
 
       if (reverse != undefined && reverse == true) {
-        $(id).text(0);
-         $(id).css({ 
-            "background-color": "white",
-         });
+        if (n != -1) $(id).text(0);
+        $(id).css({ 
+            "background-color": dict.rev_color,
+        });
         return;
       }
 
       $(id).css({ 
-        "background-color": "pink",
+        "background-color": dict.color,
       });
-      $(id).text(n);
+
+      if (n != -1) $(id).text(n);
     };
 
     id = "#" + this.get_table_id(i, j);
     this.ani.add_sequence_ani({
       pause:1,
-      action: {params: {n:n, id: id}, func: f},
-      rev_action: {params: {n:n, id: id, reverse:true}, func: f},
+      action: {params: {n:n, id: id, color:color}, func: f},
+      rev_action: {params: {n:n, id: id, reverse:true, rev_color:rev_color}, func: f},
     });
     
   }
@@ -178,7 +174,7 @@ class lcsAnimation {
     let ani = this.ani;
     let base_text, text;
 
-
+    this.rect_color_change(0);
     text = "lcs({}, {})".format(ptr1, ptr2);
     ani.add_sequence_ani({
       target:rect,
@@ -188,20 +184,26 @@ class lcsAnimation {
     ani.add_sequence_ani({prop: {step: true}});
 
     if (ptr1 < 0 || ptr2 < 0) {
-
+      this.rect_color_change(1);
       this.text_ani("Return {}".format_b(0));
       this.fade_out(rect);
       return 0;
     }
     if (this.table[ptr1][ptr2] != 0) {
-      this.text_ani("Find {} in the table. Return {}".format_b(text, this.table[ptr1][ptr2]));
+      this.rect_color_change(2);
+      this.text_ani("Find {} in the table".format_b(text), true);
       this.fade_out(rect);
-      // this.pause();
+      this.text_ani("Return {}".format_b(this.table[ptr1][ptr2]));
+      this.table_ani(ptr1, ptr2, -1, "yellow", "pink");
       return this.table[ptr1][ptr2];
     }
     if (str1[ptr1] == str2[ptr2]) {
+
       text += ARROW_UNICODE + "{} + lcs({}, {})".format(1, ptr1 - 1, ptr2 - 1);
+      this.rect_color_change(3);
       this.rect_text_ani(rect, [text]);
+      this.text_ani("str[{}] == str[{}]. We remove the last char of both str1 and str2 to solve it recursively".format_b(ptr1, ptr2), true)
+
       this.table[ptr1][ptr2] = 1 + this.recursive_lcs(ptr1 - 1, ptr2 - 1, level + 1);
 
       text += ARROW_UNICODE + "{} + {}".format(1, this.table[ptr1][ptr2] - 1);
@@ -210,18 +212,25 @@ class lcsAnimation {
 
 
     } else {
+
       base_text = text;
       text = base_text + ARROW_UNICODE + "Max(lcs({}, {}), lcs({}, {}))".format(ptr1 - 1, ptr2, ptr1, ptr2 - 1);
+
+      this.rect_color_change(4);
       this.rect_text_ani(rect, [text]);
+      this.text_ani("str[{}] != str[{}]. We remove the last char of str1 or str2 to solve it recursively".format_b(ptr1, ptr2), true)
+      
 
       rv1 = this.recursive_lcs(ptr1 - 1, ptr2, level + 1);
       text = base_text + ARROW_UNICODE + "Max({}, lcs({}, {}))".format(rv1, ptr1, ptr2 - 1);
       this.rect_text_ani(rect, [text]);
+      this.rect_color_change(4);
       this.pause_ani();
 
       rv2 = this.recursive_lcs(ptr1, ptr2 - 1, level + 1);
       text = base_text + ARROW_UNICODE + "Max({}, {})".format(rv1,rv2);
       this.rect_text_ani(rect, [text]);
+      this.rect_color_change(4);
       // this.pause_ani();
 
       this.table[ptr1][ptr2] = Math.max(rv1, rv2);
@@ -234,6 +243,7 @@ class lcsAnimation {
     this.pause_ani();
     this.fade_out(rect);
     this.text_ani("Return {}".format_b(this.table[ptr1][ptr2]));
+    // this.rect_color_change(5);
     return this.table[ptr1][ptr2];
   }
 
