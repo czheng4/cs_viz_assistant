@@ -18,12 +18,13 @@ class lcsAnimation {
     let text;
     this.ani = new Animation();
     this.ani.step_by_step = $("#step_by_step").is(":checked");
-    this.code_rect = new Rect(15, 30, 210, 180, "CODE_REF", 
-                               ["def fib(n):", 
-                                "    if n <= 1: return n",
-                                "    if n in cache: return cache[n]",
-                                "    cache[n] = fib(n - 1) + fib(n - 2)",
-                                "    return cache[n]"]);
+    this.code_rect = new Rect(15, 30, 300, 180, "CODE_REF", 
+                               ["def lcs(i, j):", 
+                                "    if i < 0 || j < 0: return 0",
+                                "    if cache[i][j] != 0: return cache[i][j]",
+                                "    if str1[i] == str2[j]: cache[i][j] = 1 + lcs(i - 1, j - 1)",
+                                "    else: cache[i][j] = Max(lcs(i - 1, j), lcs(i, j - 1))",
+                                "    return cache[i][j]"]);
 
     this.code_rect.text_align = "left";
     this.code_rect.ctx_prop.lineWidth = 0.4;
@@ -31,7 +32,7 @@ class lcsAnimation {
     
     this.stacks = [];
     for (let i = 0; i < 12; i++) {
-      rect = new Rect(300, height * 12 - i * height, 250, height, "STACK_" + i, [i]);
+      rect = new Rect(400, height * 12 - i * height, 250, height, "STACK_" + i, [i]);
       rect.label = i;
       rect.label_position = "left";
       rect.text_align = "left";
@@ -40,12 +41,13 @@ class lcsAnimation {
       this.stacks.push(rect);
       this.ani.add_object(rect);
     }
-    text = new Text("Stack", 300, 13.5 * height , 250, "20px Arial");
+    text = new Text("Stack", 400, 13.5 * height , 250, "20px Arial");
     this.ani.add_object(text);
 
     this.str1 = str1;
     this.str2 = str2;
-    this.make_table(str1, str2);
+    
+    this.call_lcs(str1, str2);
     this.ani.draw();  
     
   }
@@ -72,6 +74,10 @@ class lcsAnimation {
     let str = "";
     let id;
     let i, j;
+    let a = [];
+
+    this.table = [];
+
     table.text("");
     str = '<tr><th colspan={} >Cache</th></tr>'.format(str1.length + 2);
 
@@ -86,9 +92,12 @@ class lcsAnimation {
     for (i = 0; i < str2.length; i++) {
 
       str += '<tr><th>{}</th><th>{}</th>'.format(i, str2[i]);
+      a = [];
       for (j = 0; j < str1.length; j++) {
+        a.push(0);
         str += '<td id={}>0</td>'.format(this.get_table_id(i, j));
       }
+      this.table.push(a);
       str += '</tr>'
     }
     // for (let i = 2; i <= n; i++) {
@@ -101,147 +110,145 @@ class lcsAnimation {
     table.append(str);
 
   }
-  call_fibonacci(n) {
+  
+
+  table_ani(i, j, n) {
+
+    let id;
+
+    let f = (dict) => {
+      let n = dict.n;
+      let reverse = dict.reverse;
+      let id = dict.id;
+    
+
+      if (reverse != undefined && reverse == true) {
+        $(id).text(0);
+         $(id).css({ 
+            "background-color": "white",
+         });
+        return;
+      }
+
+      $(id).css({ 
+        "background-color": "pink",
+      });
+      $(id).text(n);
+    };
+
+    id = "#" + this.get_table_id(i, j);
+    this.ani.add_sequence_ani({
+      pause:1,
+      action: {params: {n:n, id: id}, func: f},
+      rev_action: {params: {n:n, id: id, reverse:true}, func: f},
+    });
+    
+  }
+
+  call_lcs(str1, str2) {
     let rv;
 
-    if (n > 12) {
-      $("#elaboration_text").text("Please enter a number that is <= 12");
-      return;
-    }
-
-    this.make_table(n);
+    this.make_table(str2, str1);
     this.ani.clear_animation();
-    rv = this.fibonacci(n, 0);
+    console.log(this.table);
+    rv = this.recursive_lcs(this.str1.length - 1, this.str2.length - 1);
+
     this.ani.add_sequence_ani({prop:{step:true, time:1}});
     this.ani.add_sequence_ani({
-      text: "Done. f({}) = {}".format_b(n, rv),
+      text: "Done. lcs(\"{}\", \"{}\") = {}".format_b(str1, str2, rv),
     });
     this.ani.run_animation();
   }
 
-  table_ani(n, val) {
-
-    let f = (dict) => {
-      let n = dict.n;
-      let val = dict.val;
-      let reverse = dict.reverse;
-      let key_id, val_id, row_id;
-
-
-      key_id = "#key_" + n;
-      val_id = "#val_" + n;
-      row_id = "#row_" + n;
-      if (reverse != undefined && reverse == true) {
-        $(row_id).css("display", "none");
-        return;
-      }
-
-      $(row_id).css({ 
-        "display" : "table-row",
-        "background-color": "pink",
-      });
-      $(key_id).text(n);
-      $(val_id).text(val);
-    };
-
+  text_ani(text, step = false) {
     this.ani.add_sequence_ani({
-      pause:1,
-      action: {params: {n:n, val:val}, func: f},
-      rev_action: {params: {n:n, val:val, reverse:true}, func: f},
+      text: text,
+      prop: {step: step, time : 1}
     });
-    
+  }
+  pause_ani() {
+    this.ani.add_sequence_ani({prop:{step:true, time:1}});
   }
 
-  fibonacci(n, level = 0) {
-    let i;
-    let ani = this.ani;
-    let e_text, stack_text;
-    let rect = this.stacks[level];
+  recursive_lcs (ptr1, ptr2, level = 0) {
+    let str1 = this.str1,
+        str2 = this.str2;
     let rv1, rv2;
+    let rect = this.stacks[level];
+    let ani = this.ani;
+    let base_text, text;
 
-    this.rect_color_change(0);
-    this.ani.add_sequence_ani({
-      text:"Call fibonacci({})".format_b(n),
-      pause:1,
-    });
-   
+
+    text = "lcs({}, {})".format(ptr1, ptr2);
     ani.add_sequence_ani({
       target:rect,
-      prop: {fade_in: true, text: ["f({})".format(n)],  visible:true }
+      prop: {fade_in: true, text: [text],  visible:true }
     });
+    this.text_ani("Call {}".format_b(text));
     ani.add_sequence_ani({prop: {step: true}});
-    
 
-    if (n <= 1) {
-      e_text = "{} <= 1. Return {}".format_b(n, n);
-      
-      this.rect_color_change(1);
-      ani.add_sequence_ani({
-        text: e_text,
-        target: rect,
-        prop: {fade_out: true, time: ANIMATION_TIME * 2}
-      });
-      return n;
-    } else if (n in this.tables) {
-      this.rect_color_change(2);
-      ani.add_sequence_ani({
-        text: "{} is in the table. Return {}".format_b(n, this.tables[n]),
-        target: rect,
-        prop: {fade_out: true, time: ANIMATION_TIME * 2}
-      });
-      return this.tables[n];
+    if (ptr1 < 0 || ptr2 < 0) {
+
+      this.text_ani("Return {}".format_b(0));
+      this.fade_out(rect);
+      return 0;
+    }
+    if (this.table[ptr1][ptr2] != 0) {
+      this.text_ani("Find {} in the table. Return {}".format_b(text, this.table[ptr1][ptr2]));
+      this.fade_out(rect);
+      // this.pause();
+      return this.table[ptr1][ptr2];
+    }
+    if (str1[ptr1] == str2[ptr2]) {
+      text += ARROW_UNICODE + "{} + lcs({}, {})".format(1, ptr1 - 1, ptr2 - 1);
+      this.rect_text_ani(rect, [text]);
+      this.table[ptr1][ptr2] = 1 + this.recursive_lcs(ptr1 - 1, ptr2 - 1, level + 1);
+
+      text += ARROW_UNICODE + "{} + {}".format(1, this.table[ptr1][ptr2] - 1);
+      // this.rect_text_ani(rect, [text]);
+      // this.pause_ani();
+
 
     } else {
-      e_text = "{} > 1. Compute fibonacci({}) + fibonacci({})".format_b(n,  n - 1, n - 2);
-      
-      stack_text = "f({}) {} f({}) + f({})".format(n, ARROW_UNICODE, n - 1, n - 2);
-      ani.add_sequence_ani({
-        text: e_text,
-        target:rect,
-        prop: {fade_in: true, text: [stack_text], time:1}
-      });
-      
-      this.rect_color_change(3,  false);
-      ani.add_sequence_ani({prop: {step:true}});
+      base_text = text;
+      text = base_text + ARROW_UNICODE + "Max(lcs({}, {}), lcs({}, {}))".format(ptr1 - 1, ptr2, ptr1, ptr2 - 1);
+      this.rect_text_ani(rect, [text]);
 
-      // first function call
-      rv1 = this.fibonacci(n - 1, level + 1);
-      stack_text += "{} {} + f({})".format(ARROW_UNICODE, rv1, n - 2);
-     
-      ani.add_sequence_ani({
-        target:rect,
-        prop: {fade_in: true, text: [stack_text], time:1}
-      });
-      ani.add_sequence_ani({prop: {step:true}});
+      rv1 = this.recursive_lcs(ptr1 - 1, ptr2, level + 1);
+      text = base_text + ARROW_UNICODE + "Max({}, lcs({}, {}))".format(rv1, ptr1, ptr2 - 1);
+      this.rect_text_ani(rect, [text]);
+      this.pause_ani();
 
-      // second function call
-      rv2 = this.fibonacci(n - 2, level + 1);
-      stack_text += "{} {} + {}".format(ARROW_UNICODE, rv1, rv2);
-      ani.add_sequence_ani({
-        target:rect,
-        prop: {fade_in: true, text: [stack_text], time:1}
-      });
-      ani.add_sequence_ani({prop: {step:true}});
+      rv2 = this.recursive_lcs(ptr1, ptr2 - 1, level + 1);
+      text = base_text + ARROW_UNICODE + "Max({}, {})".format(rv1,rv2);
+      this.rect_text_ani(rect, [text]);
+      // this.pause_ani();
 
-      // returns
-      ani.add_sequence_ani({
-        text: "Store ({}, {}) into table and return it".format_b(n, rv1 + rv2),
-        target:rect,
-        prop: {fade_in: true, text: [stack_text], time:1}
-      });
-
-      this.table_ani(n, rv1 + rv2);
-      this.rect_color_change(3);
-
-      ani.add_sequence_ani({
-        target: rect,
-        prop: {fade_out: true, time: ANIMATION_TIME * 2}
-      });
-
-      this.tables[n] = rv1 + rv2;
-      return rv1 + rv2;
+      this.table[ptr1][ptr2] = Math.max(rv1, rv2);
     }
-    
+
+    this.table_ani(ptr1, ptr2,  this.table[ptr1][ptr2]);
+    text += ARROW_UNICODE + this.table[ptr1][ptr2];
+    this.rect_text_ani(rect, [text]);
+
+    this.pause_ani();
+    this.fade_out(rect);
+    this.text_ani("Return {}".format_b(this.table[ptr1][ptr2]));
+    return this.table[ptr1][ptr2];
   }
 
+
+  fade_out(rect, step = false) {
+    this.ani.add_sequence_ani({
+      target: rect,
+      prop: {fade_out: true, time: ANIMATION_TIME, step:step}
+    });
+  }
+
+  rect_text_ani(rect, text) {
+    this.ani.add_sequence_ani({
+      target: rect,
+      prop: {text: text, time:1}
+    });
+  }
 }

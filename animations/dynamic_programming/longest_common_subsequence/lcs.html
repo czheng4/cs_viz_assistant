@@ -66,7 +66,7 @@
         <button type="button" id = "go_back" disabled>Go Back</button>&emsp;
         <button type="button" id = "go_forward" disabled>Go Forward</button>&emsp;&emsp;
         Step-by-Step Animation<input type="checkbox" id="step_by_step">&emsp;&emsp;
-        Animation Speed&emsp;<input type="range" min="0" max="100" value="0" id="speed"> 
+        Animation Speed&emsp;<input type="range" min="0" max="100" value="80" id="speed"> 
       </div>
 
       <div class = "elaboration">
@@ -118,7 +118,7 @@
       </div>
       <canvas id = "draw" style="position: absolute;"></canvas>
 
-      <div id ="board"  style="margin-left: 650px; margin-bottom: 50px; margin-top: 5px;">
+      <div id ="board"  style="margin-left: 700px; margin-bottom: 50px; margin-top: 5px;">
         
         <table id = "cache_table" border = 1 style= "border-collapse: collapse;">
         </table>
@@ -153,10 +153,10 @@ $(document).ready(function(){
     }
   });
 
-  set_canvas(650,500,0,0);
+  set_canvas(650,600,0,0);
   D_ANIMATION_TIME = 100 - $("#speed").val();
   
-  MAIN_A = new lcsAnimation("343fewve2", "341fe345");
+  MAIN_A = new lcsAnimation("343fee2", "341345");
  
   $("#memoization").click(function(){
     let val = $(this).is(':checked');
@@ -186,7 +186,7 @@ $(document).ready(function(){
     } else {
       MAIN_A = new fibonacciAnimation();
     }
-    MAIN_A.call_fibonacci(parseInt(n));
+    MAIN_A.call_lcs(parseInt(n));
   })
 
 
