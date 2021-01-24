@@ -94,21 +94,6 @@
          
         </span>
         <span class="tooltiptext" id ="chinese">
-          <div>
-            <span class="red">斐波那契数列定义：</span>斐波那契数列，又称黄金分割数列。它指的是这样一个数列：0, 1, 1, 2, 3, 5, 8, 13 &middot;&middot;&middot;
-          </div>
-          <div>
-            <span class="red">Recursion Approach: </span>
-            <div style="position: relative;">
-              <span style="top: -4px; position: relative;"> fibonacci(n) = </span>
-              <span style="font-size:30px;">{</span>
-              <span style="position: absolute;">fibonacci(n - 1) * fibonacci(n - 2)&emsp;n >= 2</span>
-              <span style="position: absolute; top: 23px">n&emsp;n = 0, 1</span>
-            </div>
-          </div> 
-          <div style="margin-top: 10px">
-            <span class="red">Memoization: </span>勾选此处，就会显示出现一个存储列表，它存储key和对应的值。其中k为n，其值为fib(n)。 如果发现key在表中，就可以立即return。
-          </div>
             
         </span>
       </div>
@@ -140,20 +125,18 @@
 
 $(document).ready(function(){
   
-
-
-  /* get rid of - + and e*/
   $(document).on('keypress', ':input[type="text"]', function (e) {
     let size = $(this).val().length;
     if (size >= 9) return false;
     else return true;
   });
 
-  set_canvas(650,600,0,0);
+  set_canvas(650,620,0,0);
   D_ANIMATION_TIME = 100 - $("#speed").val();
   
   MAIN_A = new lcsAnimation("", "", true);
- 
+  ENABLE_STEP_IDS = ["#run", "input"];
+  ENABLE_IDS = ["#run", "input"];
   $("#run").click(function() {
     let str1, str2;
 
