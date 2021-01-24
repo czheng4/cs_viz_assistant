@@ -23,11 +23,7 @@
       text-align: center;
       background: #DFDFDF;
     }
-    #compute {
-      height: 26px;
-    }
-
-
+   
     #cache_table tr:first-child th {
       border-left: hidden;
       border-right: hidden;
@@ -51,14 +47,13 @@
     <div class = "header"><span class = "logo"><img src="../../../images/logo.png"></span> Longest Common Subsequence</div>
     <div class = "control"> 
 
-      
-      <input type = "text" id = "string1" placeholder="string1">
-      <input type = "text" id = "string2" placeholder="string2">
+      <label for="string1">String 1: </label>
+      <input type = "text" id = "string1" placeholder="string1" value = "XMJYAUZ">
+      <div class = "line"></div>
+      <label for="string1">String 2: </label>
+      <input type = "text" id = "string2" placeholder="string2" value= "MZJAWXU">
 
       <button id = "run">Run</button> &emsp;&emsp;
-
-     <!--  <label for="memoization">Memoization</label>
-      <input type="checkbox" id="memoization" name="memoization" value="memoization" style="position:relative; top: 2px"> -->
 
       <div class = "line"></div>
       
@@ -79,16 +74,17 @@
       <div class="tooltip">?
         <span class="tooltiptext" id ="english">
           <div>
-            <span class="red">Fibonacci Numbers: </span> a series of numbers where the first two numbers are 0 and 1 respectively, and the following number is the sum of two preceding numbers. (0, 1, 1, 2, 3, 5, 8, 13 &middot;&middot;&middot;)
+            <span class="red">Longest Common Subsequence: </span>Given two strings, It finds the longest subsequence of them.
           </div>
           
           <div>
-            <span class="red">Recursive Approach: </span>
+            <span class="red">Recursive Approach: </span> we define a function <b>lcs(i, j)</b> where i and j is a index pointer to string 1 and string 2 respectively.
             <div style="position: relative;">
-              <span style="top: -4px; position: relative;"> fibonacci(n) = </span>
-              <span style="font-size:30px;">{</span>
-              <span style="position: absolute;">fibonacci(n - 1) * fibonacci(n - 2)&emsp;n >= 2</span>
-              <span style="position: absolute; top: 23px">n&emsp;n = 0, 1</span>
+              <span style="top: -10px; position: relative;"> lcs(i, j) = </span>
+              <span style="font-size:50px;">{</span>
+              <span style="position: absolute;"> 0&emsp; i < 0 or j < 0</span>
+              <span style="position: absolute; top: 23px"> lcs(i - 1, j - 1)&emsp; str1[i] = str2[j]</span>
+              <span style="position: absolute; top: 46px"> Max(lcs(i - 1, j), lcs(i, j - 1))&emsp; otherwise</span>
             </div>
           </div> 
           <div style="margin-top: 10px">
@@ -147,46 +143,28 @@ $(document).ready(function(){
 
 
   /* get rid of - + and e*/
-  $(document).on('keypress', ':input[type="number"]', function (e) {
-    if (e.key == '-' || e.key == '+' || e.key == 'e' || e.key == '.') {
-      return false;
-    }
+  $(document).on('keypress', ':input[type="text"]', function (e) {
+    let size = $(this).val().length;
+    if (size >= 9) return false;
+    else return true;
   });
 
   set_canvas(650,600,0,0);
   D_ANIMATION_TIME = 100 - $("#speed").val();
   
-  MAIN_A = new lcsAnimation("343fee2", "341345");
+  MAIN_A = new lcsAnimation("", "", true);
  
-  $("#memoization").click(function(){
-    let val = $(this).is(':checked');
-    if (val) {
-      $("#cache_table").text("");
-      $("#cache_table").append(' <tr><td colspan="2" style="border: hidden; color: red; font-size: 17px; font-weight: bold">Cache</td></tr>\
-          <tr><th>Key</th><th>Value</th></tr>');
-
-      $("#cache_table").css("display", "table");
-    } else {
-      $("#cache_table").css("display","none");
-    }
-  })
-
-
   $("#run").click(function() {
-    let n;
-    let memoization = $("#memoization").is(":checked");
-    n = $("#fibonacci_n").val();
-    
-    if (n == "") {
+    let str1, str2;
+
+    str1 = $("#string1").val();
+    str2 = $("#string2").val();
+    if (str1 == "" || str2 == "") {
       $("#elaboration_text").text("One of values is empty");
       return;
     }
-    if (memoization) {
-      MAIN_A = new fibonacciDPAnimation();
-    } else {
-      MAIN_A = new fibonacciAnimation();
-    }
-    MAIN_A.call_lcs(parseInt(n));
+   
+    MAIN_A = new lcsAnimation(str1, str2);
   })
 
 

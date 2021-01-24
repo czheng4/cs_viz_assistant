@@ -11,7 +11,7 @@
 const ARROW_UNICODE = String.fromCharCode(8594);
 
 class lcsAnimation {
-  constructor(str1, str2) {
+  constructor(str1, str2, show_code_rect_only = false) {
     
     let rect;
     let height = 30;
@@ -20,8 +20,8 @@ class lcsAnimation {
     this.ani.step_by_step = $("#step_by_step").is(":checked");
     this.code_rect = new Rect(15, 30, 300, 180, "CODE_REF", 
                                ["def lcs(i, j):", 
-                                "    if i < 0 || j < 0: return 0",
-                                "    if cache[i][j] != 0: return cache[i][j]",
+                                "    if i < 0  ||  j < 0: return 0",
+                                "    if cache[i][j] != -1: return cache[i][j]",
                                 "    if str1[i] == str2[j]: cache[i][j] = 1 + lcs(i - 1, j - 1)",
                                 "    else: cache[i][j] = Max(lcs(i - 1, j), lcs(i, j - 1))",
                                 "    return cache[i][j]"]);
@@ -29,10 +29,13 @@ class lcsAnimation {
     this.code_rect.text_align = "left";
     this.code_rect.ctx_prop.lineWidth = 0.4;
     this.ani.add_object(this.code_rect);
-    
+    if (show_code_rect_only) {
+      this.ani.draw();
+      return;
+    }
     this.stacks = [];
-    for (let i = 0; i < 12; i++) {
-      rect = new Rect(400, height * 12 - i * height, 250, height, "STACK_" + i, [i]);
+    for (let i = 0; i < 16; i++) {
+      rect = new Rect(400, height * 16 - i * height, 250, height, "STACK_" + i, [i]);
       rect.label = i;
       rect.label_position = "left";
       rect.text_align = "left";
@@ -41,7 +44,7 @@ class lcsAnimation {
       this.stacks.push(rect);
       this.ani.add_object(rect);
     }
-    text = new Text("Stack", 400, 13.5 * height , 250, "20px Arial");
+    text = new Text("Stack", 400, 17.5 * height , 250, "20px Arial");
     this.ani.add_object(text);
 
     this.str1 = str1;
@@ -94,8 +97,8 @@ class lcsAnimation {
       str += '<tr><th>{}</th><th>{}</th>'.format(i, str2[i]);
       a = [];
       for (j = 0; j < str1.length; j++) {
-        a.push(0);
-        str += '<td id={}>0</td>'.format(this.get_table_id(i, j));
+        a.push(-1);
+        str += '<td id={}>-1</td>'.format(this.get_table_id(i, j));
       }
       this.table.push(a);
       str += '</tr>'
@@ -146,7 +149,8 @@ class lcsAnimation {
 
     this.make_table(str2, str1);
     this.ani.clear_animation();
-    console.log(this.table);
+    
+    this.text_ani("Init the cache table with -1 value", true);
     rv = this.recursive_lcs(this.str1.length - 1, this.str2.length - 1);
 
     this.ani.add_sequence_ani({prop:{step:true, time:1}});
@@ -189,12 +193,13 @@ class lcsAnimation {
       this.fade_out(rect);
       return 0;
     }
-    if (this.table[ptr1][ptr2] != 0) {
+    if (this.table[ptr1][ptr2] != -1) {
       this.rect_color_change(2);
+      this.table_ani(ptr1, ptr2, -1, "yellow", "pink");
       this.text_ani("Find {} in the table".format_b(text), true);
       this.fade_out(rect);
       this.text_ani("Return {}".format_b(this.table[ptr1][ptr2]));
-      this.table_ani(ptr1, ptr2, -1, "yellow", "pink");
+      
       return this.table[ptr1][ptr2];
     }
     if (str1[ptr1] == str2[ptr2]) {

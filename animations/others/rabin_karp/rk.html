@@ -30,8 +30,8 @@
     <div class = "header"><span class = "logo"><img src="../../../images/logo.png"></span> Rabin-Karp Algorithm for Pattern Searching</div>
     <div class = "control"> 
 
-     
-      <input type = "text" id = "string_text" placeholder="text" value=""> 
+      <label for="string_text" style="margin-right: 17px">Text: </label>
+      <input type = "text" id = "string_text" placeholder="text" value="AABAACAADAABAABA"> 
 
 
       <span style="margin-left:100px">Rolling hash:</span>
@@ -43,7 +43,9 @@
 
 
       <div class="line"></div>
-      <input type = "text" id = "pattern_text" placeholder="pattern" value=""> 
+
+      <label for="pattern_text">Pattern: </label>
+      <input type = "text" id = "pattern_text" placeholder="pattern" value="AABA"> 
      
       <button id = "run">Run</button>
       <div class = "line"></div>
