@@ -1,3 +1,9 @@
+
+ChaoHui Zheng
+-------------
+
+
+We host the application in http://web.eecs.utk.edu/~czheng4/cs_viz_assistant/
 # Overall Animation property
 To add animation property, we provide `add_sequence_ani` and `add_parallel_ani` function calls. 
 
