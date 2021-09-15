@@ -261,12 +261,14 @@ $(document).ready(function(){
   $("#init").click(function(){
     let size = $("#table_size").val();
     size = parseInt(size);
+
     if (isNaN(size) || size <= 0 || size >= 30) {
        $("#elaboration_text").text("Table size must > 0 and <= 30");
     } else {
       MAIN_A = new oaHashAnimation(size, 
                                    $("input[name=hash_function]:checked").val(), 
                                    $("input[name=collision_strategy]:checked").val());
+      MAIN_A.ani.step_by_step = $("#step_by_step").is(":checked");
     }
 
   })
