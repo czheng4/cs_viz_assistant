@@ -599,6 +599,7 @@ class avlTreeAnimation {
         if (parent != null) {      
           e = g.get_edge_by_name(parent.ani_node.id, n.ani_node.id);
 
+
           /* set deleted node's parent edge to its left node */
           ani.add_sequence_ani({
             text: "Set node {}'s left to node {}. Set node {}'s parent to node {}".format_b(parent.key, child.key, child.key, parent.key),
@@ -719,8 +720,20 @@ class avlTreeAnimation {
       });
     }
 
+
     ani.add_sequence_ani({prop:{step:true, time:1}});
-    if (rv.path.length >= 2 && rv.delete == true) this.avl_tree_balance(rv.path[rv.path.length - 2], rv.path, false);
+
+      
+    //console.log(is_imbalance); 
+    // if (this.imbalance(rv.node.parent) == NO_ROTATION) {
+    //   this.fix_height(rv.node.parent);
+    // } else this.avl_tree_balance(rv.path[rv.path.length - 2], rv.path, false);
+    if (rv.path.length >= 2 && rv.delete == true) {
+      this.avl_tree_balance(rv.path[rv.path.length - 2], rv.path, false);
+    }
+    // this.avl_tree_balance(rv.node.parent, rv.path.slice(0, rv.path.length - 1), true);
+    
+    
     this.clear_after_func_ani(false);
 
     ani.run_animation();
@@ -934,7 +947,7 @@ class avlTreeAnimation {
     let g = this.g;
     let new_path = [];
 
-    if (node.parent == null) return;
+    if (node.parent == null && after_insert == true) return;
 
     //console.log(node, path);
 
@@ -949,7 +962,9 @@ class avlTreeAnimation {
     });
 
     if (after_insert) this.fix_imbalance(node.parent, node, after_insert);
-    else this.fix_imbalance(node, null, after_insert);
+    else {
+      this.fix_imbalance(node, null, after_insert);
+    }
   }
 
   imbalance(n) {
@@ -1193,6 +1208,7 @@ class avlTreeAnimation {
     let s_from;
 
     s_from = null;
+    // console.log(n);
     while (n != null) {
 
       if (from != null) {
@@ -1217,7 +1233,7 @@ class avlTreeAnimation {
       
       is_imbalance = this.imbalance(n);
       
-      //console.log(is_imbalance); 
+      // console.log(is_imbalance); 
       if (is_imbalance == NO_ROTATION) {
         if (!this.fix_height(n)) break;
       } else if (is_imbalance == ZIG_ZIG_RIGHT) {
